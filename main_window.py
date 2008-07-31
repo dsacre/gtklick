@@ -15,7 +15,7 @@ import gtk.keysyms
 import time
 import math
 
-import klick
+import klick_backend
 import misc
 
 
@@ -191,13 +191,13 @@ class MainWindow:
 
     # OSC callbacks
 
-    @klick.make_method('/simple/tempo', 'f')
+    @klick_backend.make_method('/simple/tempo', 'f')
     @misc.osc_callback
     def metro_tempo_cb(self, path, args):
         self.wtree.get_widget('scale_tempo').set_value(args[0])
         self.wtree.get_widget('spin_tempo').set_value(args[0])
 
-    @klick.make_method('/simple/meter', 'ii')
+    @klick_backend.make_method('/simple/meter', 'ii')
     @misc.osc_callback
     def metro_meter_cb(self, path, args):
         if args[0] in (0, 2, 3, 4) and args[1] == 4 and \
@@ -227,7 +227,7 @@ class MainWindow:
 
         self.prev_denom = args[1]
 
-    @klick.make_method('/metro/active', 'i')
+    @klick_backend.make_method('/metro/active', 'i')
     @misc.osc_callback
     def metro_active_cb(self, path, args):
         if args[0]:
@@ -239,7 +239,7 @@ class MainWindow:
 
         self.active = bool(args[0])
 
-    @klick.make_method('/volume', 'f')
+    @klick_backend.make_method('/volume', 'f')
     @misc.osc_callback
     def volume_cb(self, path, args):
         self.wtree.get_widget('scale_volume').set_value(args[0])

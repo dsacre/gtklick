@@ -22,10 +22,10 @@ import getopt
 
 import liblo
 
-import klick
-import config
-import mainwin
-import prefs
+import klick_backend
+import gtklick_config
+import main_window
+import preferences_dialog
 import misc
 
 
@@ -58,22 +58,22 @@ class GTKlick:
             self.wtree = gtk.glade.XML('gtklick.glade')
 
             # load config from file
-            self.config = config.GtklickConfig()
+            self.config = gtklick_config.GtklickConfig()
             self.config.read()
 
             # start klick process
-            self.klick = klick.Klick(port, 'gtklick')
+            self.klick = klick_backend.KlickBackend(port, 'gtklick')
 
             # the actual windows are created by glade, this basically just connects GUI and OSC callbacks
-            self.win = mainwin.MainWindow(self.wtree, self.klick)
-            self.prefs = prefs.PreferencesDialog(self.wtree, self.klick, self.config)
+            self.win = main_window.MainWindow(self.wtree, self.klick)
+            self.prefs = preferences_dialog.PreferencesDialog(self.wtree, self.klick, self.config)
 
             self.klick.add_method(None, None, self.fallback)
 
             # wassup?
             self.klick.send('/query_all')
 
-        except klick.KlickError, e:
+        except klick_backend.KlickBackendError, e:
             self.error_message(e.msg)
             sys.exit(1)
 

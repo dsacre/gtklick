@@ -9,7 +9,6 @@
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 
-
 import liblo
 import subprocess
 
@@ -23,7 +22,7 @@ import signal
 START_TIMEOUT = 5
 
 
-class KlickError:
+class KlickBackendError:
     def __init__(self, msg):
         self.msg = msg
     def __str__(self):
@@ -35,7 +34,7 @@ class make_method(liblo.make_method):
         liblo.make_method.__init__(self, '/klick' + path, types)
 
 
-class Klick(liblo.ServerThread):
+class KlickBackend(liblo.ServerThread):
     def __init__(self, port, name):
         self.addr = None
         self.ready = threading.Event()
@@ -57,16 +56,16 @@ class Klick(liblo.ServerThread):
                     '-s1', ####
                 ])
             except OSError, e:
-                raise KlickError("failed to start klick: " + e.strerror)
+                raise KlickBackendError("failed to start klick: " + e.strerror)
             # wait for klick to send /klick/ready
             if not self.wait():
-                raise KlickError("timeout while waiting for klick to start")
+                raise KlickBackendError("timeout while waiting for klick to start")
         else:
             self.process = None
             # check if klick is running
             liblo.ServerThread.send(self, port, '/klick/check')
             if not self.wait():
-                raise KlickError("can't connect to klick")
+                raise KlickBackendError("can't connect to klick")
 
         # register as client
         self.send('/register_client')

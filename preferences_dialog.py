@@ -9,7 +9,7 @@
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 
-import klick
+import klick_backend
 import misc
 
 
@@ -50,7 +50,7 @@ class PreferencesDialog:
                 self.klick.send('/autoconnect')
             self.config.set_autoconnect(data)
 
-    @klick.make_method('/sound', 'i')
+    @klick_backend.make_method('/sound', 'i')
     @misc.osc_callback
     def sound_cb(self, path, args):
         sound = args[0]
