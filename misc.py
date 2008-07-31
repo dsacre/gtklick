@@ -17,7 +17,7 @@ import weakref, new
 # decorator: don't call function while gtk signals are blocked
 def gui_callback(f):
     def g(self, *args):
-        if not self.__block:
+        if not hasattr(self, '__block') or not self.__block:
             return f(self, *args)
     return g
 

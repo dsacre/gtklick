@@ -92,7 +92,7 @@ class MainWindow:
 
     @misc.gui_callback
     def on_tempo_changed(self, r):
-        self.klick.send('/metro/set_tempo', int(r.get_value()))
+        self.klick.send('/simple/set_tempo', int(r.get_value()))
 
     @misc.gui_callback
     def on_tap_tempo(self, b):
@@ -102,15 +102,15 @@ class MainWindow:
     def on_meter_toggled(self, b, data):
         if b.get_active():
             if data != None:
-                self.klick.send('/metro/set_meter', data[0], data[1])
+                self.klick.send('/simple/set_meter', data[0], data[1])
             else:
-                self.klick.send('/metro/set_meter',
+                self.klick.send('/simple/set_meter',
                                 self.wtree.get_widget('spin_meter_beats').get_value(),
                                 self.wtree.get_widget('spin_meter_denom').get_value())
 
     @misc.gui_callback
     def on_meter_beats_changed(self, b):
-        self.klick.send('/metro/set_meter',
+        self.klick.send('/simple/set_meter',
                         self.wtree.get_widget('spin_meter_beats').get_value(),
                         self.wtree.get_widget('spin_meter_denom').get_value())
 
@@ -136,7 +136,7 @@ class MainWindow:
         b.set_value(denom)
         self.prev_denom = denom
 
-        self.klick.send('/metro/set_meter',
+        self.klick.send('/simple/set_meter',
                         self.wtree.get_widget('spin_meter_beats').get_value(),
                         self.wtree.get_widget('spin_meter_denom').get_value())
 
@@ -160,7 +160,7 @@ class MainWindow:
         elif key == gtk.keysyms.Up:         tempo += 10
         elif key == gtk.keysyms.Page_Down:  tempo /= 2
         elif key == gtk.keysyms.Page_Up:    tempo *= 2
-        self.klick.send('/metro/set_tempo', int(tempo))
+        self.klick.send('/simple/set_tempo', int(tempo))
         return True
 
     @misc.gui_callback
@@ -191,13 +191,13 @@ class MainWindow:
 
     # OSC callbacks
 
-    @klick.make_method('/metro/tempo', 'f')
+    @klick.make_method('/simple/tempo', 'f')
     @misc.osc_callback
     def metro_tempo_cb(self, path, args):
         self.wtree.get_widget('scale_tempo').set_value(args[0])
         self.wtree.get_widget('spin_tempo').set_value(args[0])
 
-    @klick.make_method('/metro/meter', 'ii')
+    @klick.make_method('/simple/meter', 'ii')
     @misc.osc_callback
     def metro_meter_cb(self, path, args):
         if args[0] in (0, 2, 3, 4) and args[1] == 4 and \

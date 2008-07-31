@@ -23,6 +23,7 @@ import getopt
 import liblo
 
 import klick
+import config
 import mainwin
 import prefs
 import misc
@@ -38,6 +39,7 @@ Options:
 
 class GTKlick:
     def __init__(self, args):
+        # parse command line arguments
         port = None
         try:
             r = getopt.getopt(args, 'o:h');
@@ -55,21 +57,32 @@ class GTKlick:
         try:
             self.wtree = gtk.glade.XML('gtklick.glade')
 
+            # load config from file
+            self.config = config.GtklickConfig()
+            self.config.read()
+
+            # start klick process
             self.klick = klick.Klick(port, 'gtklick')
+
+            # the actual windows are created by glade, this basically just connects GUI and OSC callbacks
             self.win = mainwin.MainWindow(self.wtree, self.klick)
-            self.prefs = prefs.PreferencesDialog(self.wtree, self.klick)
+            self.prefs = prefs.PreferencesDialog(self.wtree, self.klick, self.config)
 
             self.klick.add_method(None, None, self.fallback)
 
-            self.klick.send('/query')
-            self.klick.send('/metro/query')
+            # wassup?
+            self.klick.send('/query_all')
 
         except klick.KlickError, e:
             self.error_message(e.msg)
             sys.exit(1)
 
+        # start timer to check if klick is still running
         if self.klick.process:
             self.timer = gobject.timeout_add(1000, misc.weakref_method(self.check_klick))
+
+    def __del__(self):
+        self.config.write()
 
     def check_klick(self):
         if not self.klick.check_process():
@@ -81,10 +94,10 @@ class GTKlick:
         print "message not handled:", path, args, src.get_url()
 
     def error_message(self, msg):
-            m = gtk.MessageDialog(self.wtree.get_widget('window_main'),
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, msg)
-            m.set_title("gtklick error")
-            m.run()
+        m = gtk.MessageDialog(self.wtree.get_widget('window_main'),
+                              0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, msg)
+        m.set_title("gtklick error")
+        m.run()
 
 
 if __name__ == '__main__':
