@@ -15,14 +15,15 @@ import gtk.keysyms
 import time
 import math
 
-import klick_backend
-import misc
+from klick_backend import *
+from misc import *
 
 
 class MainWindow:
-    def __init__(self, wtree, klick):
+    def __init__(self, wtree, klick, config):
         self.wtree = wtree
         self.klick = klick
+        self.config = config
 
         # why doesn't glade do this?
         self.wtree.get_widget('spin_meter_beats').set_value(4)
@@ -70,6 +71,8 @@ class MainWindow:
 
         self.klick.register_methods(self)
 
+        self.klick.send('/config/set_volume', self.config.get_volume())
+
         self.taps = []
 
 
@@ -90,15 +93,15 @@ class MainWindow:
         about.run()
         about.hide()
 
-    @misc.gui_callback
+    @gui_callback
     def on_tempo_changed(self, r):
         self.klick.send('/simple/set_tempo', int(r.get_value()))
 
-    @misc.gui_callback
+    @gui_callback
     def on_tap_tempo(self, b):
         self.tap_tempo()
 
-    @misc.gui_callback
+    @gui_callback
     def on_meter_toggled(self, b, data):
         if b.get_active():
             if data != None:
@@ -108,13 +111,13 @@ class MainWindow:
                                 self.wtree.get_widget('spin_meter_beats').get_value(),
                                 self.wtree.get_widget('spin_meter_denom').get_value())
 
-    @misc.gui_callback
+    @gui_callback
     def on_meter_beats_changed(self, b):
         self.klick.send('/simple/set_meter',
                         self.wtree.get_widget('spin_meter_beats').get_value(),
                         self.wtree.get_widget('spin_meter_denom').get_value())
 
-    @misc.gui_callback
+    @gui_callback
     def on_meter_denom_changed(self, b):
         v = b.get_value()
 
@@ -140,18 +143,18 @@ class MainWindow:
                         self.wtree.get_widget('spin_meter_beats').get_value(),
                         self.wtree.get_widget('spin_meter_denom').get_value())
 
-    @misc.gui_callback
+    @gui_callback
     def on_start_stop(self, b):
         if self.active:
             self.klick.send('/metro/stop')
         else:
             self.klick.send('/metro/start')
 
-    @misc.gui_callback
+    @gui_callback
     def on_volume_changed(self, r):
-        self.klick.send('/set_volume', r.get_value())
+        self.klick.send('/config/set_volume', r.get_value())
 
-    @misc.gui_callback
+    @gui_callback
     def on_tempo_accel(self, group, accel, key, mod):
         tempo = self.wtree.get_widget('spin_tempo').get_value()
         if   key == gtk.keysyms.Left:       tempo -= 1
@@ -163,7 +166,7 @@ class MainWindow:
         self.klick.send('/simple/set_tempo', int(tempo))
         return True
 
-    @misc.gui_callback
+    @gui_callback
     def on_volume_accel(self, group, accel, key, mod):
         volume = self.wtree.get_widget('scale_volume').get_value()
         if key in (gtk.keysyms.minus, gtk.keysyms.KP_Subtract):
@@ -172,10 +175,10 @@ class MainWindow:
             volume += 0.1
         if volume < 0.0: volume = 0.0
         if volume > 1.0: volume = 1.0
-        self.klick.send('/set_volume', volume)
+        self.klick.send('/config/set_volume', volume)
         return True
 
-    @misc.gui_callback
+    @gui_callback
     def on_start_stop_accel(self, group, accel, key, mod):
         if self.active:
             self.klick.send('/metro/stop')
@@ -183,7 +186,7 @@ class MainWindow:
             self.klick.send('/metro/start')
         return True
 
-    @misc.gui_callback
+    @gui_callback
     def on_tap_tempo_accel(self, group, accel, key, mod):
         self.tap_tempo()
         return True
@@ -191,14 +194,14 @@ class MainWindow:
 
     # OSC callbacks
 
-    @klick_backend.make_method('/simple/tempo', 'f')
-    @misc.osc_callback
+    @make_method('/simple/tempo', 'f')
+    @osc_callback
     def metro_tempo_cb(self, path, args):
         self.wtree.get_widget('scale_tempo').set_value(args[0])
         self.wtree.get_widget('spin_tempo').set_value(args[0])
 
-    @klick_backend.make_method('/simple/meter', 'ii')
-    @misc.osc_callback
+    @make_method('/simple/meter', 'ii')
+    @osc_callback
     def metro_meter_cb(self, path, args):
         if args[0] in (0, 2, 3, 4) and args[1] == 4 and \
                 not self.wtree.get_widget('radio_meter_other').get_active():
@@ -227,8 +230,8 @@ class MainWindow:
 
         self.prev_denom = args[1]
 
-    @klick_backend.make_method('/metro/active', 'i')
-    @misc.osc_callback
+    @make_method('/metro/active', 'i')
+    @osc_callback
     def metro_active_cb(self, path, args):
         if args[0]:
             self.wtree.get_widget('align_start').hide()
@@ -239,10 +242,11 @@ class MainWindow:
 
         self.active = bool(args[0])
 
-    @klick_backend.make_method('/volume', 'f')
-    @misc.osc_callback
+    @make_method('/config/volume', 'f')
+    @osc_callback
     def volume_cb(self, path, args):
         self.wtree.get_widget('scale_volume').set_value(args[0])
+        self.config.set_volume(args[0])
 
 
     def tap_tempo(self):

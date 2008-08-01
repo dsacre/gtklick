@@ -9,8 +9,8 @@
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 
-import klick_backend
-import misc
+from klick_backend import *
+from misc import *
 
 
 class PreferencesDialog:
@@ -30,32 +30,30 @@ class PreferencesDialog:
 
         self.klick.register_methods(self)
 
-        self.klick.send('/set_sound', self.config.get_sound())
+        self.klick.send('/config/set_sound', self.config.get_sound())
         if self.config.get_autoconnect():
             self.wtree.get_widget('radio_connect_auto').set_active(True)
-            self.klick.send('/autoconnect')
+            self.klick.send('/config/autoconnect')
         else:
             self.wtree.get_widget('radio_connect_manual').set_active(True)
 
-    @misc.gui_callback
+    @gui_callback
     def on_sound_toggled(self, b, data):
         if b.get_active():
-            self.klick.send('/set_sound', data)
-            self.config.set_sound(data)
+            self.klick.send('/config/set_sound', data)
 
-    @misc.gui_callback
+    @gui_callback
     def on_autoconnect_toggled(self, b, data):
         if b.get_active():
             if data == True:
-                self.klick.send('/autoconnect')
+                self.klick.send('/config/autoconnect')
             self.config.set_autoconnect(data)
 
-    @klick_backend.make_method('/sound', 'i')
-    @misc.osc_callback
+    @make_method('/config/sound', 'i')
+    @osc_callback
     def sound_cb(self, path, args):
         sound = args[0]
         if sound < 0 or sound > 3: return
         w = ('radio_sound_square', 'radio_sound_sine', 'radio_sound_noise', 'radio_sound_click')[sound]
         self.wtree.get_widget(w).set_active(True)
-
         self.config.set_sound(sound)

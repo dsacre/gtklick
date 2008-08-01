@@ -23,6 +23,7 @@ class GtklickConfig:
         self.parser.add_section('preferences')
         self.set_sound(0)
         self.set_autoconnect(False)
+        self.set_volume(1.0)
 
     def read(self):
         self.parser.read(self.cfgfile)
@@ -41,3 +42,9 @@ class GtklickConfig:
 
     def get_autoconnect(self):
         return self.parser.getboolean('preferences', 'autoconnect')
+
+    def set_volume(self, volume):
+        self.parser.set('preferences', 'volume', str(volume))
+
+    def get_volume(self):
+        return self.parser.getfloat('preferences', 'volume')

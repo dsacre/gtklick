@@ -22,11 +22,11 @@ import getopt
 
 import liblo
 
-import klick_backend
-import gtklick_config
-import main_window
-import preferences_dialog
-import misc
+from klick_backend import *
+from gtklick_config import *
+from main_window import *
+from preferences_dialog import *
+from misc import *
 
 
 help_string = """Usage:
@@ -58,28 +58,28 @@ class GTKlick:
             self.wtree = gtk.glade.XML('gtklick.glade')
 
             # load config from file
-            self.config = gtklick_config.GtklickConfig()
+            self.config = GtklickConfig()
             self.config.read()
 
             # start klick process
-            self.klick = klick_backend.KlickBackend(port, 'gtklick')
+            self.klick = KlickBackend(port, 'gtklick')
 
             # the actual windows are created by glade, this basically just connects GUI and OSC callbacks
-            self.win = main_window.MainWindow(self.wtree, self.klick)
-            self.prefs = preferences_dialog.PreferencesDialog(self.wtree, self.klick, self.config)
+            self.win = MainWindow(self.wtree, self.klick, self.config)
+            self.prefs = PreferencesDialog(self.wtree, self.klick, self.config)
 
             self.klick.add_method(None, None, self.fallback)
 
             # wassup?
-            self.klick.send('/query_all')
+            self.klick.send('/query')
 
-        except klick_backend.KlickBackendError, e:
+        except KlickBackendError, e:
             self.error_message(e.msg)
             sys.exit(1)
 
         # start timer to check if klick is still running
         if self.klick.process:
-            self.timer = gobject.timeout_add(1000, misc.weakref_method(self.check_klick))
+            self.timer = gobject.timeout_add(1000, weakref_method(self.check_klick))
 
     def __del__(self):
         self.config.write()
