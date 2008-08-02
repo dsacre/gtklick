@@ -71,7 +71,9 @@ class MainWindow:
 
         self.klick.register_methods(self)
 
-        self.klick.send('/config/set_volume', self.config.get_volume())
+        self.klick.send('/simple/set_tempo', self.config.tempo)
+        self.klick.send('/simple/set_meter', self.config.meter_beats, self.config.meter_denom)
+        self.klick.send('/config/set_volume', self.config.volume)
 
         self.taps = []
 
@@ -163,6 +165,7 @@ class MainWindow:
         elif key == gtk.keysyms.Up:         tempo += 10
         elif key == gtk.keysyms.Page_Down:  tempo /= 2
         elif key == gtk.keysyms.Page_Up:    tempo *= 2
+        tempo = min(max(tempo, 1), 999)
         self.klick.send('/simple/set_tempo', int(tempo))
         return True
 
@@ -173,8 +176,7 @@ class MainWindow:
             volume -= 0.1
         elif key in (gtk.keysyms.plus, gtk.keysyms.equal, gtk.keysyms.KP_Add):
             volume += 0.1
-        if volume < 0.0: volume = 0.0
-        if volume > 1.0: volume = 1.0
+        volume = min(max(volume, 0.0), 1.0)
         self.klick.send('/config/set_volume', volume)
         return True
 
@@ -199,36 +201,41 @@ class MainWindow:
     def metro_tempo_cb(self, path, args):
         self.wtree.get_widget('scale_tempo').set_value(args[0])
         self.wtree.get_widget('spin_tempo').set_value(args[0])
+        self.config.tempo = args[0]
 
     @make_method('/simple/meter', 'ii')
     @osc_callback
     def metro_meter_cb(self, path, args):
-        if args[0] in (0, 2, 3, 4) and args[1] == 4 and \
+        beats, denom = args
+        if beats in (0, 2, 3, 4) and denom == 4 and \
                 not self.wtree.get_widget('radio_meter_other').get_active():
             # standard meter
             self.wtree.get_widget('hbox_meter_spins').set_sensitive(False)
             self.wtree.get_widget('spin_meter_beats').select_region(0, 0)
             self.wtree.get_widget('spin_meter_denom').select_region(0, 0)
-            if args[0] == 0:
+            if beats == 0:
                 self.wtree.get_widget('radio_meter_even').set_active(True)
-            elif args[0] == 2:
+            elif beats == 2:
                 self.wtree.get_widget('radio_meter_24').set_active(True)
-            elif args[0] == 3:
+            elif beats == 3:
                 self.wtree.get_widget('radio_meter_34').set_active(True)
-            elif args[0] == 4:
+            elif beats == 4:
                 self.wtree.get_widget('radio_meter_44').set_active(True)
         else:
             # custom meter
             self.wtree.get_widget('radio_meter_other').set_active(True)
             self.wtree.get_widget('hbox_meter_spins').set_sensitive(True)
-            self.wtree.get_widget('spin_meter_beats').set_value(args[0])
-            self.wtree.get_widget('spin_meter_denom').set_value(args[1])
+            self.wtree.get_widget('spin_meter_beats').set_value(beats)
+            self.wtree.get_widget('spin_meter_denom').set_value(denom)
 
         # set active radio button as mnemonic widget
         w = [x for x in self.wtree.get_widget('radio_meter_other').get_group() if x.get_active()][0]
         self.wtree.get_widget('label_frame_meter').set_mnemonic_widget(w)
 
-        self.prev_denom = args[1]
+        self.prev_denom = denom
+
+        self.config.meter_beats = beats
+        self.config.meter_denom = denom
 
     @make_method('/metro/active', 'i')
     @osc_callback
@@ -246,7 +253,7 @@ class MainWindow:
     @osc_callback
     def volume_cb(self, path, args):
         self.wtree.get_widget('scale_volume').set_value(args[0])
-        self.config.set_volume(args[0])
+        self.config.volume = args[0]
 
 
     def tap_tempo(self):

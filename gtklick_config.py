@@ -13,17 +13,38 @@ import ConfigParser
 import os.path
 
 
-class GtklickConfig:
+def make_property(section, option, type_):
+    def getter(self):
+        if type_ is int:
+            return self.parser.getint(section, option)
+        elif type_ is float:
+            return self.parser.getfloat(section, option)
+        elif type_ is bool:
+            return self.parser.getboolean(section, option)
+
+    def setter(self, value):
+        self.parser.set(section, option, str(type_(value)))
+
+    return property(getter, setter)
+
+
+class GtklickConfig(object):
     def __init__(self):
         self.cfgfile = os.path.expanduser('~/.gtklickrc')
 
         self.parser = ConfigParser.SafeConfigParser()
 
-        # default values, overridden by read()
         self.parser.add_section('preferences')
-        self.set_sound(0)
-        self.set_autoconnect(False)
-        self.set_volume(1.0)
+        self.parser.add_section('state')
+
+        # default values, overridden by read()
+        self.sound = 0
+        self.autoconnect = False
+
+        self.tempo = 120
+        self.meter_beats = 4
+        self.meter_denom = 4
+        self.volume = 1.0
 
     def read(self):
         self.parser.read(self.cfgfile)
@@ -31,20 +52,11 @@ class GtklickConfig:
     def write(self):
         self.parser.write(open(self.cfgfile, 'w'))
 
-    def set_sound(self, sound):
-        self.parser.set('preferences', 'sound', str(sound))
 
-    def get_sound(self):
-        return self.parser.getint('preferences', 'sound')
+    sound       = make_property('preferences', 'sound', int)
+    autoconnect = make_property('preferences', 'autoconnect', bool)
 
-    def set_autoconnect(self, autoconnect):
-        self.parser.set('preferences', 'autoconnect', str(autoconnect))
-
-    def get_autoconnect(self):
-        return self.parser.getboolean('preferences', 'autoconnect')
-
-    def set_volume(self, volume):
-        self.parser.set('preferences', 'volume', str(volume))
-
-    def get_volume(self):
-        return self.parser.getfloat('preferences', 'volume')
+    tempo       = make_property('state', 'tempo', int)
+    meter_beats = make_property('state', 'meter_beats', int)
+    meter_denom = make_property('state', 'meter_denom', int)
+    volume      = make_property('state', 'volume', float)

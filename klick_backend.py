@@ -47,13 +47,10 @@ class KlickBackend(liblo.ServerThread):
             try:
                 self.process = subprocess.Popen([
                     '/home/das/src/klick/branches/osc/klick',
-#                    '/home/sacre/klick-osc/klick',
-#                    '/home/sacre/klick_wrapper',
-#                    '/home/das/klick_wrapper',
+#                    'klick',
                     '-R', self.get_url(),
                     '-n', name,
                     '-L',
-                    '-s1', ####
                 ])
             except OSError, e:
                 raise KlickBackendError("failed to start klick: " + e.strerror)

@@ -40,12 +40,12 @@ Options:
 class GTKlick:
     def __init__(self, args):
         # parse command line arguments
-        port = None
+        self.klick_port = None
         try:
             r = getopt.getopt(args, 'o:h');
             for opt in r[0]:
                 if opt[0] == '-o':
-                    port = opt[1]
+                    self.klick_port = opt[1]
                 elif opt[0] == '-h':
                     print help_string
                     sys.exit(0)
@@ -57,12 +57,13 @@ class GTKlick:
         try:
             self.wtree = gtk.glade.XML('gtklick.glade')
 
-            # load config from file
-            self.config = GtklickConfig()
-            self.config.read()
+            if not self.klick_port:
+                # load config from file
+                self.config = GtklickConfig()
+                self.config.read()
 
             # start klick process
-            self.klick = KlickBackend(port, 'gtklick')
+            self.klick = KlickBackend(self.klick_port, 'gtklick')
 
             # the actual windows are created by glade, this basically just connects GUI and OSC callbacks
             self.win = MainWindow(self.wtree, self.klick, self.config)
@@ -82,7 +83,8 @@ class GTKlick:
             self.timer = gobject.timeout_add(1000, weakref_method(self.check_klick))
 
     def __del__(self):
-        self.config.write()
+        if not self.klick_port:
+            self.config.write()
 
     def check_klick(self):
         if not self.klick.check_process():

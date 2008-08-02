@@ -30,8 +30,8 @@ class PreferencesDialog:
 
         self.klick.register_methods(self)
 
-        self.klick.send('/config/set_sound', self.config.get_sound())
-        if self.config.get_autoconnect():
+        self.klick.send('/config/set_sound', self.config.sound)
+        if self.config.autoconnect:
             self.wtree.get_widget('radio_connect_auto').set_active(True)
             self.klick.send('/config/autoconnect')
         else:
@@ -47,7 +47,7 @@ class PreferencesDialog:
         if b.get_active():
             if data == True:
                 self.klick.send('/config/autoconnect')
-            self.config.set_autoconnect(data)
+            self.config.autoconnect = data
 
     @make_method('/config/sound', 'i')
     @osc_callback
@@ -56,4 +56,4 @@ class PreferencesDialog:
         if sound < 0 or sound > 3: return
         w = ('radio_sound_square', 'radio_sound_sine', 'radio_sound_noise', 'radio_sound_click')[sound]
         self.wtree.get_widget(w).set_active(True)
-        self.config.set_sound(sound)
+        self.config.sound = sound

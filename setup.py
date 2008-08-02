@@ -22,12 +22,12 @@ except:
 
 setup(
     name = 'gtklick',
-    version = '0.0.1',
+    version = '0.1.0',
     author = 'Dominic Sacre',
     author_email = 'dominic.sacre@gmx.de',
     url = 'http://das.nasophon.de/gtklick/',
     description = '',
     license = "GPL",
-    scripts= ['gtklick.py'],
+    scripts = ['gtklick.py'],
     data_files = [('share/gtklick', ['gtklick.glade'])],
 )
