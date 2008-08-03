@@ -28,6 +28,7 @@ setup(
     url = 'http://das.nasophon.de/gtklick/',
     description = '',
     license = "GPL",
-    scripts = ['gtklick.py'],
-    data_files = [('share/gtklick', ['gtklick.glade'])],
+    scripts = ['bin/gtklick'],
+    packages = ['gtklick'],
+    data_files = [('share/gtklick', ['share/gtklick.glade'])],
 )

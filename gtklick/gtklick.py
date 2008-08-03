@@ -17,8 +17,9 @@ import gtk
 import gtk.glade
 import gobject
 
-import sys
 import getopt
+import sys
+import os.path
 
 import liblo
 
@@ -38,7 +39,7 @@ Options:
 
 
 class GTKlick:
-    def __init__(self, args):
+    def __init__(self, args, share_dir):
         # parse command line arguments
         self.klick_port = None
         try:
@@ -55,11 +56,11 @@ class GTKlick:
         gtk.gdk.threads_init()
 
         try:
-            self.wtree = gtk.glade.XML('gtklick.glade')
+            self.wtree = gtk.glade.XML(os.path.join(share_dir, 'gtklick.glade'))
 
             if not self.klick_port:
                 # load config from file
-                self.config = GtklickConfig()
+                self.config = GTKlickConfig()
                 self.config.read()
 
             # start klick process
@@ -86,6 +87,9 @@ class GTKlick:
         if not self.klick_port:
             self.config.write()
 
+    def run(self):
+        gtk.main()
+
     def check_klick(self):
         if not self.klick.check_process():
             self.error_message("klick seems to have been killed, can't continue without it")
@@ -103,5 +107,5 @@ class GTKlick:
 
 
 if __name__ == '__main__':
-    gtklick = GTKlick(sys.argv[1:])
-    gtk.main()
+    app = GTKlick(sys.argv[1:], 'share')
+    app.run()

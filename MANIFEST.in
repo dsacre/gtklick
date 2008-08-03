@@ -1,0 +1,7 @@
+include setup.py
+include README
+include COPYING
+include NEWS
+include bin/gtklick
+include gtklick *.py
+recursive-include share *

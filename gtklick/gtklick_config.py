@@ -28,7 +28,7 @@ def make_property(section, option, type_):
     return property(getter, setter)
 
 
-class GtklickConfig(object):
+class GTKlickConfig(object):
     def __init__(self):
         self.cfgfile = os.path.expanduser('~/.gtklickrc')
 

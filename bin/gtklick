@@ -1,0 +1,22 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# gtklick
+#
+# Copyright (C) 2008  Dominic Sacré  <dominic.sacre@gmx.de>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+
+from gtklick.gtklick import GTKlick
+import sys
+import os.path
+
+bin_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
+share_dir = os.path.join(os.path.split(bin_dir)[0], 'share/gtklick')
+
+app = GTKlick(sys.argv[1:], share_dir)
+app.run()
