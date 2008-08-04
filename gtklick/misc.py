@@ -25,20 +25,23 @@ def gui_callback(f):
 # gtk functions, and block gtk signals while the function is running
 def osc_callback(f):
     def g(self, *args):
-        gtk.gdk.threads_enter()
-        self.__block = True
+        try:
+            gtk.gdk.threads_enter()
+            self.__block = True
 
-        # call function with the correct number of arguments, to allow osc callbacks to omit
-        # some of pyliblo's callback arguments
-        if inspect.getargspec(f)[1] == None:
-            n = len(inspect.getargspec(f)[0]) - 1
-            r = f(self, *args[0:n])
-        else:
-            r = f(self, *args)
+            # call function with the correct number of arguments, to allow osc callbacks to omit
+            # some of pyliblo's callback arguments
+            if inspect.getargspec(f)[1] == None:
+                n = len(inspect.getargspec(f)[0]) - 1
+                r = f(self, *args[0:n])
+            else:
+                r = f(self, *args)
 
-        self.__block = False
-        gtk.gdk.threads_leave()
-        return r
+            self.__block = False
+            gtk.gdk.threads_leave()
+            return r
+        finally:
+            gtk.gdk.threads_leave()
     return g
 
 

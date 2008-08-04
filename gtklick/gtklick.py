@@ -58,9 +58,10 @@ class GTKlick:
         try:
             self.wtree = gtk.glade.XML(os.path.join(share_dir, 'gtklick.glade'))
 
+            self.config = GTKlickConfig()
+
             if not self.klick_port:
                 # load config from file
-                self.config = GTKlickConfig()
                 self.config.read()
 
             # start klick process
@@ -72,7 +73,6 @@ class GTKlick:
 
             self.klick.add_method(None, None, self.fallback)
 
-            # wassup?
             self.klick.send('/query')
 
         except KlickBackendError, e:
@@ -97,7 +97,8 @@ class GTKlick:
         return True
 
     def fallback(self, path, args, types, src):
-        print "message not handled:", path, args, src.get_url()
+#        print "message not handled:", path, args, src.get_url()
+        pass
 
     def error_message(self, msg):
         m = gtk.MessageDialog(self.wtree.get_widget('window_main'),

@@ -50,7 +50,7 @@ class KlickBackend(liblo.ServerThread):
 #                    'klick',
                     '-R', self.get_url(),
                     '-n', name,
-                    '-L',
+#                    '-L',
                 ])
             except OSError, e:
                 raise KlickBackendError("failed to start klick: " + e.strerror)

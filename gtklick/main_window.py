@@ -72,10 +72,8 @@ class MainWindow:
         self.klick.register_methods(self)
 
         self.klick.send('/simple/set_tempo', self.config.tempo)
-        self.klick.send('/simple/set_meter', self.config.meter_beats, self.config.meter_denom)
+        self.klick.send('/simple/set_meter', self.config.beats, self.config.denom)
         self.klick.send('/config/set_volume', self.config.volume)
-
-        self.taps = []
 
 
     # GUI callbacks
@@ -101,7 +99,7 @@ class MainWindow:
 
     @gui_callback
     def on_tap_tempo(self, b):
-        self.tap_tempo()
+        self.klick.send('/simple/tap', ('d', time.time()))
 
     @gui_callback
     def on_meter_toggled(self, b, data):
@@ -190,7 +188,7 @@ class MainWindow:
 
     @gui_callback
     def on_tap_tempo_accel(self, group, accel, key, mod):
-        self.tap_tempo()
+        self.klick.send('/simple/tap', ('d', time.time()))
         return True
 
 
@@ -234,8 +232,8 @@ class MainWindow:
 
         self.prev_denom = denom
 
-        self.config.meter_beats = beats
-        self.config.meter_denom = denom
+        self.config.beats = beats
+        self.config.denom = denom
 
     @make_method('/metro/active', 'i')
     @osc_callback
@@ -254,22 +252,3 @@ class MainWindow:
     def volume_cb(self, path, args):
         self.wtree.get_widget('scale_volume').set_value(args[0])
         self.config.volume = args[0]
-
-
-    def tap_tempo(self):
-        self.taps.append(time.time())
-
-        self.taps = self.taps[-8:]
-
-        for i in range(len(self.taps) - 1, 0, -1):
-            dist_next = self.taps[i] - self.taps[i-1]
-            dist_now = self.taps[-1] - self.taps[i-1]
-            if dist_next > 1.5 or dist_now > 3.0:
-                if dist_now < 5.0:
-                    i = min(i, len(self.taps) - 2)
-                self.taps = self.taps[i:]
-                break
-
-        if len(self.taps) > 1:
-            bpm = int(60.0 * (len(self.taps) - 1) / (self.taps[-1] - self.taps[0]))
-            self.klick.send('/metro/set_tempo', bpm)

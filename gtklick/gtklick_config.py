@@ -42,8 +42,8 @@ class GTKlickConfig(object):
         self.autoconnect = False
 
         self.tempo = 120
-        self.meter_beats = 4
-        self.meter_denom = 4
+        self.beats = 4
+        self.denom = 4
         self.volume = 1.0
 
     def read(self):
@@ -57,6 +57,6 @@ class GTKlickConfig(object):
     autoconnect = make_property('preferences', 'autoconnect', bool)
 
     tempo       = make_property('state', 'tempo', int)
-    meter_beats = make_property('state', 'meter_beats', int)
-    meter_denom = make_property('state', 'meter_denom', int)
+    beats       = make_property('state', 'beats', int)
+    denom       = make_property('state', 'denom', int)
     volume      = make_property('state', 'volume', float)
