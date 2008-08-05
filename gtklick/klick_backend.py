@@ -35,21 +35,22 @@ class make_method(liblo.make_method):
 
 
 class KlickBackend(liblo.ServerThread):
-    def __init__(self, port, name):
+    def __init__(self, name, port, connect):
         self.addr = None
         self.ready = threading.Event()
         # call base class c'tor and start OSC server
         liblo.ServerThread.__init__(self)
         self.start()
 
-        if not port:
+        if not connect:
             # start klick process
             try:
                 self.process = subprocess.Popen([
                     '/home/das/src/klick/branches/osc/klick',
 #                    'klick',
-                    '-R', self.get_url(),
                     '-n', name,
+                    '-o', str(port),
+                    '-R', self.get_url(),
 #                    '-L',
                 ])
             except OSError, e:

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.1 on Sat Aug  2 08:20:19 2008 -->
+<!--Generated with glade3 3.4.1 on Tue Aug  5 09:22:02 2008 -->
 <glade-interface>
   <widget class="GtkAboutDialog" id="dialog_about">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -16,6 +16,7 @@
     <property name="version">0.1.0</property>
     <property name="copyright" translatable="yes">© 2008 Dominic Sacré &lt;dominic.sacre@gmx.de&gt;</property>
     <property name="website">http://das.nasophon.de/gtklick/</property>
+    <property name="artists"></property>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -815,7 +816,7 @@ Ctrl+→			Tempo + 1
 Ctrl+←			Tempo - 1
 Ctrl+↑			Tempo + 10
 Ctrl+↓			Tempo - 10
-Ctrl+PgUp		Tempo * 2
+Ctrl+PgUp		Tempo × 2
 Ctrl+PgDn		Tempo / 2
 
 Ctrl+Return		Tap tempo

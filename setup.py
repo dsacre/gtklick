@@ -3,8 +3,8 @@
 from distutils.core import setup
 import sys
 
-if sys.hexversion < 0x02050000:
-    sys.exit("sorry, python 2.5 or higher is required")
+if sys.hexversion < 0x02040000:
+    sys.exit("sorry, python 2.4 or higher is required")
 
 try:
     import pygtk
@@ -30,5 +30,8 @@ setup(
     license = "GPL",
     scripts = ['bin/gtklick'],
     packages = ['gtklick'],
-    data_files = [('share/gtklick', ['share/gtklick.glade'])],
+    data_files = [
+        ('share/gtklick', ['share/gtklick.glade']),
+        ('share/applications', ['share/gtklick.desktop']),
+    ],
 )

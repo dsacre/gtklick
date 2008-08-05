@@ -34,19 +34,27 @@ help_string = """Usage:
   gtklick [ options ]
 
 Options:
-  -o port   specify OSC port of klick instance to connect to
+  -o port   OSC port to start klick with
+  -q port   OSC port of running klick instance to connect to
   -h        show this help"""
 
 
 class GTKlick:
     def __init__(self, args, share_dir):
+        self.config =None
+
         # parse command line arguments
-        self.klick_port = None
+        self.port = 0
+        self.connect = False
         try:
-            r = getopt.getopt(args, 'o:h');
+            r = getopt.getopt(args, 'o:q:h');
             for opt in r[0]:
                 if opt[0] == '-o':
-                    self.klick_port = opt[1]
+                    self.port = opt[1]
+                    self.connect = False
+                elif opt[0] == '-q':
+                    self.port = opt[1]
+                    self.connect = True
                 elif opt[0] == '-h':
                     print help_string
                     sys.exit(0)
@@ -60,18 +68,18 @@ class GTKlick:
 
             self.config = GTKlickConfig()
 
-            if not self.klick_port:
+            if not self.connect:
                 # load config from file
                 self.config.read()
 
             # start klick process
-            self.klick = KlickBackend(self.klick_port, 'gtklick')
+            self.klick = KlickBackend('gtklick', self.port, self.connect)
 
             # the actual windows are created by glade, this basically just connects GUI and OSC callbacks
             self.win = MainWindow(self.wtree, self.klick, self.config)
             self.prefs = PreferencesDialog(self.wtree, self.klick, self.config)
 
-            self.klick.add_method(None, None, self.fallback)
+            #self.klick.add_method(None, None, self.fallback)
 
             self.klick.send('/query')
 
@@ -84,7 +92,7 @@ class GTKlick:
             self.timer = gobject.timeout_add(1000, weakref_method(self.check_klick))
 
     def __del__(self):
-        if not self.klick_port:
+        if not self.connect and self.config:
             self.config.write()
 
     def run(self):
@@ -97,8 +105,7 @@ class GTKlick:
         return True
 
     def fallback(self, path, args, types, src):
-#        print "message not handled:", path, args, src.get_url()
-        pass
+        print "message not handled:", path, args, src.get_url()
 
     def error_message(self, msg):
         m = gtk.MessageDialog(self.wtree.get_widget('window_main'),
