@@ -46,8 +46,7 @@ class KlickBackend(liblo.ServerThread):
             # start klick process
             try:
                 self.process = subprocess.Popen([
-                    '/home/das/src/klick/branches/osc/klick',
-#                    'klick',
+                    'klick',
                     '-n', name,
                     '-o', str(port),
                     '-R', self.get_url(),
