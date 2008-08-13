@@ -1,7 +1,7 @@
 2008-08-13: Version 0.1.1
 
  * Increased timeout when starting klick, to work around some liblo
-   weirdness (slow startup under certain circumstances, e.g. with
+   strangeness (slow startup under certain circumstances, e.g. with
    avahi-daemon running).
 
 2008-08-11: Version 0.1.0
