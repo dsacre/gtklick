@@ -31,7 +31,7 @@ class MainWindow:
 
         self.wtree.signal_autoconnect({
             # main menu
-            'on_file_quit':             gtk.main_quit,
+            'on_file_quit':             self.on_file_quit,
             'on_edit_preferences':      self.on_edit_preferences,
             'on_help_shortcuts':        self.on_help_shortcuts,
             'on_help_about':            self.on_help_about,
@@ -77,6 +77,9 @@ class MainWindow:
 
 
     # GUI callbacks
+
+    def on_file_quit(self, i):
+        self.wtree.get_widget('window_main').destroy()
 
     def on_edit_preferences(self, i):
         prefs = self.wtree.get_widget('dialog_preferences')
