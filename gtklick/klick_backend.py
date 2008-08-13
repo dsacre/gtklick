@@ -10,14 +10,10 @@
 # (at your option) any later version.
 
 import liblo
-import subprocess
 
-import time
+import subprocess
 import sys
-import re
 import threading
-import os
-import signal
 
 START_TIMEOUT = 10
 

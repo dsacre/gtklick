@@ -21,8 +21,6 @@ import getopt
 import sys
 import os.path
 
-import liblo
-
 from klick_backend import *
 from gtklick_config import *
 from main_window import *
