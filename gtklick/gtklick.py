@@ -44,7 +44,7 @@ class GTKlick:
         self.config =None
 
         # parse command line arguments
-        self.port = 0
+        self.port = None
         self.connect = False
         try:
             r = getopt.getopt(args, 'o:q:h');

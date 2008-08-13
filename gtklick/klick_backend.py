@@ -19,7 +19,7 @@ import threading
 import os
 import signal
 
-START_TIMEOUT = 5
+START_TIMEOUT = 10
 
 
 class KlickBackendError:
@@ -45,13 +45,15 @@ class KlickBackend(liblo.ServerThread):
         if not connect:
             # start klick process
             try:
-                self.process = subprocess.Popen([
+                args = [
                     'klick',
                     '-n', name,
-                    '-o', str(port),
                     '-R', self.get_url(),
-#                    '-L',
-                ])
+                    #'-L'
+                ]
+                if port:
+                    args += ['-o', str(port)]
+                self.process = subprocess.Popen(args)
             except OSError, e:
                 raise KlickBackendError("failed to start klick: " + e.strerror)
             # wait for klick to send /klick/ready
