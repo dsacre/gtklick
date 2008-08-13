@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+#
 # gtklick
 #
 # Copyright (C) 2008  Dominic Sacré  <dominic.sacre@gmx.de>
@@ -63,6 +63,7 @@ class GTKlick:
 
         try:
             self.wtree = gtk.glade.XML(os.path.join(share_dir, 'gtklick.glade'))
+            self.widgets = dict([(w.get_name(), w) for w in self.wtree.get_widget_prefix('')])
 
             self.config = GTKlickConfig()
 
@@ -74,8 +75,8 @@ class GTKlick:
             self.klick = KlickBackend('gtklick', self.port, self.connect)
 
             # the actual windows are created by glade, this basically just connects GUI and OSC callbacks
-            self.win = MainWindow(self.wtree, self.klick, self.config)
-            self.prefs = PreferencesDialog(self.wtree, self.klick, self.config)
+            self.win = MainWindow(self.wtree, self.widgets, self.klick, self.config)
+            self.prefs = PreferencesDialog(self.wtree, self.widgets, self.klick, self.config)
 
             #self.klick.add_method(None, None, self.fallback)
 

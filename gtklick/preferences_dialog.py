@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+#
 # gtklick
 #
 # Copyright (C) 2008  Dominic Sacré  <dominic.sacre@gmx.de>
@@ -14,12 +14,12 @@ from misc import *
 
 
 class PreferencesDialog:
-    def __init__(self, wtree, klick, config):
-        self.wtree = wtree
+    def __init__(self, wtree, widgets, klick, config):
+        self.widgets = widgets
         self.klick = klick
         self.config = config
 
-        self.wtree.signal_autoconnect({
+        wtree.signal_autoconnect({
             'on_sound_square_toggled':  (self.on_sound_toggled, 0),
             'on_sound_sine_toggled':    (self.on_sound_toggled, 1),
             'on_sound_noise_toggled':   (self.on_sound_toggled, 2),
@@ -32,10 +32,10 @@ class PreferencesDialog:
 
         self.klick.send('/config/set_sound', self.config.sound)
         if self.config.autoconnect:
-            self.wtree.get_widget('radio_connect_auto').set_active(True)
+            self.widgets['radio_connect_auto'].set_active(True)
             self.klick.send('/config/autoconnect')
         else:
-            self.wtree.get_widget('radio_connect_manual').set_active(True)
+            self.widgets['radio_connect_manual'].set_active(True)
 
     @gui_callback
     def on_sound_toggled(self, b, data):
@@ -55,5 +55,5 @@ class PreferencesDialog:
         sound = args[0]
         if sound < 0 or sound > 3: return
         w = ('radio_sound_square', 'radio_sound_sine', 'radio_sound_noise', 'radio_sound_click')[sound]
-        self.wtree.get_widget(w).set_active(True)
+        self.widgets[w].set_active(True)
         self.config.sound = sound

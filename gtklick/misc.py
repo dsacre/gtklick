@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+#
 # gtklick
 #
 # Copyright (C) 2008  Dominic Sacré  <dominic.sacre@gmx.de>
