@@ -1,3 +1,8 @@
+2008-08-14: Version 0.1.2
+
+ * Terminate klick correctly on file->quit from the main menu.
+ * Some code cleanup.
+
 2008-08-13: Version 0.1.1
 
  * Increased timeout when starting klick, to work around some liblo
