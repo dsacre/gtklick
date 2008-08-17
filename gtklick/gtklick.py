@@ -63,7 +63,8 @@ class GTKlick:
 
         try:
             self.wtree = gtk.glade.XML(os.path.join(share_dir, 'gtklick.glade'))
-            self.widgets = dict([(w.get_name(), w) for w in self.wtree.get_widget_prefix('')])
+            # explicitly call base class method, because get_name() is overridden in AboutDialog. stupid GTK...
+            self.widgets = dict([(gtk.Widget.get_name(w), w) for w in self.wtree.get_widget_prefix('')])
 
             self.config = GTKlickConfig()
 
