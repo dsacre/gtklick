@@ -42,7 +42,6 @@ def osc_callback(f):
                 r = f(self, *args)
 
             self.__block = False
-            gtk.gdk.threads_leave()
             return r
         finally:
             gtk.gdk.threads_leave()
