@@ -21,6 +21,8 @@ def make_property(section, option, type_):
             return self.parser.getfloat(section, option)
         elif type_ is bool:
             return self.parser.getboolean(section, option)
+        elif type_ is str:
+            return self.parser.get(section, option)
 
     def setter(self, value):
         self.parser.set(section, option, str(type_(value)))
@@ -35,16 +37,24 @@ class GTKlickConfig(object):
         self.parser = ConfigParser.SafeConfigParser()
 
         self.parser.add_section('preferences')
+        self.parser.add_section('view')
         self.parser.add_section('state')
 
         # default values, overridden by read()
-        self.sound = 0
-        self.autoconnect = False
+        self.prefs_sound = 0
+        self.prefs_autoconnect = False
 
-        self.tempo = 120
-        self.beats = 4
-        self.denom = 4
-        self.volume = 1.0
+        self.view_markings = False
+        self.view_meter = True
+        self.view_speedtrainer = False
+        self.view_pattern = False
+
+        self.state_tempo = 120
+        self.state_beats = 4
+        self.state_denom = 4
+        self.state_volume = 1.0
+        self.state_speedtrainer = False
+        self.state_pattern = ''
 
     def read(self):
         self.parser.read(self.cfgfile)
@@ -53,10 +63,17 @@ class GTKlickConfig(object):
         self.parser.write(open(self.cfgfile, 'w'))
 
 
-    sound       = make_property('preferences', 'sound', int)
-    autoconnect = make_property('preferences', 'autoconnect', bool)
+    prefs_sound         = make_property('preferences', 'sound', int)
+    prefs_autoconnect   = make_property('preferences', 'autoconnect', bool)
 
-    tempo       = make_property('state', 'tempo', int)
-    beats       = make_property('state', 'beats', int)
-    denom       = make_property('state', 'denom', int)
-    volume      = make_property('state', 'volume', float)
+    view_markings       = make_property('view', 'markings', bool)
+    view_meter          = make_property('view', 'meter', bool)
+    view_speedtrainer   = make_property('view', 'speedtrainer', bool)
+    view_pattern        = make_property('view', 'pattern', bool)
+
+    state_tempo         = make_property('state', 'tempo', int)
+    state_beats         = make_property('state', 'beats', int)
+    state_denom         = make_property('state', 'denom', int)
+    state_volume        = make_property('state', 'volume', float)
+    state_speedtrainer  = make_property('state', 'speedtrainer', bool)
+    state_pattern       = make_property('state', 'pattern', str)

@@ -6,9 +6,9 @@ Copyright (C) 2008  Dominic Sacré  <dominic.sacre@gmx.de>
 Requirements:
 =============
 
-* Python 2.4
+* Python 2.5
 * PyGTK
-* klick [http://das.nasophon.de/klick/]
+* klick 0.9 [http://das.nasophon.de/klick/]
 * pyliblo [http://das.nsaophon.de/pyliblo/]
 
 

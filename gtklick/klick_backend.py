@@ -42,7 +42,8 @@ class KlickBackend(liblo.ServerThread):
             # start klick process
             try:
                 args = [
-                    'klick',
+#                    'klick',
+                    '/home/das/src/klick/trunk/klick',
                     '-n', name,
                     '-R', self.get_url(),
                     #'-L'
