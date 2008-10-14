@@ -27,8 +27,8 @@ class MainWindow:
         self.config = config
 
         # why doesn't glade do this?
-        self.widgets['spin_meter_beats'].set_value(4)
-        self.widgets['spin_meter_denom'].set_value(4)
+        #self.widgets['spin_meter_beats'].set_value(4)
+        #self.widgets['spin_meter_denom'].set_value(4)
 
         wtree.signal_autoconnect({
             # main menu
@@ -47,6 +47,8 @@ class MainWindow:
             'on_tempo_format_value':            self.on_tempo_format_value,
             # speed trainer
             'on_speedtrainer_enable_toggled':   self.on_speedtrainer_enable_toggled,
+            'on_tempo_increment_changed':       self.on_tempo_increment_changed,
+            'on_tempo_limit_changed':           self.on_tempo_limit_changed,
             # meter
             'on_meter_even_toggled':            (self.on_meter_toggled, (0, 4)),
             'on_meter_24_toggled':              (self.on_meter_toggled, (2, 4)),
@@ -84,17 +86,20 @@ class MainWindow:
         self.widgets['item_view_speedtrainer'].set_active(self.config.view_speedtrainer)
         self.widgets['item_view_pattern'].set_active(self.config.view_pattern)
 
-        self.widgets['check_speedtrainer_enable'].set_active(self.config.state_speedtrainer)
+        self.widgets['check_speedtrainer_enable'].set_active(self.config.speedtrainer)
         self.widgets['check_speedtrainer_enable'].toggled()
 
         self.pattern_buttons = []
 
         self.klick.register_methods(self)
 
-        self.klick.send('/simple/set_tempo', self.config.state_tempo)
-        self.klick.send('/simple/set_meter', self.config.state_beats, self.config.state_denom)
-        self.klick.send('/simple/set_pattern', self.config.state_pattern)
-        self.klick.send('/config/set_volume', self.config.state_volume)
+        self.klick.send('/simple/set_tempo', self.config.tempo)
+        self.klick.send('/simple/set_tempo_increment',
+                        self.config.tempo_increment if self.config.speedtrainer else 0.0)
+        self.klick.send('/simple/set_tempo_limit', self.config.tempo_limit)
+        self.klick.send('/simple/set_meter', self.config.beats, self.config.denom)
+        self.klick.send('/simple/set_pattern', self.config.pattern)
+        self.klick.send('/config/set_volume', self.config.volume)
 
         self.widgets['window_main'].show()
 
@@ -165,7 +170,15 @@ class MainWindow:
     def on_speedtrainer_enable_toggled(self, b):
         self.widgets['spin_tempo_increment'].set_sensitive(b.get_active())
         self.widgets['spin_tempo_limit'].set_sensitive(b.get_active())
-        self.config.state_speedtrainer = b.get_active()
+        self.config.speedtrainer = b.get_active()
+
+    @gui_callback
+    def on_tempo_increment_changed(self, b):
+        self.klick.send('/simple/set_tempo_increment')
+
+    @gui_callback
+    def on_tempo_limit_changed(self, b):
+        self.klick.send('/simple/set_tempo_limit')
 
     @gui_callback
     def on_meter_toggled(self, b, data):
@@ -184,7 +197,7 @@ class MainWindow:
     def set_meter(self, beats, denom):
         if beats == 0:
             self.pattern_buttons[0].set_state(1)
-        elif beats != 0 and self.config.state_beats == 0:
+        elif beats != 0 and self.config.beats == 0:
             self.pattern_buttons[0].set_state(2)
 
         self.klick.send('/simple/set_meter', beats, denom)
@@ -194,14 +207,14 @@ class MainWindow:
         v = b.get_value()
 
         # make sure value is a power of two
-        if v == self.config.state_denom:
+        if v == self.config.denom:
             return
-        elif v == self.config.state_denom - 0.5:
+        elif v == self.config.denom - 0.5:
             # down arrow (step_inc is 0.5)
-            denom = 2 ** (math.log(self.config.state_denom, 2) - 1)
-        elif v == self.config.state_denom + 0.5:
+            denom = 2 ** (math.log(self.config.denom, 2) - 1)
+        elif v == self.config.denom + 0.5:
             # up arrow
-            denom = 2 ** (math.log(self.config.state_denom, 2) + 1)
+            denom = 2 ** (math.log(self.config.denom, 2) + 1)
         else:
             # keyboard input: use next power of two
             denom = 1
@@ -209,7 +222,7 @@ class MainWindow:
                 denom *= 2
 
         b.set_value(denom)
-        self.config.state_denom = denom
+        self.config.denom = denom
 
         self.set_meter(self.widgets['spin_meter_beats'].get_value(),
                        self.widgets['spin_meter_denom'].get_value())
@@ -278,7 +291,27 @@ class MainWindow:
     def simple_tempo_cb(self, path, args):
         self.widgets['scale_tempo'].set_value(args[0])
         self.widgets['spin_tempo'].set_value(args[0])
-        self.config.state_tempo = args[0]
+        self.config.tempo = args[0]
+
+    @make_method('/simple/tempo_increment', 'f')
+    @osc_callback
+    def simple_tempo_increment_cb(self, path, args):
+        self.widgets['spin_tempo_increment'].set_value(args[0])
+        self.config.tempo_increment = args[0]
+
+    @make_method('/simple/tempo_limit', 'f')
+    @osc_callback
+    def simple_tempo_limit_cb(self, path, args):
+        self.widgets['spin_tempo_limit'].set_value(args[0])
+        self.config.tempo_limit = args[0]
+
+    @make_method('/simple/current_tempo', 'f')
+    @osc_callback
+    def simple_current_tempo_cb(self, path, args):
+        if args[0]:
+            self.widgets['window_main'].set_title("gtklick - " + str(int(args[0])))
+        else:
+            self.widgets['window_main'].set_title("gtklick")
 
     @make_method('/simple/meter', 'ii')
     @osc_callback
@@ -309,8 +342,8 @@ class MainWindow:
         w = [x for x in self.widgets['radio_meter_other'].get_group() if x.get_active()][0]
         self.widgets['label_frame_meter'].set_mnemonic_widget(w)
 
-        self.config.state_beats = beats
-        self.config.state_denom = denom
+        self.config.beats = beats
+        self.config.denom = denom
 
         self.readjust_pattern_table(beats)
         self.send_pattern()
@@ -323,7 +356,7 @@ class MainWindow:
             pattern = self.default_pattern()
         for p, b in itertools.izip(pattern, self.pattern_buttons):
             b.set_state('.xX'.index(p))
-        self.config.state_pattern = pattern
+        self.config.pattern = pattern
 
     @make_method('/metro/active', 'i')
     @osc_callback
@@ -341,7 +374,7 @@ class MainWindow:
     @osc_callback
     def config_volume_cb(self, path, args):
         self.widgets['scale_volume'].set_value(args[0])
-        self.config.state_volume = args[0]
+        self.config.volume = args[0]
 
 
     def readjust_pattern_table(self, beats):
@@ -366,9 +399,6 @@ class MainWindow:
                 self.pattern_buttons.append(b)
                 b.set_state(2 if x == 0 else 1)
                 b.show()
-
-#        if beats == 0:
-#            self.pattern_buttons[0].set_state(1)
 
     def send_pattern(self):
         pattern = ''.join('.xX'[s] for s in (n.get_state() for n in self.pattern_buttons))

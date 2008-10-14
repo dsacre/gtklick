@@ -19,6 +19,7 @@ import weakref, new
 # decorator: don't call function while gtk signals are blocked
 def gui_callback(f):
     def g(self, *args):
+        # FIXME: it may be a bad idea to discard arbitrary signals
         if not hasattr(self, '__block') or not self.__block:
             return f(self, *args)
     return g

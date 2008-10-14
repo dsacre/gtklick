@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.1 on Sat Oct  4 16:58:07 2008 -->
+<!--Generated with glade3 3.4.1 on Tue Oct  7 14:36:23 2008 -->
 <glade-interface>
   <widget class="GtkAboutDialog" id="dialog_about">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -570,11 +570,12 @@
                             <property name="max_length">4</property>
                             <property name="width_chars">4</property>
                             <property name="xalign">1</property>
-                            <property name="adjustment">0.10000000000000001 0 9.9000000000000004 0.10000000000000001 1 1</property>
+                            <property name="adjustment">0.10000000000000001 0 9.9000000000000004 0.050000000000000003 1 1</property>
                             <property name="digits">2</property>
                             <property name="snap_to_ticks">True</property>
                             <property name="numeric">True</property>
                             <property name="update_policy">GTK_UPDATE_IF_VALID</property>
+                            <signal name="value_changed" handler="on_tempo_increment_changed"/>
                           </widget>
                           <packing>
                             <property name="expand">False</property>

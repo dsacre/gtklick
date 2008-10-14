@@ -49,12 +49,14 @@ class GTKlickConfig(object):
         self.view_speedtrainer = False
         self.view_pattern = False
 
-        self.state_tempo = 120
-        self.state_beats = 4
-        self.state_denom = 4
-        self.state_volume = 1.0
-        self.state_speedtrainer = False
-        self.state_pattern = ''
+        self.tempo = 120
+        self.speedtrainer = False
+        self.tempo_increment = 0.1
+        self.tempo_limit = 120
+        self.beats = 4
+        self.denom = 4
+        self.pattern = ''
+        self.volume = 1.0
 
     def read(self):
         self.parser.read(self.cfgfile)
@@ -71,9 +73,11 @@ class GTKlickConfig(object):
     view_speedtrainer   = make_property('view', 'speedtrainer', bool)
     view_pattern        = make_property('view', 'pattern', bool)
 
-    state_tempo         = make_property('state', 'tempo', int)
-    state_beats         = make_property('state', 'beats', int)
-    state_denom         = make_property('state', 'denom', int)
-    state_volume        = make_property('state', 'volume', float)
-    state_speedtrainer  = make_property('state', 'speedtrainer', bool)
-    state_pattern       = make_property('state', 'pattern', str)
+    tempo               = make_property('state', 'tempo', int)
+    speedtrainer        = make_property('state', 'speedtrainer', bool)
+    tempo_increment     = make_property('state', 'tempo_increment', float)
+    tempo_limit         = make_property('state', 'tempo_limit', float)
+    beats               = make_property('state', 'beats', int)
+    denom               = make_property('state', 'denom', int)
+    pattern             = make_property('state', 'pattern', str)
+    volume              = make_property('state', 'volume', float)
