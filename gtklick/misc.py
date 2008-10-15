@@ -32,7 +32,7 @@ def osc_callback(f):
             gtk.gdk.threads_enter()
             self.__block = True
 
-            #print args[0], args[1]
+            print args[0], args[1]
 
             # call function with the correct number of arguments, to allow osc callbacks to omit
             # some of pyliblo's callback arguments

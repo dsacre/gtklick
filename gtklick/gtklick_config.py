@@ -51,8 +51,8 @@ class GTKlickConfig(object):
 
         self.tempo = 120
         self.speedtrainer = False
-        self.tempo_increment = 0.1
-        self.tempo_limit = 120
+        self.tempo_increment = 0.5
+        self.tempo_limit = 180
         self.beats = 4
         self.denom = 4
         self.pattern = ''

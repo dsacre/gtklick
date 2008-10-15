@@ -27,8 +27,8 @@ class MainWindow:
         self.config = config
 
         # why doesn't glade do this?
-        #self.widgets['spin_meter_beats'].set_value(4)
-        #self.widgets['spin_meter_denom'].set_value(4)
+        self.widgets['spin_meter_beats'].set_value(4)
+        self.widgets['spin_meter_denom'].set_value(4)
 
         wtree.signal_autoconnect({
             # main menu
@@ -92,16 +92,6 @@ class MainWindow:
         self.pattern_buttons = []
 
         self.klick.register_methods(self)
-
-        self.klick.send('/simple/set_tempo', self.config.tempo)
-        self.klick.send('/simple/set_tempo_increment',
-                        self.config.tempo_increment if self.config.speedtrainer else 0.0)
-        self.klick.send('/simple/set_tempo_limit', self.config.tempo_limit)
-        self.klick.send('/simple/set_meter', self.config.beats, self.config.denom)
-        self.klick.send('/simple/set_pattern', self.config.pattern)
-        self.klick.send('/config/set_volume', self.config.volume)
-
-        self.widgets['window_main'].show()
 
 
     # GUI callbacks
@@ -168,17 +158,23 @@ class MainWindow:
 
     @gui_callback
     def on_speedtrainer_enable_toggled(self, b):
-        self.widgets['spin_tempo_increment'].set_sensitive(b.get_active())
-        self.widgets['spin_tempo_limit'].set_sensitive(b.get_active())
-        self.config.speedtrainer = b.get_active()
+        a = b.get_active()
+        self.widgets['spin_tempo_increment'].set_sensitive(a)
+        self.widgets['spin_tempo_limit'].set_sensitive(a)
+        self.config.speedtrainer = a
+        if a:
+            self.klick.send('/simple/set_tempo_increment', self.widgets['spin_tempo_increment'].get_value())
+            self.klick.send('/simple/set_tempo_limit', self.widgets['spin_tempo_limit'].get_value())
+        else:
+            self.klick.send('/simple/set_tempo_increment', 0.0)
 
     @gui_callback
     def on_tempo_increment_changed(self, b):
-        self.klick.send('/simple/set_tempo_increment')
+        self.klick.send('/simple/set_tempo_increment', b.get_value())
 
     @gui_callback
     def on_tempo_limit_changed(self, b):
-        self.klick.send('/simple/set_tempo_limit')
+        self.klick.send('/simple/set_tempo_limit', b.get_value())
 
     @gui_callback
     def on_meter_toggled(self, b, data):
@@ -195,6 +191,7 @@ class MainWindow:
                        self.widgets['spin_meter_denom'].get_value())
 
     def set_meter(self, beats, denom):
+        # make "even" meter non-emphasized by default
         if beats == 0:
             self.pattern_buttons[0].set_state(1)
         elif beats != 0 and self.config.beats == 0:
@@ -296,8 +293,9 @@ class MainWindow:
     @make_method('/simple/tempo_increment', 'f')
     @osc_callback
     def simple_tempo_increment_cb(self, path, args):
-        self.widgets['spin_tempo_increment'].set_value(args[0])
-        self.config.tempo_increment = args[0]
+        if args[0]:
+            self.widgets['spin_tempo_increment'].set_value(args[0])
+            self.config.tempo_increment = args[0]
 
     @make_method('/simple/tempo_limit', 'f')
     @osc_callback

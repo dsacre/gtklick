@@ -46,7 +46,7 @@ class KlickBackend(liblo.ServerThread):
                     '/home/das/src/klick/trunk/klick',
                     '-n', name,
                     '-R', self.get_url(),
-                    #'-L'
+                    '-L'
                 ]
                 if port:
                     args += ['-o', str(port)]
