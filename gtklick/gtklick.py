@@ -68,9 +68,8 @@ class GTKlick:
 
             self.config = GTKlickConfig()
 
-            if not self.connect:
-                # load config from file
-                self.config.read()
+            # load config from file
+            self.config.read()
 
             # start klick process
             self.klick = KlickBackend('gtklick', self.port, self.connect)
@@ -82,6 +81,13 @@ class GTKlick:
             #self.klick.add_method(None, None, self.fallback)
 
             if not self.connect:
+                self.klick.send('/config/set_sound', self.config.prefs_sound)
+                if self.config.prefs_autoconnect:
+                    self.widgets['radio_connect_auto'].set_active(True)
+                    self.klick.send('/config/autoconnect')
+                else:
+                    self.widgets['radio_connect_manual'].set_active(True)
+
                 # this is not set in the OSC callback if speed trainer is disabled
                 self.widgets['spin_tempo_increment'].set_value(self.config.tempo_increment)
 

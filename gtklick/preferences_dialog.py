@@ -30,13 +30,6 @@ class PreferencesDialog:
 
         self.klick.register_methods(self)
 
-        self.klick.send('/config/set_sound', self.config.prefs_sound)
-        if self.config.prefs_autoconnect:
-            self.widgets['radio_connect_auto'].set_active(True)
-            self.klick.send('/config/autoconnect')
-        else:
-            self.widgets['radio_connect_manual'].set_active(True)
-
     @gui_callback
     def on_sound_toggled(self, b, data):
         if b.get_active():
