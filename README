@@ -6,10 +6,10 @@ Copyright (C) 2008  Dominic Sacré  <dominic.sacre@gmx.de>
 Requirements:
 =============
 
-* Python 2.5
+* klick >= 0.9.0 [http://das.nasophon.de/klick/]
+* pyliblo >= 0.7.0 [http://das.nsaophon.de/pyliblo/]
+* Python >= 2.5
 * PyGTK
-* klick 0.9 [http://das.nasophon.de/klick/]
-* pyliblo [http://das.nsaophon.de/pyliblo/]
 
 
 Installation:

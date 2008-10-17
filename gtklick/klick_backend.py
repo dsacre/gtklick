@@ -15,6 +15,8 @@ import subprocess
 import sys
 import threading
 
+KLICK_PATH = 'klick'
+MIN_KLICK_VERSION = (0,9,0)
 START_TIMEOUT = 10
 
 
@@ -34,6 +36,9 @@ class KlickBackend(liblo.ServerThread):
     def __init__(self, name, port, connect):
         self.addr = None
         self.ready = threading.Event()
+
+        self.check_version()
+
         # call base class c'tor and start OSC server
         liblo.ServerThread.__init__(self)
         self.start()
@@ -42,11 +47,10 @@ class KlickBackend(liblo.ServerThread):
             # start klick process
             try:
                 args = [
-#                    'klick',
-                    '/home/das/src/klick/trunk/klick',
+                    KLICK_PATH,
                     '-n', name,
                     '-R', self.get_url(),
-                    '-L'
+                    #'-L'
                 ]
                 if port:
                     args += ['-o', str(port)]
@@ -71,6 +75,14 @@ class KlickBackend(liblo.ServerThread):
             self.send('/unregister_client')
             if self.process:
                 self.send('/quit')
+
+    def check_version(self):
+        output = subprocess.Popen([KLICK_PATH, '-V'], stdout=subprocess.PIPE).communicate()[0]
+        version_string = output.split()[1]
+        version = tuple(int(x) for x in version_string.split('.'))
+        if version < MIN_KLICK_VERSION:
+            raise KlickBackendError("your version of klick is too old (%s).\n" % version_string + 
+                                    "please upgrade to klick %d.%d.%d or later" % MIN_KLICK_VERSION)
 
     def check_process(self):
         return self.process and self.process.poll() == None

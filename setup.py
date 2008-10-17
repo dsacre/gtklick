@@ -3,8 +3,8 @@
 from distutils.core import setup
 import sys
 
-if sys.hexversion < 0x02040000:
-    sys.exit("sorry, python 2.4 or higher is required")
+if sys.hexversion < 0x02050000:
+    sys.exit("sorry, python 2.5 or higher is required")
 
 try:
     import pygtk
@@ -22,7 +22,7 @@ except:
 
 setup(
     name = 'gtklick',
-    version = '0.1.3',
+    version = '0.2.0',
     author = 'Dominic Sacre',
     author_email = 'dominic.sacre@gmx.de',
     url = 'http://das.nasophon.de/gtklick/',
