@@ -15,4 +15,5 @@ Requirements:
 Installation:
 =============
 
+./setup.py build
 ./setup.py install

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.1 on Wed Oct 15 01:20:10 2008 -->
+<!--Generated with glade3 3.4.1 on Sat Oct 18 05:30:31 2008 -->
 <glade-interface>
   <widget class="GtkAboutDialog" id="dialog_about">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -462,7 +462,7 @@
                             <property name="max_length">3</property>
                             <property name="width_chars">4</property>
                             <property name="xalign">1</property>
-                            <property name="adjustment">120 1 999 1 10 10</property>
+                            <property name="adjustment">120 1 999 1 10 0</property>
                             <property name="snap_to_ticks">True</property>
                             <property name="numeric">True</property>
                             <property name="update_policy">GTK_UPDATE_IF_VALID</property>
@@ -570,7 +570,7 @@
                             <property name="max_length">4</property>
                             <property name="width_chars">4</property>
                             <property name="xalign">1</property>
-                            <property name="adjustment">0.5 0 9.9900000000000002 0.01 1 1</property>
+                            <property name="adjustment">0.5 0 9.9900000000000002 0.01 1 0</property>
                             <property name="digits">2</property>
                             <property name="snap_to_ticks">True</property>
                             <property name="numeric">True</property>
@@ -604,7 +604,7 @@
                             <property name="max_length">3</property>
                             <property name="width_chars">4</property>
                             <property name="xalign">1</property>
-                            <property name="adjustment">120 1 999 1 10 10</property>
+                            <property name="adjustment">120 1 999 1 10 0</property>
                             <property name="snap_to_ticks">True</property>
                             <property name="numeric">True</property>
                             <property name="update_policy">GTK_UPDATE_IF_VALID</property>
@@ -659,91 +659,6 @@
                         <property name="row_spacing">6</property>
                         <property name="homogeneous">True</property>
                         <child>
-                          <widget class="GtkRadioButton" id="radio_meter_even">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label" translatable="yes">Eve_n</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <property name="active">True</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="on_meter_even_toggled"/>
-                          </widget>
-                        </child>
-                        <child>
-                          <widget class="GtkRadioButton" id="radio_meter_24">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label" translatable="yes">_2/4</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <property name="active">True</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="group">radio_meter_even</property>
-                            <signal name="toggled" handler="on_meter_24_toggled"/>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkRadioButton" id="radio_meter_34">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label" translatable="yes">_3/4</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <property name="active">True</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="group">radio_meter_even</property>
-                            <signal name="toggled" handler="on_meter_34_toggled"/>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkRadioButton" id="radio_meter_44">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label" translatable="yes">_4/4</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <property name="active">True</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="group">radio_meter_even</property>
-                            <signal name="toggled" handler="on_meter_44_toggled"/>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">3</property>
-                            <property name="right_attach">4</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkRadioButton" id="radio_meter_other">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label" translatable="yes">_Other:</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <property name="active">True</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="group">radio_meter_even</property>
-                            <signal name="toggled" handler="on_meter_other_toggled"/>
-                          </widget>
-                          <packing>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
                           <widget class="GtkHBox" id="hbox_meter_spins">
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -756,7 +671,7 @@
                                 <property name="max_length">3</property>
                                 <property name="width_chars">3</property>
                                 <property name="xalign">1</property>
-                                <property name="adjustment">4 1 128 1 10 10</property>
+                                <property name="adjustment">4 1 128 1 10 0</property>
                                 <property name="snap_to_ticks">True</property>
                                 <property name="numeric">True</property>
                                 <signal name="value_changed" handler="on_meter_beats_changed"/>
@@ -785,7 +700,7 @@
                                 <property name="max_length">3</property>
                                 <property name="width_chars">3</property>
                                 <property name="xalign">1</property>
-                                <property name="adjustment">4 1 32 0.5 10 10</property>
+                                <property name="adjustment">4 1 32 0.5 10 0</property>
                                 <property name="snap_to_ticks">True</property>
                                 <property name="numeric">True</property>
                                 <signal name="value_changed" handler="on_meter_denom_changed"/>
@@ -803,6 +718,91 @@
                             <property name="bottom_attach">2</property>
                             <property name="x_options">GTK_FILL</property>
                           </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkRadioButton" id="radio_meter_other">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="label" translatable="yes">_Other:</property>
+                            <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">radio_meter_even</property>
+                            <signal name="toggled" handler="on_meter_other_toggled"/>
+                          </widget>
+                          <packing>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkRadioButton" id="radio_meter_44">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="label" translatable="yes">_4/4</property>
+                            <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">radio_meter_even</property>
+                            <signal name="toggled" handler="on_meter_44_toggled"/>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">3</property>
+                            <property name="right_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkRadioButton" id="radio_meter_34">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="label" translatable="yes">_3/4</property>
+                            <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">radio_meter_even</property>
+                            <signal name="toggled" handler="on_meter_34_toggled"/>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkRadioButton" id="radio_meter_24">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="label" translatable="yes">_2/4</property>
+                            <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">radio_meter_even</property>
+                            <signal name="toggled" handler="on_meter_24_toggled"/>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkRadioButton" id="radio_meter_even">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="label" translatable="yes">Eve_n</property>
+                            <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="on_meter_even_toggled"/>
+                          </widget>
                         </child>
                       </widget>
                     </child>
