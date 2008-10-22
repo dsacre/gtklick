@@ -77,9 +77,6 @@ class MainWindow:
                   gtk.keysyms.minus, gtk.keysyms.KP_Subtract):
             accel.connect_group(k, gtk.gdk.CONTROL_MASK, 0, self.on_volume_accel)
 
-        accel.connect_group(gtk.keysyms.space, gtk.gdk.CONTROL_MASK, 0, self.on_start_stop_accel)
-        accel.connect_group(gtk.keysyms.Return, gtk.gdk.CONTROL_MASK, 0, self.on_tap_tempo_accel)
-
         self.widgets['window_main'].add_accel_group(accel)
 
         self.widgets['item_view_markings'].set_active(self.config.view_markings)
@@ -248,7 +245,7 @@ class MainWindow:
 
     @gui_callback
     def on_start_stop(self, b):
-        if self.active:
+        if self.widgets['align_stop'].get_property('visible'):
             self.klick.send('/metro/stop')
         else:
             self.klick.send('/metro/start')
@@ -279,19 +276,6 @@ class MainWindow:
             volume += 0.1
         volume = min(max(volume, 0.0), 1.0)
         self.klick.send('/config/set_volume', volume)
-        return True
-
-    @gui_callback
-    def on_start_stop_accel(self, group, accel, key, mod):
-        if self.active:
-            self.klick.send('/metro/stop')
-        else:
-            self.klick.send('/metro/start')
-        return True
-
-    @gui_callback
-    def on_tap_tempo_accel(self, group, accel, key, mod):
-        self.klick.send('/simple/tap', ('d', time.time()))
         return True
 
 
@@ -380,8 +364,6 @@ class MainWindow:
         else:
             self.widgets['align_stop'].hide()
             self.widgets['align_start'].show()
-
-        self.active = bool(args[0])
 
     @make_method('/config/volume', 'f')
     @osc_callback
