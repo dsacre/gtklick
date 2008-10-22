@@ -24,6 +24,7 @@ import os.path
 from klick_backend import *
 from gtklick_config import *
 from main_window import *
+from profiles_pane import *
 from preferences_dialog import *
 from misc import *
 
@@ -64,7 +65,7 @@ class GTKlick:
         try:
             self.wtree = gtk.glade.XML(os.path.join(share_dir, 'gtklick.glade'))
             # explicitly call base class method, because get_name() is overridden in AboutDialog. stupid GTK...
-            self.widgets = dict([(gtk.Widget.get_name(w), w) for w in self.wtree.get_widget_prefix('')])
+            widgets = dict([(gtk.Widget.get_name(w), w) for w in self.wtree.get_widget_prefix('')])
 
             self.config = GTKlickConfig()
 
@@ -75,21 +76,22 @@ class GTKlick:
             self.klick = KlickBackend('gtklick', self.port, self.connect)
 
             # the actual windows are created by glade, this basically just connects GUI and OSC callbacks
-            self.win = MainWindow(self.wtree, self.widgets, self.klick, self.config)
-            self.prefs = PreferencesDialog(self.wtree, self.widgets, self.klick, self.config)
+            win = MainWindow(self.wtree, widgets, self.klick, self.config)
+            profiles = ProfilesPane(self.wtree, widgets, self.klick, self.config, win)
+            prefs = PreferencesDialog(self.wtree, widgets, self.klick, self.config)
 
             #self.klick.add_method(None, None, self.fallback)
 
             if not self.connect:
                 self.klick.send('/config/set_sound', self.config.prefs_sound)
                 if self.config.prefs_autoconnect:
-                    self.widgets['radio_connect_auto'].set_active(True)
+                    widgets['radio_connect_auto'].set_active(True)
                     self.klick.send('/config/autoconnect')
                 else:
-                    self.widgets['radio_connect_manual'].set_active(True)
+                    widgets['radio_connect_manual'].set_active(True)
 
                 # this is not set in the OSC callback if speed trainer is disabled
-                self.widgets['spin_tempo_increment'].set_value(self.config.tempo_increment)
+                widgets['spin_tempo_increment'].set_value(self.config.tempo_increment)
 
                 self.klick.send('/simple/set_tempo', self.config.tempo)
                 self.klick.send('/simple/set_tempo_increment',
@@ -101,7 +103,7 @@ class GTKlick:
 
             self.klick.send('/query')
 
-            self.widgets['window_main'].show()
+            widgets['window_main'].show()
 
         except KlickBackendError, e:
             self.error_message(e.msg)

@@ -22,7 +22,7 @@ except:
 
 setup(
     name = 'gtklick',
-    version = '0.2.0',
+    version = '0.3.0',
     author = 'Dominic Sacre',
     author_email = 'dominic.sacre@gmx.de',
     url = 'http://das.nasophon.de/gtklick/',

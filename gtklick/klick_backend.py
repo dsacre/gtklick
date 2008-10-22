@@ -71,6 +71,9 @@ class KlickBackend(liblo.ServerThread):
         self.send('/register_client')
 
     def __del__(self):
+        self.quit()
+
+    def quit(self):
         if self.addr:
             self.send('/unregister_client')
             if self.process:

@@ -38,6 +38,7 @@ class MainWindow:
             'on_view_speedtrainer_toggled':     self.on_view_speedtrainer_toggled,
             'on_view_meter_toggled':            self.on_view_meter_toggled,
             'on_view_pattern_toggled':          self.on_view_pattern_toggled,
+            'on_view_profiles_toggled':         self.on_view_profiles_toggled,
             'on_help_shortcuts':                self.on_help_shortcuts,
             'on_help_about':                    self.on_help_about,
             # tempo
@@ -62,7 +63,7 @@ class MainWindow:
             # others
             'on_start_stop':                    self.on_start_stop,
             'on_volume_changed':                self.on_volume_changed,
-            'on_window_main_destroy':           gtk.main_quit,
+            'on_window_main_delete_event':      self.on_delete_event,
         })
 
         accel = gtk.AccelGroup()
@@ -85,6 +86,7 @@ class MainWindow:
         self.widgets['item_view_meter'].set_active(self.config.view_meter)
         self.widgets['item_view_speedtrainer'].set_active(self.config.view_speedtrainer)
         self.widgets['item_view_pattern'].set_active(self.config.view_pattern)
+        self.widgets['item_view_profiles'].set_active(self.config.view_profiles)
 
         self.widgets['check_speedtrainer_enable'].set_active(self.config.speedtrainer)
         self.widgets['check_speedtrainer_enable'].toggled()
@@ -96,8 +98,14 @@ class MainWindow:
 
     # GUI callbacks
 
+    def on_delete_event(self, w, ev):
+        self.klick.quit()
+        gtk.main_quit()
+
     def on_file_quit(self, i):
         self.widgets['window_main'].destroy()
+        self.klick.quit()
+        gtk.main_quit()
 
     def on_edit_preferences(self, i):
         prefs = self.widgets['dialog_preferences']
@@ -126,6 +134,11 @@ class MainWindow:
         self.config.view_pattern = b
         if not b:
             self.klick.send('/simple/set_pattern', '')
+
+    def on_view_profiles_toggled(self, i):
+        b = i.get_active()
+        getattr(self.widgets['vbox_profiles'], 'show' if b else 'hide')()
+        self.config.view_profiles = b
 
     def on_help_shortcuts(self, i):
         shortcuts = self.widgets['dialog_shortcuts']
@@ -226,7 +239,8 @@ class MainWindow:
 
     @gui_callback
     def on_pattern_button_toggled(self, b):
-        self.send_pattern()
+        pattern = self.get_pattern()
+        self.klick.send('/simple/set_pattern', pattern)
 
     @gui_callback
     def on_pattern_reset(self, b):
@@ -344,7 +358,8 @@ class MainWindow:
         self.config.denom = denom
 
         self.readjust_pattern_table(beats)
-        self.send_pattern()
+        pattern = self.get_pattern()
+        self.klick.send('/simple/set_pattern', pattern)
 
     @make_method('/simple/pattern', 's')
     @osc_callback
@@ -394,15 +409,15 @@ class MainWindow:
                 b.connect('toggled', self.on_pattern_button_toggled)
                 row, col = x // 6, x % 6
                 table.attach(b, col, col + 1, row, row + 1)
+                if x == 0:
+                    self.widgets['label_frame_pattern'].set_mnemonic_widget(b)
                 self.pattern_buttons.append(b)
                 b.set_state(2 if x == 0 else 1)
                 b.show()
 
-    def send_pattern(self):
+    def get_pattern(self):
         pattern = ''.join('.xX'[s] for s in (n.get_state() for n in self.pattern_buttons))
-        if pattern == self.default_pattern():
-            pattern = ''
-        self.klick.send('/simple/set_pattern', pattern)
+        return pattern if pattern != self.default_pattern() else ''
 
     def default_pattern(self):
         if (len(self.pattern_buttons) > 1):
