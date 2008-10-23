@@ -137,13 +137,20 @@ class ProfilesPane:
         self.klick.send('/simple/set_meter', v.beats, v.denom)
         self.klick.send('/simple/set_pattern', v.pattern)
 
+        if v.speedtrainer:
+            self.widgets['frame_speedtrainer'].show()
+        if (v.beats, v.denom) != (0, 4):
+            self.widgets['frame_meter'].show()
+        if v.pattern != '':
+            self.widgets['frame_speedtrainer'].show()
+
     def current_profile(self, name):
         # create profile from the current state of the GUI
         if self.widgets['radio_meter_other'].get_active():
             beats = int(self.widgets['spin_meter_beats'].get_value())
             denom = int(self.widgets['spin_meter_denom'].get_value())
         else:
-            beats = 1 if self.widgets['radio_meter_even'].get_active() else \
+            beats = 0 if self.widgets['radio_meter_even'].get_active() else \
                     2 if self.widgets['radio_meter_24'].get_active() else \
                     3 if self.widgets['radio_meter_34'].get_active() else 4
             denom = 4

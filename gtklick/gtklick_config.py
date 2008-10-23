@@ -84,6 +84,8 @@ class GTKlickConfig(object):
         self.pattern = ''
         self.volume = 1.0
 
+        self.prof_re = re.compile('^profile_[0-9]+$')
+
     def read(self):
         self.parser.read(self.cfgfile)
 
@@ -91,8 +93,7 @@ class GTKlickConfig(object):
         self.parser.write(open(self.cfgfile, 'w'))
 
     def get_profiles(self):
-        r = re.compile('^profile_[0-9]+$')
-        sections = (x for x in self.parser.sections() if re.match(r, x))
+        sections = (x for x in self.parser.sections() if re.match(self.prof_re, x))
         numbers = sorted(int(x.split('_')[1]) for x in sections)
 
         profiles = []
@@ -134,10 +135,8 @@ class GTKlickConfig(object):
             self.parser.set(s, 'pattern', p.pattern)
 
         # remove unused profile sections
-        r = re.compile('^profile_[0-9]+$')
-        sections = (x for x in self.parser.sections() if re.match(r, x))
-        for s in sections:
-            if int(s.split('_')[1]) >= len(profiles):
+        for s in self.parser.sections():
+            if re.match(self.prof_re, s) and int(s.split('_')[1]) >= len(profiles):
                 self.parser.remove_section(s)
 
 

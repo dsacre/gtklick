@@ -115,26 +115,26 @@ class MainWindow:
 
     def on_view_speedtrainer_toggled(self, i):
         b = i.get_active()
-        getattr(self.widgets['frame_speedtrainer'], 'show' if b else 'hide')()
+        self.widgets['frame_speedtrainer'].set_property('visible', b)
         self.config.view_speedtrainer = b
 
     def on_view_meter_toggled(self, i):
         b = i.get_active()
-        getattr(self.widgets['frame_meter'], 'show' if b else 'hide')()
+        self.widgets['frame_meter'].set_property('visible', b)
         self.config.view_meter = b
         if not b:
             self.set_meter(0, 4)
 
     def on_view_pattern_toggled(self, i):
         b = i.get_active()
-        getattr(self.widgets['frame_pattern'], 'show' if b else 'hide')()
+        self.widgets['frame_pattern'].set_property('visible', b)
         self.config.view_pattern = b
         if not b:
             self.klick.send('/simple/set_pattern', '')
 
     def on_view_profiles_toggled(self, i):
         b = i.get_active()
-        getattr(self.widgets['vbox_profiles'], 'show' if b else 'hide')()
+        self.widgets['vbox_profiles'].set_property('visible', b)
         self.config.view_profiles = b
 
     def on_help_shortcuts(self, i):
