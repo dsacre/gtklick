@@ -174,7 +174,7 @@ class MainWindow:
         self.config.speedtrainer = a
         if a:
             self.klick.send('/simple/set_tempo_increment', self.widgets['spin_tempo_increment'].get_value())
-            self.klick.send('/simple/set_tempo_limit', self.widgets['spin_tempo_limit'].get_value())
+            self.klick.send('/simple/set_tempo_limit', int(self.widgets['spin_tempo_limit'].get_value()))
         else:
             self.klick.send('/simple/set_tempo_increment', 0.0)
 
@@ -184,7 +184,7 @@ class MainWindow:
 
     @gui_callback
     def on_tempo_limit_changed(self, b):
-        self.klick.send('/simple/set_tempo_limit', b.get_value())
+        self.klick.send('/simple/set_tempo_limit', int(b.get_value()))
 
     @gui_callback
     def on_meter_toggled(self, b, data):
@@ -192,22 +192,13 @@ class MainWindow:
             if data != None:
                 self.set_meter(data[0], data[1])
             else:
-                self.set_meter(self.widgets['spin_meter_beats'].get_value(),
-                               self.widgets['spin_meter_denom'].get_value())
+                self.set_meter(int(self.widgets['spin_meter_beats'].get_value()),
+                               int(self.widgets['spin_meter_denom'].get_value()))
 
     @gui_callback
     def on_meter_beats_changed(self, b):
-        self.set_meter(self.widgets['spin_meter_beats'].get_value(),
-                       self.widgets['spin_meter_denom'].get_value())
-
-    def set_meter(self, beats, denom):
-        # make "even" meter non-emphasized by default
-        if beats == 0:
-            self.pattern_buttons[0].set_state(1)
-        elif beats != 0 and self.config.beats == 0:
-            self.pattern_buttons[0].set_state(2)
-
-        self.klick.send('/simple/set_meter', beats, denom)
+        self.set_meter(int(self.widgets['spin_meter_beats'].get_value()),
+                       int(self.widgets['spin_meter_denom'].get_value()))
 
     @gui_callback
     def on_meter_denom_changed(self, b):
@@ -231,8 +222,22 @@ class MainWindow:
         b.set_value(denom)
         self.config.denom = denom
 
-        self.set_meter(self.widgets['spin_meter_beats'].get_value(),
-                       self.widgets['spin_meter_denom'].get_value())
+        self.set_meter(int(self.widgets['spin_meter_beats'].get_value()),
+                       int(self.widgets['spin_meter_denom'].get_value()))
+
+    def set_meter(self, beats, denom):
+        if len(self.pattern_buttons):
+            # make "even" meter non-emphasized by default
+            if beats == 0:
+                self.pattern_buttons[0].set_state(1)
+            elif beats != 0 and self.config.beats == 0:
+                self.pattern_buttons[0].set_state(2)
+
+        self.klick.send('/simple/set_meter', beats, denom)
+
+        self.readjust_pattern_table(beats)
+        pattern = self.get_pattern()
+        self.klick.send('/simple/set_pattern', pattern)
 
     @gui_callback
     def on_pattern_button_toggled(self, b):
@@ -256,7 +261,7 @@ class MainWindow:
 
     @gui_callback
     def on_tempo_accel(self, group, accel, key, mod):
-        tempo = self.widgets['spin_tempo'].get_value()
+        tempo = int(self.widgets['spin_tempo'].get_value())
         if   key == gtk.keysyms.Left:       tempo -= 1
         elif key == gtk.keysyms.Right:      tempo += 1
         elif key == gtk.keysyms.Down:       tempo -= 10
@@ -264,7 +269,7 @@ class MainWindow:
         elif key == gtk.keysyms.Page_Down:  tempo /= 2
         elif key == gtk.keysyms.Page_Up:    tempo *= 2
         tempo = min(max(tempo, 1), 999)
-        self.klick.send('/simple/set_tempo', int(tempo))
+        self.klick.send('/simple/set_tempo', tempo)
         return True
 
     @gui_callback
@@ -327,23 +332,22 @@ class MainWindow:
                 self.widgets['radio_meter_34'].set_active(True)
             elif beats == 4:
                 self.widgets['radio_meter_44'].set_active(True)
+            self.config.beats = beats
+            self.config.denom = 0
         else:
             # custom meter
             self.widgets['radio_meter_other'].set_active(True)
             self.widgets['hbox_meter_spins'].set_sensitive(True)
             self.widgets['spin_meter_beats'].set_value(beats)
             self.widgets['spin_meter_denom'].set_value(denom)
+            self.config.beats = beats
+            self.config.denom = denom
 
         # set active radio button as mnemonic widget
         w = [x for x in self.widgets['radio_meter_other'].get_group() if x.get_active()][0]
         self.widgets['label_frame_meter'].set_mnemonic_widget(w)
 
-        self.config.beats = beats
-        self.config.denom = denom
-
         self.readjust_pattern_table(beats)
-        pattern = self.get_pattern()
-        self.klick.send('/simple/set_pattern', pattern)
 
     @make_method('/simple/pattern', 's')
     @osc_callback
@@ -388,13 +392,13 @@ class MainWindow:
             table.resize((n-1)//6 + 1, 6)
             for x in range(len(self.pattern_buttons), n):
                 b = TristateCheckButton(str(x+1))
+                b.set_state(2 if x == 0 else 1)
                 b.connect('toggled', self.on_pattern_button_toggled)
                 row, col = x // 6, x % 6
                 table.attach(b, col, col + 1, row, row + 1)
+                self.pattern_buttons.append(b)
                 if x == 0:
                     self.widgets['label_frame_pattern'].set_mnemonic_widget(b)
-                self.pattern_buttons.append(b)
-                b.set_state(2 if x == 0 else 1)
                 b.show()
 
     def get_pattern(self):

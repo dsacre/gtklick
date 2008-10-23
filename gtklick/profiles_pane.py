@@ -12,9 +12,8 @@
 import gtk
 import gobject
 
-from misc import weakref_method
-
 from gtklick_config import Profile
+import misc
 
 
 class ProfilesPane:
@@ -55,7 +54,7 @@ class ProfilesPane:
         self.treeview.connect('row-activated', self.on_row_activated)
         # create a weak reference to the callback function, to prevent cyclic references.
         # sometimes PyGTK astounds me...
-        self.renderer.connect('edited', weakref_method(self.on_cell_edited))
+        self.renderer.connect('edited', misc.weakref_method(self.on_cell_edited))
 
         self.model.connect('row-changed', self.on_row_changed)
         self.model.connect('row-deleted', self.on_row_deleted)
@@ -129,14 +128,23 @@ class ProfilesPane:
 
     def activate_profile(self, i):
         v = self.model.get_value(i, 1)
+
         self.klick.send('/simple/set_tempo', v.tempo)
         self.widgets['spin_tempo_increment'].set_value(v.tempo_increment)
         self.widgets['check_speedtrainer_enable'].set_active(v.speedtrainer)
         self.klick.send('/simple/set_tempo_increment', v.tempo_increment if v.speedtrainer else 0.0)
         self.klick.send('/simple/set_tempo_limit', v.tempo_limit)
-        self.klick.send('/simple/set_meter', v.beats, v.denom)
+
+        if v.denom:
+            self.widgets['radio_meter_other'].set_active(True)
+        else:
+            # focus any radio button other than "other"
+            self.widgets['radio_meter_even'].set_active(True)
+        self.klick.send('/simple/set_meter', v.beats, v.denom if v.denom else 4)
+
         self.klick.send('/simple/set_pattern', v.pattern)
 
+        # show all relevant frames
         if v.speedtrainer:
             self.widgets['frame_speedtrainer'].show()
         if (v.beats, v.denom) != (0, 4):
@@ -153,7 +161,7 @@ class ProfilesPane:
             beats = 0 if self.widgets['radio_meter_even'].get_active() else \
                     2 if self.widgets['radio_meter_24'].get_active() else \
                     3 if self.widgets['radio_meter_34'].get_active() else 4
-            denom = 4
+            denom = 0
 
         return Profile(
             name,

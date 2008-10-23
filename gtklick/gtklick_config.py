@@ -22,7 +22,7 @@ def make_property(section, option, type_):
             try:
                 return self.parser.getint(section, option)
             except ValueError:
-                # this shouldn't be here
+                # this is only here because i fucked up
                 return int(self.parser.getfloat(section, option))
         elif type_ is float:
             return self.parser.getfloat(section, option)

@@ -90,14 +90,14 @@ class GTKlick:
                 else:
                     widgets['radio_connect_manual'].set_active(True)
 
-                # this is not set in the OSC callback if speed trainer is disabled
+                # this can not (always) be set in the OSC callback
                 widgets['spin_tempo_increment'].set_value(self.config.tempo_increment)
+                widgets['radio_meter_other'].set_active(self.config.denom != 0)
 
                 self.klick.send('/simple/set_tempo', self.config.tempo)
-                self.klick.send('/simple/set_tempo_increment',
-                                self.config.tempo_increment if self.config.speedtrainer else 0.0)
+                self.klick.send('/simple/set_tempo_increment', self.config.tempo_increment if self.config.speedtrainer else 0.0)
                 self.klick.send('/simple/set_tempo_limit', self.config.tempo_limit)
-                self.klick.send('/simple/set_meter', self.config.beats, self.config.denom)
+                self.klick.send('/simple/set_meter', self.config.beats, self.config.denom if self.config.denom else 4)
                 self.klick.send('/simple/set_pattern', self.config.pattern)
                 self.klick.send('/config/set_volume', self.config.volume)
 
@@ -114,7 +114,7 @@ class GTKlick:
             self.timer = gobject.timeout_add(1000, weakref_method(self.check_klick))
 
     def __del__(self):
-        if not self.connect and self.config:
+        if self.config:
             self.config.write()
 
     def run(self):
