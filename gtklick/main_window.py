@@ -179,6 +179,8 @@ class MainWindow:
             self.klick.send('/simple/set_tempo_increment', self.widgets['spin_tempo_increment'].get_value())
             self.klick.send('/simple/set_tempo_limit', int(self.widgets['spin_tempo_limit'].get_value()))
         else:
+            self.widgets['spin_tempo_increment'].select_region(0, 0)
+            self.widgets['spin_tempo_limit'].select_region(0, 0)
             self.klick.send('/simple/set_tempo_increment', 0.0)
         self.state_changed.queue()
 

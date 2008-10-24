@@ -144,7 +144,7 @@ class ProfilesPane:
         # ignore state changes while activating the profile
         self.track_changes = False
         # sending and receiving all OSC messages takes, uhm... so we need to wait at least... oh well...
-        gobject.timeout_add(100, lambda: setattr(self, 'track_changes', True))
+        gobject.timeout_add(500, lambda: setattr(self, 'track_changes', True))
 
         self.klick.send('/simple/set_tempo', v.tempo)
         self.widgets['spin_tempo_increment'].set_value(v.tempo_increment)
