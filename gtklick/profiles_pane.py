@@ -74,14 +74,23 @@ class ProfilesPane:
 
 
     def on_row_activated(self, w, path, view_column):
+        # reset profile name
+        self.model[path][0] = cgi.escape(self.model[path][1].name)
+
         i = self.model.get_iter(path)
         self.activate_profile(i)
 
     def on_selection_changed(self, selection):
+        # reset all profile names, since we don't know which one was previously selected
+        for p in self.model:
+            p[0] = cgi.escape(p[1].name)
+
         i = selection.get_selected()[1]
         if i:
             self.activate_profile(i)
             self.enable_buttons(True)
+        else:
+            self.idle.queue()
 
     def on_cell_edited(self, cell, path, new_text):
         self.model[path][0] = cgi.escape(new_text)
@@ -117,6 +126,9 @@ class ProfilesPane:
                 if row >= 0:
                     selection.select_path(row)
 
+        # this is needed when removing a newly added profile before 'edited' has been sent
+        self.renderer.set_property('editable', False)
+
     def on_profile_save(self, b):
         selection = self.treeview.get_selection()
         i = selection.get_selected()[1]
@@ -136,10 +148,6 @@ class ProfilesPane:
 
     def activate_profile(self, i):
         v = self.model.get_value(i, 1)
-
-        # reset all profile names, since we don't know which one was previously selected
-        for p in self.model:
-            p[0] = cgi.escape(p[1].name)
 
         # ignore state changes while activating the profile
         self.track_changes = False
