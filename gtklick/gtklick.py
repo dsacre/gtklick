@@ -43,17 +43,17 @@ class GTKlick:
         self.config =None
 
         # parse command line arguments
-        self.port = None
-        self.connect = False
+        port = None
+        connect = False
         try:
             r = getopt.getopt(args, 'o:q:h');
             for opt in r[0]:
                 if opt[0] == '-o':
-                    self.port = opt[1]
-                    self.connect = False
+                    port = opt[1]
+                    connect = False
                 elif opt[0] == '-q':
-                    self.port = opt[1]
-                    self.connect = True
+                    port = opt[1]
+                    connect = True
                 elif opt[0] == '-h':
                     print help_string
                     sys.exit(0)
@@ -73,7 +73,7 @@ class GTKlick:
             self.config.read()
 
             # start klick process
-            self.klick = KlickBackend('gtklick', self.port, self.connect)
+            self.klick = KlickBackend('gtklick', port, connect)
 
             # the actual windows are created by glade, this basically just connects GUI and OSC callbacks
             win = MainWindow(self.wtree, widgets, self.klick, self.config)
@@ -82,7 +82,7 @@ class GTKlick:
 
             #self.klick.add_method(None, None, self.fallback)
 
-            if not self.connect:
+            if not connect:
                 self.klick.send('/config/set_sound', self.config.prefs_sound)
                 if self.config.prefs_autoconnect:
                     widgets['radio_connect_auto'].set_active(True)
