@@ -85,10 +85,12 @@ class MainWindow:
         self.widgets['item_view_pattern'].set_active(self.config.view_pattern)
         self.widgets['item_view_profiles'].set_active(self.config.view_profiles)
 
-        self.widgets['check_speedtrainer_enable'].set_active(self.config.speedtrainer)
-        self.widgets['check_speedtrainer_enable'].toggled()
-
         self.pattern_buttons = []
+        # create one button now to avoid window size changes later on
+        self.readjust_pattern_table(1)
+
+        self.state_changed = run_idle_once(lambda: self.state_changed_callback())
+        self.state_changed_callback = None
 
         self.klick.register_methods(self)
 
@@ -150,6 +152,7 @@ class MainWindow:
     @gui_callback
     def on_tempo_changed(self, r):
         self.klick.send('/simple/set_tempo', int(r.get_value()))
+        self.state_changed.queue()
 
     @gui_callback
     def on_tap_tempo(self, b):
@@ -177,14 +180,17 @@ class MainWindow:
             self.klick.send('/simple/set_tempo_limit', int(self.widgets['spin_tempo_limit'].get_value()))
         else:
             self.klick.send('/simple/set_tempo_increment', 0.0)
+        self.state_changed.queue()
 
     @gui_callback
     def on_tempo_increment_changed(self, b):
         self.klick.send('/simple/set_tempo_increment', b.get_value())
+        self.state_changed.queue()
 
     @gui_callback
     def on_tempo_limit_changed(self, b):
         self.klick.send('/simple/set_tempo_limit', int(b.get_value()))
+        self.state_changed.queue()
 
     @gui_callback
     def on_meter_toggled(self, b, data):
@@ -194,11 +200,13 @@ class MainWindow:
             else:
                 self.set_meter(int(self.widgets['spin_meter_beats'].get_value()),
                                int(self.widgets['spin_meter_denom'].get_value()))
+        self.state_changed.queue()
 
     @gui_callback
     def on_meter_beats_changed(self, b):
         self.set_meter(int(self.widgets['spin_meter_beats'].get_value()),
                        int(self.widgets['spin_meter_denom'].get_value()))
+        self.state_changed.queue()
 
     @gui_callback
     def on_meter_denom_changed(self, b):
@@ -224,6 +232,7 @@ class MainWindow:
 
         self.set_meter(int(self.widgets['spin_meter_beats'].get_value()),
                        int(self.widgets['spin_meter_denom'].get_value()))
+        self.state_changed.queue()
 
     def set_meter(self, beats, denom):
         if len(self.pattern_buttons):
@@ -243,10 +252,12 @@ class MainWindow:
     def on_pattern_button_toggled(self, b):
         pattern = self.get_pattern()
         self.klick.send('/simple/set_pattern', pattern)
+        self.state_changed.queue()
 
     @gui_callback
     def on_pattern_reset(self, b):
         self.klick.send('/simple/set_pattern', '')
+        self.state_changed.queue()
 
     @gui_callback
     def on_start_stop(self, b):
@@ -385,11 +396,11 @@ class MainWindow:
             for b in self.pattern_buttons[n:]:
                 self.pattern_buttons.remove(b)
                 table.remove(b)
-            table.resize((n-1)//6 + 1, 6)
+            table.resize(max((n-1)//6 + 1, 2), 6)
 
         elif n > len(self.pattern_buttons):
             # increase table size
-            table.resize((n-1)//6 + 1, 6)
+            table.resize(max((n-1)//6 + 1, 2), 6)
             for x in range(len(self.pattern_buttons), n):
                 b = TristateCheckButton(str(x+1))
                 b.set_state(2 if x == 0 else 1)

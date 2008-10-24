@@ -11,6 +11,7 @@
 
 import gtk
 import gtk.keysyms
+import gobject
 
 import inspect
 import weakref, new
@@ -56,6 +57,21 @@ class weakref_method:
     def __call__(self, *args, **kwargs):
         f = new.instancemethod(self.func, self.inst(), self.inst().__class__)
         return f(*args, **kwargs)
+
+
+# calls function once when going idle, blocking redundant calls
+class run_idle_once:
+    def __init__(self, call):
+        self.call = call
+        self.pending = False
+    def queue(self):
+        if not self.pending:
+            self.pending = True
+            gobject.idle_add(self.call_wrapper)
+    def call_wrapper(self):
+        self.pending = False
+        self.call()
+        return False
 
 
 class TristateCheckButton(gtk.CheckButton):

@@ -90,7 +90,9 @@ class GTKlick:
                 else:
                     widgets['radio_connect_manual'].set_active(True)
 
-                # this can not (always) be set in the OSC callback
+                # this can not be set in the OSC callback
+                widgets['check_speedtrainer_enable'].set_active(self.config.speedtrainer)
+                widgets['check_speedtrainer_enable'].toggled()
                 widgets['spin_tempo_increment'].set_value(self.config.tempo_increment)
                 widgets['radio_meter_other'].set_active(self.config.denom != 0)
 

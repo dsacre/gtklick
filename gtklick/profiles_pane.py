@@ -12,6 +12,8 @@
 import gtk
 import gobject
 
+import cgi
+
 from gtklick_config import Profile
 import misc
 
@@ -46,7 +48,7 @@ class ProfilesPane:
 
         # create renderer/column
         self.renderer = gtk.CellRendererText()
-        self.column = gtk.TreeViewColumn(None, self.renderer, text=0)
+        self.column = gtk.TreeViewColumn(None, self.renderer, markup=0)
         self.treeview.append_column(self.column)
 
         # connect signals
@@ -60,11 +62,15 @@ class ProfilesPane:
         self.model.connect('row-deleted', self.on_row_deleted)
         self.enable_buttons(False)
 
-        self.idle_pending = False
+        self.idle = misc.run_idle_once(self.idle_handler)
+
+        self.track_changes = False
 
         # populate treeview with profiles from config file
         for p in self.config.get_profiles():
-            self.model.append([p.name, p])
+            self.model.append([cgi.escape(p.name), p])
+
+        self.mainwin.state_changed_callback = self.state_changed_callback
 
 
     def on_row_activated(self, w, path, view_column):
@@ -78,7 +84,7 @@ class ProfilesPane:
             self.enable_buttons(True)
 
     def on_cell_edited(self, cell, path, new_text):
-        self.model[path][0] = new_text
+        self.model[path][0] = cgi.escape(new_text)
         self.model[path][1].name = new_text
         # renaming finished, make cell non-editable again
         self.renderer.set_property('editable', False)
@@ -86,10 +92,10 @@ class ProfilesPane:
     def on_row_changed(self, w, path, i):
         # enable/disable buttons and save profiles. doing this in an idle callback seems to be
         # the only way to avoid spurious calls while the treeview is in an intermediate state
-        self.queue_idle()
+        self.idle.queue()
 
     def on_row_deleted(self, w, path):
-        self.queue_idle()
+        self.idle.queue()
 
     def on_profile_add(self, b):
         i = self.model.append(["unnamed", self.current_profile("unnamed")])
@@ -115,8 +121,10 @@ class ProfilesPane:
         selection = self.treeview.get_selection()
         i = selection.get_selected()[1]
         if i:
+            path = self.model.get_path(i)
             # replace selected profile
-            self.model.set_value(i, 1, self.current_profile(self.model.get_value(i, 0)))
+            self.model[path][0] = cgi.escape(self.model[path][1].name)
+            self.model[path][1] = self.current_profile(self.model[path][1].name)
 
     def on_profile_rename(self, b):
         selection = self.treeview.get_selection()
@@ -128,6 +136,15 @@ class ProfilesPane:
 
     def activate_profile(self, i):
         v = self.model.get_value(i, 1)
+
+        # reset all profile names, since we don't know which one was previously selected
+        for p in self.model:
+            p[0] = cgi.escape(p[1].name)
+
+        # ignore state changes while activating the profile
+        self.track_changes = False
+        # sending and receiving all OSC messages takes, uhm... so we need to wait at least... oh well...
+        gobject.timeout_add(100, lambda: setattr(self, 'track_changes', True))
 
         self.klick.send('/simple/set_tempo', v.tempo)
         self.widgets['spin_tempo_increment'].set_value(v.tempo_increment)
@@ -146,11 +163,11 @@ class ProfilesPane:
 
         # show all relevant frames
         if v.speedtrainer:
-            self.widgets['frame_speedtrainer'].show()
+            self.widgets['item_view_speedtrainer'].set_active(True)
         if (v.beats, v.denom) != (0, 4):
-            self.widgets['frame_meter'].show()
+            self.widgets['item_view_meter'].set_active(True)
         if v.pattern != '':
-            self.widgets['frame_speedtrainer'].show()
+            self.widgets['item_view_pattern'].set_active(True)
 
     def current_profile(self, name):
         # create profile from the current state of the GUI
@@ -179,22 +196,21 @@ class ProfilesPane:
         self.widgets['btn_profile_save'].set_sensitive(enable)
         self.widgets['btn_profile_rename'].set_sensitive(enable)
 
-    def queue_idle(self):
-        # avoid redundant calls of the idle handler
-        if not self.idle_pending:
-            gobject.idle_add(self.idle_handler)
-            self.idle_pending = True
-
     def idle_handler(self):
-        self.idle_pending = False
         # enable buttons only if a profile is selected
         i = self.treeview.get_selection().get_selected()[1]
         self.enable_buttons(bool(i))
         # save all profiles
         self.save_profiles()
-        return False
 
     def save_profiles(self):
         # save all profiles, write config file
         self.config.set_profiles([i[1] for i in self.model])
         self.config.write()
+
+    def state_changed_callback(self):
+        selection = self.treeview.get_selection()
+        i = selection.get_selected()[1]
+        if i and self.track_changes:
+            path = self.model.get_path(i)
+            self.model[path][0] = "<i>%s</i>" % cgi.escape(self.model[path][1].name)
