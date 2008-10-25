@@ -302,8 +302,8 @@ class MainWindow:
     @make_method('/simple/tempo', 'f')
     @osc_callback
     def simple_tempo_cb(self, path, args):
-        self.widgets['scale_tempo'].set_value(args[0])
-        self.widgets['spin_tempo'].set_value(args[0])
+        self.widgets['scale_tempo'].set_value(int(args[0]))
+        self.widgets['spin_tempo'].set_value(int(args[0]))
         self.config.tempo = args[0]
 
     @make_method('/simple/tempo_increment', 'f')
@@ -316,7 +316,7 @@ class MainWindow:
     @make_method('/simple/tempo_limit', 'f')
     @osc_callback
     def simple_tempo_limit_cb(self, path, args):
-        self.widgets['spin_tempo_limit'].set_value(args[0])
+        self.widgets['spin_tempo_limit'].set_value(int(args[0]))
         self.config.tempo_limit = args[0]
 
     @make_method('/simple/current_tempo', 'f')

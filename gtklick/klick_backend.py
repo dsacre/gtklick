@@ -56,7 +56,7 @@ class KlickBackend(liblo.ServerThread):
                     args += ['-o', str(port)]
                 self.process = subprocess.Popen(args)
             except OSError, e:
-                raise KlickBackendError("failed to start klick: " + e.strerror)
+                raise KlickBackendError("failed to start klick: %s" % e.strerror)
             # wait for klick to send /klick/ready
             if not self.wait():
                 raise KlickBackendError("timeout while waiting for klick to start")
@@ -80,7 +80,11 @@ class KlickBackend(liblo.ServerThread):
                 self.send('/quit')
 
     def check_version(self):
-        output = subprocess.Popen([KLICK_PATH, '-V'], stdout=subprocess.PIPE).communicate()[0]
+        try:
+            output = subprocess.Popen([KLICK_PATH, '-V'], stdout=subprocess.PIPE).communicate()[0]
+        except OSError, e:
+            raise KlickBackendError("failed to start klick: %s\n" % e.strerror +
+                                    "please make sure klick is installed")
         version_string = output.split()[1]
         version = tuple(int(x) for x in version_string.split('.'))
         if version < MIN_KLICK_VERSION:

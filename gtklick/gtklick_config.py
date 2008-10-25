@@ -80,7 +80,7 @@ class GTKlickConfig(object):
         self.tempo_increment = 0.2
         self.tempo_limit = 180
         self.beats = 4
-        self.denom = 4
+        self.denom = 0
         self.pattern = ''
         self.volume = 1.0
 
