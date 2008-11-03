@@ -419,8 +419,8 @@ class MainWindow:
         return pattern if pattern != self.default_pattern() else ''
 
     def default_pattern(self):
-        if (len(self.pattern_buttons) > 1):
-            pattern = 'X' + 'x'*(len(self.pattern_buttons)-1)
+        if self.config.beats > 0:
+            pattern = 'X' + 'x'*(self.config.beats-1)
         else:
             pattern = 'x'
         return pattern
