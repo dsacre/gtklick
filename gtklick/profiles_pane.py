@@ -116,15 +116,7 @@ class ProfilesPane:
         selection = self.treeview.get_selection()
         i = selection.get_selected()[1]
         if i:
-            path = self.model.get_path(i)
-            self.model.remove(i)
-
-            # select next item
-            selection.select_path(path)
-            if not selection.path_is_selected(path):
-                row = path[0]-1
-                if row >= 0:
-                    selection.select_path(row)
+            misc.treeview_remove(self.model, selection, i)
 
         # this is needed when removing a newly added profile before 'edited' has been sent
         self.renderer.set_property('editable', False)

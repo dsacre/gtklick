@@ -84,9 +84,15 @@ class GTKlick:
 
             if not connect:
                 self.klick.send('/config/set_sound', self.config.prefs_sound)
+
+                if len(self.config.prefs_connect_ports):
+                    ports = self.config.prefs_connect_ports.split('\0')
+                    for p in ports:
+                        prefs.model_ports.append([p])
+
                 if self.config.prefs_autoconnect:
                     widgets['radio_connect_auto'].set_active(True)
-                    self.klick.send('/config/autoconnect')
+                    widgets['radio_connect_auto'].toggled()
                 else:
                     widgets['radio_connect_manual'].set_active(True)
 

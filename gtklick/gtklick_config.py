@@ -40,6 +40,7 @@ def make_property(section, option, type_):
 class GTKlickConfig(object):
     prefs_sound         = make_property('preferences', 'sound', int)
     prefs_autoconnect   = make_property('preferences', 'autoconnect', bool)
+    prefs_connect_ports = make_property('preferences', 'connect_ports', str)
 
     view_markings       = make_property('view', 'markings', bool)
     view_meter          = make_property('view', 'meter', bool)
@@ -56,6 +57,7 @@ class GTKlickConfig(object):
     pattern             = make_property('state', 'pattern', str)
     volume              = make_property('state', 'volume', float)
 
+
     def __init__(self):
         self.cfgfile = os.path.expanduser('~/.gtklickrc')
 
@@ -68,6 +70,7 @@ class GTKlickConfig(object):
         # default values, overridden by read()
         self.prefs_sound = 0
         self.prefs_autoconnect = False
+        self.prefs_connect_ports = ''
 
         self.view_markings = False
         self.view_meter = True

@@ -122,3 +122,15 @@ class TristateCheckButton(gtk.CheckButton):
             return True
         else:
             return False
+
+
+def treeview_remove(model, selection, i):
+    path = model.get_path(i)
+    model.remove(i)
+
+    # select next item
+    selection.select_path(path)
+    if not selection.path_is_selected(path):
+        row = path[0]-1
+        if row >= 0:
+            selection.select_path(row)
