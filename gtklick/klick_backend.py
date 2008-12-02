@@ -85,11 +85,15 @@ class KlickBackend(liblo.ServerThread):
         except OSError, e:
             raise KlickBackendError("failed to start klick: %s\n" % e.strerror +
                                     "please make sure klick is installed")
-        version_string = output.split()[1]
-        version = tuple(int(x) for x in version_string.split('.'))
-        if version < MIN_KLICK_VERSION:
-            raise KlickBackendError("your version of klick is too old (%s).\n" % version_string + 
-                                    "please upgrade to klick %d.%d.%d or later" % MIN_KLICK_VERSION)
+        try:
+            version_string = output.split()[1]
+            version = tuple(int(x) for x in version_string.split('.'))
+            if version < MIN_KLICK_VERSION:
+                raise KlickBackendError("your version of klick is too old (%s).\n" % version_string + 
+                                        "please upgrade to klick %d.%d.%d or later" % MIN_KLICK_VERSION)
+        except ValueError:
+            # let's hope for the best
+            print "couldn't parse klick version"
 
     def check_process(self):
         return self.process and self.process.poll() == None
