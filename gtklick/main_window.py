@@ -107,9 +107,7 @@ class MainWindow:
         gtk.main_quit()
 
     def on_edit_preferences(self, i):
-        prefs = self.widgets['dialog_preferences']
-        prefs.run()
-        prefs.hide()
+        self.widgets['dialog_preferences'].show()
 
     def on_view_markings_toggled(self, i):
         self.widgets['scale_tempo'].set_draw_value(i.get_active())

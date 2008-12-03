@@ -20,14 +20,17 @@ class PreferencesDialog:
         self.config = config
 
         wtree.signal_autoconnect({
-            'on_sound_square_toggled':  (self.on_sound_toggled, 0),
-            'on_sound_sine_toggled':    (self.on_sound_toggled, 1),
-            'on_sound_noise_toggled':   (self.on_sound_toggled, 2),
-            'on_sound_click_toggled':   (self.on_sound_toggled, 3),
-            'on_connect_auto_toggled':  (self.on_connect_toggled, True),
-            'on_connect_manual_toggled':(self.on_connect_toggled, False),
-            'on_connect_add':           self.on_connect_add,
-            'on_connect_remove':        self.on_connect_remove,
+            'on_sound_square_toggled':      (self.on_sound_toggled, 0),
+            'on_sound_sine_toggled':        (self.on_sound_toggled, 1),
+            'on_sound_noise_toggled':       (self.on_sound_toggled, 2),
+            'on_sound_click_toggled':       (self.on_sound_toggled, 3),
+            'on_connect_auto_toggled':      (self.on_connect_toggled, True),
+            'on_connect_manual_toggled':    (self.on_connect_toggled, False),
+            'on_connect_add':               self.on_connect_add,
+            'on_connect_remove':            self.on_connect_remove,
+
+            'on_preferences_delete_event':  self.on_delete_event,
+            'on_preferences_close':         self.on_close,
         })
 
         self.treeview_ports = self.widgets['treeview_connect_ports']
@@ -54,6 +57,13 @@ class PreferencesDialog:
         self.ports_avail = []
 
         self.klick.register_methods(self)
+
+    def on_delete_event(self, w, ev):
+        self.widgets['dialog_preferences'].hide()
+        return 1
+
+    def on_close(self, b):
+        self.widgets['dialog_preferences'].hide()
 
     @gui_callback
     def on_sound_toggled(self, b, data):
