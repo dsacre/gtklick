@@ -35,6 +35,7 @@ class make_method(liblo.make_method):
 class KlickBackend(liblo.ServerThread):
     def __init__(self, name, port, connect):
         self.addr = None
+        self.version = None
         self.ready = threading.Event()
 
         self.check_version()

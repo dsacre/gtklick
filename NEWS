@@ -1,3 +1,8 @@
+2008-12-03: Version 0.4.0
+
+ * Allow manual selection of JACK ports to connect to.
+ * Some minor fixes.
+
 2008-10-24: Version 0.3.0
 
  * It's now possible to save and restore profiles.
