@@ -21,11 +21,13 @@ import getopt
 import sys
 import os.path
 
-from klick_backend import *
-from gtklick_config import *
-from main_window import *
-from profiles_pane import *
-from preferences_dialog import *
+import weakref
+
+import klick_backend
+import gtklick_config
+import main_window
+import profiles_pane
+import preferences_dialog
 import misc
 
 
@@ -70,18 +72,25 @@ class GTKlick:
             # explicitly call base class method, because get_name() is overridden in AboutDialog. stupid GTK...
             widgets = dict([(gtk.Widget.get_name(w), w) for w in self.wtree.get_widget_prefix('')])
 
-            self.config = GTKlickConfig()
+            self.config = gtklick_config.GTKlickConfig()
 
             # load config from file
             self.config.read()
 
             # start klick process
-            self.klick = KlickBackend('gtklick', port, connect, verbose)
+            self.klick = klick_backend.KlickBackend('gtklick', port, connect, verbose)
+
+            # make "globals" known in other modules
+            for m in [main_window, profiles_pane, preferences_dialog]:
+                m.wtree = self.wtree
+                m.widgets = widgets
+                m.klick = weakref.proxy(self.klick)
+                m.config = weakref.proxy(self.config)
 
             # the actual windows are created by glade, this basically just connects GUI and OSC callbacks
-            win = MainWindow(self.wtree, widgets, self.klick, self.config)
-            profiles = ProfilesPane(self.wtree, widgets, self.klick, self.config, win)
-            prefs = PreferencesDialog(self.wtree, widgets, self.klick, self.config)
+            self.win = main_window.MainWindow()
+            self.profiles = profiles_pane.ProfilesPane(self.win)
+            self.prefs = preferences_dialog.PreferencesDialog()
 
             #self.klick.add_method(None, None, self.fallback)
 
@@ -93,7 +102,7 @@ class GTKlick:
                 if len(self.config.prefs_connect_ports):
                     ports = self.config.prefs_connect_ports.split('\0')
                     for p in ports:
-                        prefs.model_ports.append([p])
+                        self.prefs.model_ports.append([p])
 
                 if self.config.prefs_autoconnect:
                     misc.do_quietly(lambda: widgets['radio_connect_auto'].set_active(True))
@@ -130,13 +139,13 @@ class GTKlick:
 
             widgets['window_main'].show()
 
-        except KlickBackendError, e:
+        except klick_backend.KlickBackendError, e:
             self.error_message(e.msg)
             sys.exit(1)
 
         # start timer to check if klick is still running
         if self.klick.process:
-            self.timer = gobject.timeout_add(1000, weakref_method(self.check_klick))
+            self.timer = gobject.timeout_add(1000, misc.weakref_method(self.check_klick))
 
     def __del__(self):
         if self.config:
@@ -155,10 +164,10 @@ class GTKlick:
         print "message not handled:", path, args, src.get_url()
 
     def error_message(self, msg):
-        m = gtk.MessageDialog(self.wtree.get_widget('window_main'),
-                              0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, msg)
+        m = gtk.MessageDialog(self.wtree.get_widget('window_main'), 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, msg)
         m.set_title("gtklick error")
         m.run()
+        m.destroy()
 
 
 if __name__ == '__main__':

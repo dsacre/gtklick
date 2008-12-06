@@ -14,15 +14,12 @@ import gobject
 
 import cgi
 
-from gtklick_config import Profile
+import gtklick_config
 import misc
 
 
 class ProfilesPane:
-    def __init__(self, wtree, widgets, klick, config, mainwin):
-        self.widgets = widgets
-        self.klick = klick
-        self.config = config
+    def __init__(self, mainwin):
         self.mainwin = mainwin
 
         wtree.signal_autoconnect({
@@ -38,12 +35,12 @@ class ProfilesPane:
         self.treeview.set_enable_search(False)
         self.treeview.set_reorderable(True)
 
-        self.widgets['scrolledwindow_profiles'].add(self.treeview)
-        self.widgets['label_frame_profiles'].set_mnemonic_widget(self.treeview)
+        widgets['scrolledwindow_profiles'].add(self.treeview)
+        widgets['label_frame_profiles'].set_mnemonic_widget(self.treeview)
         self.treeview.show()
 
         # create model
-        self.model = gtk.ListStore(str, Profile)
+        self.model = gtk.ListStore(str, gtklick_config.Profile)
         self.treeview.set_model(self.model)
 
         # create renderer/column
@@ -67,7 +64,7 @@ class ProfilesPane:
         self.track_changes = False
 
         # populate treeview with profiles from config file
-        for p in self.config.get_profiles():
+        for p in config.get_profiles():
             self.model.append([cgi.escape(p.name), p])
 
         self.mainwin.state_changed_callback = self.state_changed_callback
@@ -146,55 +143,55 @@ class ProfilesPane:
         # sending and receiving all OSC messages takes, uhm... so we need to wait at least... oh well...
         gobject.timeout_add(500, lambda: setattr(self, 'track_changes', True))
 
-        self.klick.send('/simple/set_tempo', v.tempo)
-        self.widgets['spin_tempo_increment'].set_value(v.tempo_increment)
-        self.widgets['check_speedtrainer_enable'].set_active(v.speedtrainer)
-        self.klick.send('/simple/set_tempo_increment', v.tempo_increment if v.speedtrainer else 0.0)
-        self.klick.send('/simple/set_tempo_limit', v.tempo_limit)
+        klick.send('/simple/set_tempo', v.tempo)
+        widgets['spin_tempo_increment'].set_value(v.tempo_increment)
+        widgets['check_speedtrainer_enable'].set_active(v.speedtrainer)
+        klick.send('/simple/set_tempo_increment', v.tempo_increment if v.speedtrainer else 0.0)
+        klick.send('/simple/set_tempo_limit', v.tempo_limit)
 
         if v.denom:
-            misc.do_quietly(lambda: self.widgets['radio_meter_other'].set_active(True))
+            misc.do_quietly(lambda: widgets['radio_meter_other'].set_active(True))
         else:
             # focus any radio button other than "other"
-            misc.do_quietly(lambda: self.widgets['radio_meter_44'].set_active(True))
-        self.klick.send('/simple/set_meter', v.beats, v.denom if v.denom else 4)
+            misc.do_quietly(lambda: widgets['radio_meter_44'].set_active(True))
+        klick.send('/simple/set_meter', v.beats, v.denom if v.denom else 4)
 
-        self.klick.send('/simple/set_pattern', v.pattern)
+        klick.send('/simple/set_pattern', v.pattern)
 
         # show all relevant frames
         if v.speedtrainer:
-            self.widgets['item_view_speedtrainer'].set_active(True)
+            widgets['item_view_speedtrainer'].set_active(True)
         if (v.beats, v.denom) != (0, 4):
-            self.widgets['item_view_meter'].set_active(True)
+            widgets['item_view_meter'].set_active(True)
         if v.pattern != '':
-            self.widgets['item_view_pattern'].set_active(True)
+            widgets['item_view_pattern'].set_active(True)
 
     def current_profile(self, name):
         # create profile from the current state of the GUI
-        if self.widgets['radio_meter_other'].get_active():
-            beats = int(self.widgets['spin_meter_beats'].get_value())
-            denom = int(self.widgets['spin_meter_denom'].get_value())
+        if widgets['radio_meter_other'].get_active():
+            beats = int(widgets['spin_meter_beats'].get_value())
+            denom = int(widgets['spin_meter_denom'].get_value())
         else:
-            beats = 0 if self.widgets['radio_meter_even'].get_active() else \
-                    2 if self.widgets['radio_meter_24'].get_active() else \
-                    3 if self.widgets['radio_meter_34'].get_active() else 4
+            beats = 0 if widgets['radio_meter_even'].get_active() else \
+                    2 if widgets['radio_meter_24'].get_active() else \
+                    3 if widgets['radio_meter_34'].get_active() else 4
             denom = 0
 
-        return Profile(
+        return gtklick_config.Profile(
             name,
-            int(self.widgets['spin_tempo'].get_value()),
-            self.widgets['check_speedtrainer_enable'].get_active(),
-            self.widgets['spin_tempo_increment'].get_value(),
-            int(self.widgets['spin_tempo_limit'].get_value()),
+            int(widgets['spin_tempo'].get_value()),
+            widgets['check_speedtrainer_enable'].get_active(),
+            widgets['spin_tempo_increment'].get_value(),
+            int(widgets['spin_tempo_limit'].get_value()),
             beats,
             denom,
             self.mainwin.get_pattern()
         )
 
     def enable_buttons(self, enable):
-        self.widgets['btn_profile_remove'].set_sensitive(enable)
-        self.widgets['btn_profile_save'].set_sensitive(enable)
-        self.widgets['btn_profile_rename'].set_sensitive(enable)
+        widgets['btn_profile_remove'].set_sensitive(enable)
+        widgets['btn_profile_save'].set_sensitive(enable)
+        widgets['btn_profile_rename'].set_sensitive(enable)
 
     def idle_handler(self):
         # enable buttons only if a profile is selected
@@ -205,8 +202,8 @@ class ProfilesPane:
 
     def save_profiles(self):
         # save all profiles, write config file
-        self.config.set_profiles([i[1] for i in self.model])
-        self.config.write()
+        config.set_profiles([i[1] for i in self.model])
+        config.write()
 
     def state_changed_callback(self):
         selection = self.treeview.get_selection()

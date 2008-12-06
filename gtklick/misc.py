@@ -19,6 +19,7 @@ import weakref, new
 
 block = False
 
+
 # decorator: don't call function while gtk signals are blocked
 def gui_callback(f):
     def g(self, *args):

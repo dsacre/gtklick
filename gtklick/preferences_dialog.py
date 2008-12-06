@@ -9,18 +9,16 @@
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 
-from klick_backend import *
-from misc import *
+import gtk
 
 import math
 
+from klick_backend import make_method
+from misc import gui_callback, osc_callback
+
 
 class PreferencesDialog:
-    def __init__(self, wtree, widgets, klick, config):
-        self.widgets = widgets
-        self.klick = klick
-        self.config = config
-
+    def __init__(self):
         wtree.signal_autoconnect({
             'on_sound_square_toggled':      (self.on_sound_toggled, 0),
             'on_sound_sine_toggled':        (self.on_sound_toggled, 1),
@@ -42,10 +40,10 @@ class PreferencesDialog:
             'on_preferences_close':         self.on_close,
         })
 
-        self.widgets['vbox_filechoosers'].set_sensitive(self.config.prefs_sound == -1)
+        widgets['vbox_filechoosers'].set_sensitive(config.prefs_sound == -1)
 
         # build JACK connection treeview
-        self.treeview_ports = self.widgets['treeview_connect_ports']
+        self.treeview_ports = widgets['treeview_connect_ports']
         self.model_ports = gtk.ListStore(str)
         self.treeview_ports.set_model(self.model_ports)
         self.model_avail = gtk.ListStore(str)
@@ -63,66 +61,66 @@ class PreferencesDialog:
         renderer.connect('edited', self.on_connect_cell_edited)
         self.model_ports.connect('row-deleted', lambda w, p: self.update_connect_ports())
 
-        self.widgets['btn_connect_remove'].set_sensitive(False)
+        widgets['btn_connect_remove'].set_sensitive(False)
         self.ports_avail = []
 
-        self.klick.register_methods(self)
+        klick.register_methods(self)
 
 
     # GUI callbacks
 
     def on_delete_event(self, w, ev):
-        self.widgets['dialog_preferences'].hide()
+        widgets['dialog_preferences'].hide()
         return 1
 
     def on_close(self, b):
-        self.widgets['dialog_preferences'].hide()
+        widgets['dialog_preferences'].hide()
 
     @gui_callback
     def on_sound_toggled(self, b, data):
         if b.get_active():
-            self.widgets['vbox_filechoosers'].set_sensitive(data == -1)
+            widgets['vbox_filechoosers'].set_sensitive(data == -1)
             if data >= 0:
-                self.klick.send('/config/set_sound', data)
+                klick.send('/config/set_sound', data)
             else:
-                a = self.widgets['filechooser_accented'].get_filename()
-                b = self.widgets['filechooser_normal'].get_filename()
+                a = widgets['filechooser_accented'].get_filename()
+                b = widgets['filechooser_normal'].get_filename()
                 if a and b:
-                    self.klick.send('/config/set_sound', a, b)
+                    klick.send('/config/set_sound', a, b)
                 else:
-                    # set silent sound
-                    self.klick.send('/config/set_sound', -2)
+                    # set silent
+                    klick.send('/config/set_sound', -2)
 
     @gui_callback
     def on_sound_selection_changed(self, chooser):
-        a = self.widgets['filechooser_accented'].get_filename()
-        b = self.widgets['filechooser_normal'].get_filename()
+        a = widgets['filechooser_accented'].get_filename()
+        b = widgets['filechooser_normal'].get_filename()
         if a and b:
-            self.klick.send('/config/set_sound', a, b)
+            klick.send('/config/set_sound', a, b)
         else:
-            # set silent sound
-            self.klick.send('/config/set_sound', -2)
+            # set silent
+            klick.send('/config/set_sound', -2)
 
     @gui_callback
     def on_sound_pitch_changed(self, r):
         # convert octave to factor
         v = 2**r.get_value()
-        self.klick.send('/config/set_sound_pitch', v, v)
+        klick.send('/config/set_sound_pitch', v, v)
 
     @gui_callback
     def on_connect_toggled(self, b, data):
         if b.get_active():
-            self.widgets['hbox_connect_manual'].set_sensitive(data == False)
+            widgets['hbox_connect_manual'].set_sensitive(data == False)
             if data:
-                self.klick.send('/config/disconnect_all')
-                self.klick.send('/config/autoconnect')
+                klick.send('/config/disconnect_all')
+                klick.send('/config/autoconnect')
             else:
                 self.update_connect_ports()
-            self.config.prefs_autoconnect = data
+            config.prefs_autoconnect = data
 
     def on_connect_add(self, b):
-        if self.klick.get_version() < (0, 10, 0):
-            m = gtk.MessageDialog(self.widgets['dialog_preferences'], 0, gtk.MESSAGE_INFO, gtk.BUTTONS_OK,
+        if klick.get_version() < (0, 10, 0):
+            m = gtk.MessageDialog(widgets['dialog_preferences'], 0, gtk.MESSAGE_INFO, gtk.BUTTONS_OK,
                                   "please upgrade to klick 0.10.0 or later for this to work.")
             m.run()
             m.destroy()
@@ -142,10 +140,10 @@ class PreferencesDialog:
 
     def on_connect_selection_changed(self, selection):
         i = selection.get_selected()[1]
-        self.widgets['btn_connect_remove'].set_sensitive(bool(i))
+        widgets['btn_connect_remove'].set_sensitive(bool(i))
 
     def on_connect_editing_started(self, cell, editable, path):
-        self.klick.send('/config/get_available_ports')
+        klick.send('/config/get_available_ports')
 
     def on_connect_editing_canceled(self, cell):
         selection = self.treeview_ports.get_selection()
@@ -162,9 +160,9 @@ class PreferencesDialog:
 
     def update_connect_ports(self):
         ports = [x[0] for x in self.model_ports]
-        self.klick.send('/config/disconnect_all')
-        self.klick.send('/config/connect', *ports)
-        self.config.prefs_connect_ports = '\0'.join(ports)
+        klick.send('/config/disconnect_all')
+        klick.send('/config/connect', *ports)
+        config.prefs_connect_ports = '\0'.join(ports)
 
 
     # OSC callbacks
@@ -175,30 +173,30 @@ class PreferencesDialog:
         sound = args[0]
         if sound < 0 or sound > 3: return
         w = ('radio_sound_square', 'radio_sound_sine', 'radio_sound_noise', 'radio_sound_click')[sound]
-        self.widgets[w].set_active(True)
-        self.config.prefs_sound = sound
+        widgets[w].set_active(True)
+        config.prefs_sound = sound
 
     @make_method('/config/sound', 'ss')
     @osc_callback
     def sound_custom_cb(self, path, args):
-        self.widgets['radio_sound_custom'].set_active(True)
+        widgets['radio_sound_custom'].set_active(True)
 
-        if args[0] != self.widgets['filechooser_accented'].get_filename():
-            self.widgets['filechooser_accented'].set_filename(args[0])
-        if args[1] != self.widgets['filechooser_normal'].get_filename():
-            self.widgets['filechooser_normal'].set_filename(args[1])
+        if args[0] != widgets['filechooser_accented'].get_filename():
+            widgets['filechooser_accented'].set_filename(args[0])
+        if args[1] != widgets['filechooser_normal'].get_filename():
+            widgets['filechooser_normal'].set_filename(args[1])
 
-        self.config.prefs_sound = -1
-        self.config.prefs_sound_accented = args[0]
-        self.config.prefs_sound_normal = args[1]
+        config.prefs_sound = -1
+        config.prefs_sound_accented = args[0]
+        config.prefs_sound_normal = args[1]
 
     @make_method('/config/sound_pitch', 'ff')
     @osc_callback
     def sound_pitch_cb(self, path, args):
         # for now let's assume that args[0] == args[1]
         v = math.log(args[0], 2)
-        self.widgets['scale_sound_pitch'].set_value(v)
-        self.config.prefs_sound_pitch = v
+        widgets['scale_sound_pitch'].set_value(v)
+        config.prefs_sound_pitch = v
 
     @make_method('/config/available_ports', None)
     @osc_callback
@@ -212,8 +210,7 @@ class PreferencesDialog:
     @make_method('/config/sound_loading_failed', 's')
     @osc_callback
     def sound_loading_failed_cb(self, path, args):
-        self.klick.send('/config/set_sound', -2)
-        m = gtk.MessageDialog(self.widgets['dialog_preferences'], 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
-                              "couldn't load file '%s'." % args[0])
+        klick.send('/config/set_sound', -2)
+        m = gtk.MessageDialog(widgets['dialog_preferences'], 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, "couldn't load file '%s'." % args[0])
         m.run()
         m.destroy()

@@ -15,6 +15,7 @@ import subprocess
 import sys
 import threading
 
+
 KLICK_PATH = 'klick'
 MIN_KLICK_VERSION = (0,9,0)
 START_TIMEOUT = 10
@@ -81,14 +82,13 @@ class KlickBackend(liblo.ServerThread):
         try:
             output = subprocess.Popen([KLICK_PATH, '-V'], stdout=subprocess.PIPE).communicate()[0]
         except OSError, e:
-            raise KlickBackendError("failed to start klick: %s\n" % e.strerror +
-                                    "please make sure klick is installed")
+            raise KlickBackendError("failed to start klick: %s\nplease make sure klick is installed." % e.strerror)
         try:
             version_string = output.split()[1]
             self.version = tuple(int(x) for x in version_string.split('.'))
             if self.version < MIN_KLICK_VERSION:
-                raise KlickBackendError("your version of klick is too old (%s).\n" % version_string + 
-                                        "please upgrade to klick %d.%d.%d or later" % MIN_KLICK_VERSION)
+                raise KlickBackendError("your version of klick is too old (%s).\nplease upgrade to klick %d.%d.%d or later." %
+                                        ((version_string,) + MIN_KLICK_VERSION))
         except ValueError:
             # let's hope for the best
             print "couldn't parse klick version"
