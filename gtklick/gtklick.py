@@ -26,7 +26,7 @@ from gtklick_config import *
 from main_window import *
 from profiles_pane import *
 from preferences_dialog import *
-from misc import *
+import misc
 
 
 help_string = """Usage:
@@ -45,16 +45,19 @@ class GTKlick:
         # parse command line arguments
         port = None
         connect = False
+        verbose = False
         try:
-            r = getopt.getopt(args, 'o:q:h');
-            for opt in r[0]:
-                if opt[0] == '-o':
-                    port = opt[1]
+            r = getopt.getopt(args, 'o:q:Lh');
+            for opt, arg in r[0]:
+                if opt == '-o':
+                    port = arg
                     connect = False
-                elif opt[0] == '-q':
-                    port = opt[1]
+                elif opt == '-q':
+                    port = arg
                     connect = True
-                elif opt[0] == '-h':
+                elif opt == '-L':
+                    verbose = True
+                elif opt == '-h':
                     print help_string
                     sys.exit(0)
         except getopt.GetoptError, e:
@@ -73,7 +76,7 @@ class GTKlick:
             self.config.read()
 
             # start klick process
-            self.klick = KlickBackend('gtklick', port, connect)
+            self.klick = KlickBackend('gtklick', port, connect, verbose)
 
             # the actual windows are created by glade, this basically just connects GUI and OSC callbacks
             win = MainWindow(self.wtree, widgets, self.klick, self.config)
@@ -82,39 +85,48 @@ class GTKlick:
 
             #self.klick.add_method(None, None, self.fallback)
 
-            self.klick.send('/query')
-
             if not connect:
+                # restore settings from config file.
+                # many settings are just sent to klick, and the OSC notifications will take care of the rest
+
+                # port connections
                 if len(self.config.prefs_connect_ports):
                     ports = self.config.prefs_connect_ports.split('\0')
                     for p in ports:
                         prefs.model_ports.append([p])
 
                 if self.config.prefs_autoconnect:
-                    widgets['radio_connect_auto'].set_active(True)
-                    widgets['radio_connect_auto'].toggled()
+                    misc.do_quietly(lambda: widgets['radio_connect_auto'].set_active(True))
+                    self.klick.send('/config/autoconnect')
                 else:
-                    widgets['radio_connect_manual'].set_active(True)
+                    misc.do_quietly(lambda: widgets['radio_connect_manual'].set_active(True))
+                    self.klick.send('/config/connect', *ports)
 
+                # sound / volume
                 if self.config.prefs_sound >= 0:
                     self.klick.send('/config/set_sound', self.config.prefs_sound)
                 else:
                     self.klick.send('/config/set_sound', self.config.prefs_sound_accented, self.config.prefs_sound_normal)
 
                 self.klick.send('/config/set_sound_pitch', 2**self.config.prefs_sound_pitch, 2**self.config.prefs_sound_pitch)
+                self.klick.send('/config/set_volume', self.config.volume)
 
-                # this can not be set in the OSC callback
-                widgets['check_speedtrainer_enable'].set_active(self.config.speedtrainer)
-                widgets['check_speedtrainer_enable'].toggled()
-                widgets['spin_tempo_increment'].set_value(self.config.tempo_increment)
-                widgets['radio_meter_other'].set_active(self.config.denom != 0)
+                # metronome state
+                misc.do_quietly(lambda: (
+                    widgets['check_speedtrainer_enable'].set_active(self.config.speedtrainer),
+                    widgets['spin_tempo_increment'].set_value(self.config.tempo_increment),
+                    widgets['radio_meter_other'].set_active(self.config.denom != 0)
+                ))
+                widgets['spin_tempo_increment'].set_sensitive(self.config.speedtrainer)
+                widgets['spin_tempo_limit'].set_sensitive(self.config.speedtrainer)
 
                 self.klick.send('/simple/set_tempo', self.config.tempo)
                 self.klick.send('/simple/set_tempo_increment', self.config.tempo_increment if self.config.speedtrainer else 0.0)
                 self.klick.send('/simple/set_tempo_limit', self.config.tempo_limit)
                 self.klick.send('/simple/set_meter', self.config.beats, self.config.denom if self.config.denom else 4)
                 self.klick.send('/simple/set_pattern', self.config.pattern)
-                self.klick.send('/config/set_volume', self.config.volume)
+            else:
+                self.klick.send('/query')
 
             widgets['window_main'].show()
 

@@ -153,10 +153,10 @@ class ProfilesPane:
         self.klick.send('/simple/set_tempo_limit', v.tempo_limit)
 
         if v.denom:
-            self.widgets['radio_meter_other'].set_active(True)
+            misc.do_quietly(lambda: self.widgets['radio_meter_other'].set_active(True))
         else:
             # focus any radio button other than "other"
-            self.widgets['radio_meter_even'].set_active(True)
+            misc.do_quietly(lambda: self.widgets['radio_meter_44'].set_active(True))
         self.klick.send('/simple/set_meter', v.beats, v.denom if v.denom else 4)
 
         self.klick.send('/simple/set_pattern', v.pattern)

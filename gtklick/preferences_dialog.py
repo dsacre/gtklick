@@ -90,6 +90,7 @@ class PreferencesDialog:
                 if a and b:
                     self.klick.send('/config/set_sound', a, b)
                 else:
+                    # set silent sound
                     self.klick.send('/config/set_sound', -2)
 
     @gui_callback
@@ -99,6 +100,7 @@ class PreferencesDialog:
         if a and b:
             self.klick.send('/config/set_sound', a, b)
         else:
+            # set silent sound
             self.klick.send('/config/set_sound', -2)
 
     @gui_callback
@@ -210,6 +212,7 @@ class PreferencesDialog:
     @make_method('/config/sound_loading_failed', 's')
     @osc_callback
     def sound_loading_failed_cb(self, path, args):
+        self.klick.send('/config/set_sound', -2)
         m = gtk.MessageDialog(self.widgets['dialog_preferences'], 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
                               "couldn't load file '%s'." % args[0])
         m.run()

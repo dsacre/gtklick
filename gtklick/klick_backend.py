@@ -33,7 +33,7 @@ class make_method(liblo.make_method):
 
 
 class KlickBackend(liblo.ServerThread):
-    def __init__(self, name, port, connect):
+    def __init__(self, name, port, connect, verbose):
         self.addr = None
         self.version = None
         self.ready = threading.Event()
@@ -47,14 +47,11 @@ class KlickBackend(liblo.ServerThread):
         if not connect:
             # start klick process
             try:
-                args = [
-                    KLICK_PATH,
-                    '-n', name,
-                    '-R', self.get_url(),
-                    #'-L'
-                ]
+                args = [ KLICK_PATH, '-n', name, '-R', self.get_url() ]
                 if port:
                     args += ['-o', str(port)]
+                if verbose:
+                    args += ['-L']
                 self.process = subprocess.Popen(args)
             except OSError, e:
                 raise KlickBackendError("failed to start klick: %s" % e.strerror)

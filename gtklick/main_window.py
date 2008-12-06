@@ -245,13 +245,11 @@ class MainWindow:
         self.klick.send('/simple/set_meter', beats, denom)
 
         self.readjust_pattern_table(beats)
-        pattern = self.get_pattern()
-        self.klick.send('/simple/set_pattern', pattern)
+        self.klick.send('/simple/set_pattern', self.get_pattern(beats))
 
     @gui_callback
     def on_pattern_button_toggled(self, b):
-        pattern = self.get_pattern()
-        self.klick.send('/simple/set_pattern', pattern)
+        self.klick.send('/simple/set_pattern', self.get_pattern())
         self.state_changed.queue()
 
     @gui_callback
@@ -365,10 +363,11 @@ class MainWindow:
     def simple_pattern_cb(self, path, args):
         pattern = args[0]
         if len(pattern) != len(self.pattern_buttons) or not all(x in '.xX' for x in pattern):
-            pattern = self.default_pattern()
+            # invalid pattern, use default
+            pattern = self.default_pattern(self.config.beats)
         for p, b in itertools.izip(pattern, self.pattern_buttons):
             b.set_state('.xX'.index(p))
-        self.config.pattern = pattern
+        self.config.pattern = args[0]
 
     @make_method('/metro/active', 'i')
     @osc_callback
@@ -412,13 +411,11 @@ class MainWindow:
                     self.widgets['label_frame_pattern'].set_mnemonic_widget(b)
                 b.show()
 
-    def get_pattern(self):
+    def get_pattern(self, beats=None):
+        if beats == None:
+            beats = self.config.beats
         pattern = ''.join('.xX'[s] for s in (n.get_state() for n in self.pattern_buttons))
-        return pattern if pattern != self.default_pattern() else ''
+        return pattern if pattern != self.default_pattern(beats) else ''
 
-    def default_pattern(self):
-        if self.config.beats > 0:
-            pattern = 'X' + 'x'*(self.config.beats-1)
-        else:
-            pattern = 'x'
-        return pattern
+    def default_pattern(self, beats):
+        return 'X' + 'x'*(beats-1) if beats > 0 else 'x'

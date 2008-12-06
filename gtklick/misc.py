@@ -17,11 +17,14 @@ import inspect
 import weakref, new
 
 
+block = False
+
 # decorator: don't call function while gtk signals are blocked
 def gui_callback(f):
     def g(self, *args):
+        global block
         # FIXME: it may be a bad idea to discard arbitrary signals
-        if not hasattr(self, '__block') or not self.__block:
+        if not block:
             return f(self, *args)
     return g
 
@@ -29,9 +32,10 @@ def gui_callback(f):
 # gtk functions, and block gtk signals while the function is running
 def osc_callback(f):
     def g(self, *args):
+        global block
         try:
             gtk.gdk.threads_enter()
-            self.__block = True
+            block = True
 
             #print args[0], args[1]
 
@@ -43,11 +47,21 @@ def osc_callback(f):
             else:
                 r = f(self, *args)
 
-            self.__block = False
             return r
         finally:
+            block = False
             gtk.gdk.threads_leave()
     return g
+
+
+# block gtk signals while calling function f
+def do_quietly(f):
+    global block
+    try:
+        block = True
+        return f()
+    finally:
+        block = False
 
 
 class weakref_method:
