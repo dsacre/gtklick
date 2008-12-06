@@ -40,7 +40,7 @@ Options:
 
 class GTKlick:
     def __init__(self, args, share_dir):
-        self.config =None
+        self.config = None
 
         # parse command line arguments
         port = None
@@ -82,9 +82,9 @@ class GTKlick:
 
             #self.klick.add_method(None, None, self.fallback)
 
-            if not connect:
-                self.klick.send('/config/set_sound', self.config.prefs_sound)
+            self.klick.send('/query')
 
+            if not connect:
                 if len(self.config.prefs_connect_ports):
                     ports = self.config.prefs_connect_ports.split('\0')
                     for p in ports:
@@ -95,6 +95,13 @@ class GTKlick:
                     widgets['radio_connect_auto'].toggled()
                 else:
                     widgets['radio_connect_manual'].set_active(True)
+
+                if self.config.prefs_sound >= 0:
+                    self.klick.send('/config/set_sound', self.config.prefs_sound)
+                else:
+                    self.klick.send('/config/set_sound', self.config.prefs_sound_accented, self.config.prefs_sound_normal)
+
+                self.klick.send('/config/set_sound_pitch', 2**self.config.prefs_sound_pitch, 2**self.config.prefs_sound_pitch)
 
                 # this can not be set in the OSC callback
                 widgets['check_speedtrainer_enable'].set_active(self.config.speedtrainer)
@@ -108,8 +115,6 @@ class GTKlick:
                 self.klick.send('/simple/set_meter', self.config.beats, self.config.denom if self.config.denom else 4)
                 self.klick.send('/simple/set_pattern', self.config.pattern)
                 self.klick.send('/config/set_volume', self.config.volume)
-
-            self.klick.send('/query')
 
             widgets['window_main'].show()
 
