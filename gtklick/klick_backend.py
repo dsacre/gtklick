@@ -17,7 +17,7 @@ import threading
 
 
 KLICK_PATH = 'klick'
-MIN_KLICK_VERSION = (0,9,0)
+MIN_KLICK_VERSION = (0,11,0)
 START_TIMEOUT = 10
 
 

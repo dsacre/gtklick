@@ -147,7 +147,7 @@ class ProfilesPane:
         widgets['spin_tempo_increment'].set_value(v.tempo_increment)
         widgets['check_speedtrainer_enable'].set_active(v.speedtrainer)
         klick.send('/simple/set_tempo_increment', v.tempo_increment if v.speedtrainer else 0.0)
-        klick.send('/simple/set_tempo_limit', v.tempo_limit)
+        klick.send('/simple/set_tempo_start', v.tempo_start)
 
         if v.denom:
             misc.do_quietly(lambda: widgets['radio_meter_other'].set_active(True))
@@ -182,7 +182,7 @@ class ProfilesPane:
             int(widgets['spin_tempo'].get_value()),
             widgets['check_speedtrainer_enable'].get_active(),
             widgets['spin_tempo_increment'].get_value(),
-            int(widgets['spin_tempo_limit'].get_value()),
+            int(widgets['spin_tempo_start'].get_value()),
             beats,
             denom,
             self.mainwin.get_pattern()

@@ -119,13 +119,6 @@ class PreferencesDialog:
             config.prefs_autoconnect = data
 
     def on_connect_add(self, b):
-        if klick.get_version() < (0, 10, 0):
-            m = gtk.MessageDialog(widgets['dialog_preferences'], 0, gtk.MESSAGE_INFO, gtk.BUTTONS_OK,
-                                  "please upgrade to klick 0.10.0 or later for this to work.")
-            m.run()
-            m.destroy()
-            return
-
         if not all(x[0] for x in self.model_ports):
             return
         i = self.model_ports.append([''])

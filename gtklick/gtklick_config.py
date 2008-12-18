@@ -54,7 +54,7 @@ class GTKlickConfig(object):
     tempo               = make_property('state', 'tempo', int)
     speedtrainer        = make_property('state', 'speedtrainer', bool)
     tempo_increment     = make_property('state', 'tempo_increment', float)
-    tempo_limit         = make_property('state', 'tempo_limit', int)
+    tempo_start         = make_property('state', 'tempo_start', int)
     beats               = make_property('state', 'beats', int)
     denom               = make_property('state', 'denom', int)
     pattern             = make_property('state', 'pattern', str)
@@ -87,7 +87,7 @@ class GTKlickConfig(object):
         self.tempo = 120
         self.speedtrainer = False
         self.tempo_increment = 0.2
-        self.tempo_limit = 180
+        self.tempo_start = 120
         self.beats = 4
         self.denom = 0
         self.pattern = ''
@@ -97,6 +97,7 @@ class GTKlickConfig(object):
 
     def read(self):
         self.parser.read(self.cfgfile)
+        self.convert_older_format('state')
 
     def write(self):
         self.parser.write(open(self.cfgfile, 'w'))
@@ -109,12 +110,14 @@ class GTKlickConfig(object):
         for n in numbers:
             try:
                 s = 'profile_%d' % n
+                self.convert_older_format(s)
+
                 p = Profile(
                     self.parser.get(s, 'name'),
                     self.parser.getint(s, 'tempo'),
                     self.parser.getboolean(s, 'speedtrainer'),
                     self.parser.getfloat(s, 'tempo_increment'),
-                    self.parser.getint(s, 'tempo_limit'),
+                    self.parser.getint(s, 'tempo_start'),
                     self.parser.getint(s, 'beats'),
                     self.parser.getint(s, 'denom'),
                     self.parser.get(s, 'pattern')
@@ -138,7 +141,7 @@ class GTKlickConfig(object):
             self.parser.set(s, 'tempo', str(p.tempo))
             self.parser.set(s, 'speedtrainer', str(p.speedtrainer))
             self.parser.set(s, 'tempo_increment', str(p.tempo_increment))
-            self.parser.set(s, 'tempo_limit', str(p.tempo_limit))
+            self.parser.set(s, 'tempo_start', str(p.tempo_start))
             self.parser.set(s, 'beats', str(p.beats))
             self.parser.set(s, 'denom', str(p.denom))
             self.parser.set(s, 'pattern', p.pattern)
@@ -148,15 +151,23 @@ class GTKlickConfig(object):
             if re.match(self.prof_re, s) and int(s.split('_')[1]) >= len(profiles):
                 self.parser.remove_section(s)
 
+    def convert_older_format(self, section):
+        # convert tempo_limit (pre 0.5) -> tempo_start
+        if self.parser.has_option(section, 'tempo_limit'):
+            self.parser.set(section, 'tempo_start', str(self.parser.getint(section, 'tempo')))
+            if self.parser.getboolean(section, 'speedtrainer'):
+                self.parser.set(section, 'tempo', str(self.parser.getint(section, 'tempo_limit')))
+            self.parser.remove_option(section, 'tempo_limit')
+
 
 class Profile(gobject.GObject):
-    def __init__(self, name, tempo, speedtrainer, tempo_increment, tempo_limit, beats, denom, pattern):
+    def __init__(self, name, tempo, speedtrainer, tempo_increment, tempo_start, beats, denom, pattern):
         gobject.GObject.__init__(self)
         self.name = name
         self.tempo = tempo
         self.speedtrainer = speedtrainer
         self.tempo_increment = tempo_increment
-        self.tempo_limit = tempo_limit
+        self.tempo_start = tempo_start
         self.beats = beats
         self.denom = denom
         self.pattern = pattern

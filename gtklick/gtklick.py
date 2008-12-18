@@ -81,7 +81,7 @@ class GTKlick:
             self.klick = klick_backend.KlickBackend('gtklick', port, connect, verbose)
 
             # make "globals" known in other modules
-            for m in [main_window, profiles_pane, preferences_dialog]:
+            for m in (main_window, profiles_pane, preferences_dialog):
                 m.wtree = self.wtree
                 m.widgets = widgets
                 m.klick = weakref.proxy(self.klick)
@@ -127,11 +127,11 @@ class GTKlick:
                     widgets['radio_meter_other'].set_active(self.config.denom != 0)
                 ))
                 widgets['spin_tempo_increment'].set_sensitive(self.config.speedtrainer)
-                widgets['spin_tempo_limit'].set_sensitive(self.config.speedtrainer)
+                widgets['spin_tempo_start'].set_sensitive(self.config.speedtrainer)
 
                 self.klick.send('/simple/set_tempo', self.config.tempo)
                 self.klick.send('/simple/set_tempo_increment', self.config.tempo_increment if self.config.speedtrainer else 0.0)
-                self.klick.send('/simple/set_tempo_limit', self.config.tempo_limit)
+                self.klick.send('/simple/set_tempo_start', self.config.tempo_start)
                 self.klick.send('/simple/set_meter', self.config.beats, self.config.denom if self.config.denom else 4)
                 self.klick.send('/simple/set_pattern', self.config.pattern)
             else:

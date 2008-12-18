@@ -46,7 +46,7 @@ class MainWindow:
             # speed trainer
             'on_speedtrainer_enable_toggled':   self.on_speedtrainer_enable_toggled,
             'on_tempo_increment_changed':       self.on_tempo_increment_changed,
-            'on_tempo_limit_changed':           self.on_tempo_limit_changed,
+            'on_tempo_start_changed':           self.on_tempo_start_changed,
             # meter
             'on_meter_even_toggled':            (self.on_meter_toggled, (0, 4)),
             'on_meter_24_toggled':              (self.on_meter_toggled, (2, 4)),
@@ -165,14 +165,14 @@ class MainWindow:
     def on_speedtrainer_enable_toggled(self, b):
         a = b.get_active()
         widgets['spin_tempo_increment'].set_sensitive(a)
-        widgets['spin_tempo_limit'].set_sensitive(a)
+        widgets['spin_tempo_start'].set_sensitive(a)
         config.speedtrainer = a
         if a:
             klick.send('/simple/set_tempo_increment', widgets['spin_tempo_increment'].get_value())
-            klick.send('/simple/set_tempo_limit', int(widgets['spin_tempo_limit'].get_value()))
+            klick.send('/simple/set_tempo_start', int(widgets['spin_tempo_start'].get_value()))
         else:
             widgets['spin_tempo_increment'].select_region(0, 0)
-            widgets['spin_tempo_limit'].select_region(0, 0)
+            widgets['spin_tempo_start'].select_region(0, 0)
             klick.send('/simple/set_tempo_increment', 0.0)
         self.state_changed.queue()
 
@@ -182,8 +182,8 @@ class MainWindow:
         self.state_changed.queue()
 
     @gui_callback
-    def on_tempo_limit_changed(self, b):
-        klick.send('/simple/set_tempo_limit', int(b.get_value()))
+    def on_tempo_start_changed(self, b):
+        klick.send('/simple/set_tempo_start', int(b.get_value()))
         self.state_changed.queue()
 
     @gui_callback
@@ -300,11 +300,11 @@ class MainWindow:
             widgets['spin_tempo_increment'].set_value(args[0])
             config.tempo_increment = args[0]
 
-    @make_method('/simple/tempo_limit', 'f')
+    @make_method('/simple/tempo_start', 'f')
     @osc_callback
-    def simple_tempo_limit_cb(self, path, args):
-        widgets['spin_tempo_limit'].set_value(int(args[0]))
-        config.tempo_limit = args[0]
+    def simple_tempo_start_cb(self, path, args):
+        widgets['spin_tempo_start'].set_value(int(args[0]))
+        config.tempo_start = args[0]
 
     @make_method('/simple/current_tempo', 'f')
     @osc_callback
