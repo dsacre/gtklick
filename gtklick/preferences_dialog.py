@@ -29,7 +29,10 @@ class PreferencesDialog:
             'on_accented_selection_changed':self.on_sound_selection_changed,
             'on_normal_selection_changed':  self.on_sound_selection_changed,
 
-            'on_sound_pitch_changed':       self.on_sound_pitch_changed,
+            'on_pitch_accented_changed':    self.on_pitch_changed,
+            'on_pitch_normal_changed':      self.on_pitch_changed,
+            'on_pitch_reset':               self.on_pitch_reset,
+            'on_pitch_format_value':        self.on_pitch_format_value,
 
             'on_connect_auto_toggled':      (self.on_connect_toggled, True),
             'on_connect_manual_toggled':    (self.on_connect_toggled, False),
@@ -102,10 +105,18 @@ class PreferencesDialog:
             klick.send('/config/set_sound', -2)
 
     @gui_callback
-    def on_sound_pitch_changed(self, r):
-        # convert octave to factor
-        v = 2**r.get_value()
-        klick.send('/config/set_sound_pitch', v, v)
+    def on_pitch_changed(self, r):
+        klick.send('/config/set_sound_pitch',
+            2 ** (widgets['scale_pitch_accented'].get_value() / 12),
+            2 ** (widgets['scale_pitch_normal'].get_value() / 12)
+        )
+
+    @gui_callback
+    def on_pitch_reset(self, r):
+        klick.send('/config/set_sound_pitch', 1.0, 1.0)
+
+    def on_pitch_format_value(self, scale, value):
+        return ('+%d' if value > 0.0 else '%d') % value
 
     @gui_callback
     def on_connect_toggled(self, b, data):
@@ -186,10 +197,12 @@ class PreferencesDialog:
     @make_method('/config/sound_pitch', 'ff')
     @osc_callback
     def sound_pitch_cb(self, path, args):
-        # for now let's assume that args[0] == args[1]
-        v = math.log(args[0], 2)
-        widgets['scale_sound_pitch'].set_value(v)
-        config.prefs_sound_pitch = v
+        v = round(math.log(args[0], 2) * 12)
+        w = round(math.log(args[1], 2) * 12)
+        widgets['scale_pitch_accented'].set_value(v)
+        widgets['scale_pitch_normal'].set_value(w)
+        config.prefs_pitch_accented = v
+        config.prefs_pitch_normal = w
 
     @make_method('/config/available_ports', None)
     @osc_callback

@@ -117,7 +117,10 @@ class GTKlick:
                 else:
                     self.klick.send('/config/set_sound', self.config.prefs_sound_accented, self.config.prefs_sound_normal)
 
-                self.klick.send('/config/set_sound_pitch', 2**self.config.prefs_sound_pitch, 2**self.config.prefs_sound_pitch)
+                self.klick.send('/config/set_sound_pitch',
+                    2 ** (self.config.prefs_pitch_accented / 12.0),
+                    2 ** (self.config.prefs_pitch_normal / 12.0)
+                )
                 self.klick.send('/config/set_volume', self.config.volume)
 
                 # metronome state

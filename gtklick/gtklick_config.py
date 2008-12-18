@@ -38,12 +38,13 @@ def make_property(section, option, type_):
 
 
 class GTKlickConfig(object):
-    prefs_autoconnect   = make_property('preferences', 'autoconnect', bool)
-    prefs_connect_ports = make_property('preferences', 'connect_ports', str)
-    prefs_sound         = make_property('preferences', 'sound', int)
-    prefs_sound_accented= make_property('preferences', 'sound_accented', str)
-    prefs_sound_normal  = make_property('preferences', 'sound_normal', str)
-    prefs_sound_pitch   = make_property('preferences', 'sound_pitch', float)
+    prefs_autoconnect       = make_property('preferences', 'autoconnect', bool)
+    prefs_connect_ports     = make_property('preferences', 'connect_ports', str)
+    prefs_sound             = make_property('preferences', 'sound', int)
+    prefs_sound_accented    = make_property('preferences', 'sound_accented', str)
+    prefs_sound_normal      = make_property('preferences', 'sound_normal', str)
+    prefs_pitch_accented    = make_property('preferences', 'pitch_accented', float)
+    prefs_pitch_normal      = make_property('preferences', 'pitch_normal', float)
 
     view_markings       = make_property('view', 'markings', bool)
     view_meter          = make_property('view', 'meter', bool)
@@ -76,7 +77,8 @@ class GTKlickConfig(object):
         self.prefs_sound = 0
         self.prefs_sound_accented = ""
         self.prefs_sound_normal = ""
-        self.prefs_sound_pitch = 0.0
+        self.prefs_pitch_accented = 0.0
+        self.prefs_pitch_normal = 0.0
 
         self.view_markings = False
         self.view_meter = True

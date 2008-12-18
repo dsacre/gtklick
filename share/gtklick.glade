@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.1 on Thu Dec 18 02:49:54 2008 -->
+<!--Generated with glade3 3.4.1 on Fri Dec 19 00:02:10 2008 -->
 <glade-interface>
   <widget class="GtkAboutDialog" id="dialog_about">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -46,6 +46,8 @@
     <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="skip_pager_hint">True</property>
     <property name="transient_for">window_main</property>
     <property name="has_separator">False</property>
     <signal name="delete_event" handler="on_preferences_delete_event"/>
@@ -176,8 +178,8 @@
                                   <widget class="GtkFileChooserButton" id="filechooser_accented">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="use_preview_label">False</property>
                                     <property name="preview_widget_active">False</property>
+                                    <property name="use_preview_label">False</property>
                                     <property name="title" translatable="yes">Select audio file for accented beats</property>
                                     <property name="width_chars">24</property>
                                     <signal name="selection_changed" handler="on_accented_selection_changed"/>
@@ -187,8 +189,8 @@
                                   <widget class="GtkFileChooserButton" id="filechooser_normal">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="use_preview_label">False</property>
                                     <property name="preview_widget_active">False</property>
+                                    <property name="use_preview_label">False</property>
                                     <property name="title" translatable="yes">Select audio file for normal beats</property>
                                     <property name="width_chars">24</property>
                                     <signal name="selection_changed" handler="on_normal_selection_changed"/>
@@ -233,18 +235,59 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkVScale" id="scale_sound_pitch">
+                          <widget class="GtkHBox" id="hbox8">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="update_policy">GTK_UPDATE_DELAYED</property>
-                            <property name="adjustment">0 -1 1 0.10000000000000001 0.5 0</property>
-                            <property name="inverted">True</property>
-                            <property name="value_pos">GTK_POS_BOTTOM</property>
-                            <signal name="value_changed" handler="on_sound_pitch_changed"/>
+                            <property name="spacing">8</property>
+                            <child>
+                              <widget class="GtkVScale" id="scale_pitch_accented">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="update_policy">GTK_UPDATE_DELAYED</property>
+                                <property name="adjustment">0 -12 12 1 1 0</property>
+                                <property name="inverted">True</property>
+                                <property name="digits">0</property>
+                                <property name="value_pos">GTK_POS_BOTTOM</property>
+                                <signal name="value_changed" handler="on_pitch_accented_changed"/>
+                                <signal name="format_value" handler="on_pitch_format_value"/>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkVScale" id="scale_pitch_normal">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="update_policy">GTK_UPDATE_DELAYED</property>
+                                <property name="adjustment">0 -12 12 1 1 0</property>
+                                <property name="inverted">True</property>
+                                <property name="digits">0</property>
+                                <property name="value_pos">GTK_POS_BOTTOM</property>
+                                <signal name="value_changed" handler="on_pitch_normal_changed"/>
+                                <signal name="format_value" handler="on_pitch_format_value"/>
+                              </widget>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
                           </widget>
                           <packing>
                             <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkButton" id="btn_pitch_reset">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="label" translatable="yes">Reset</property>
+                            <property name="response_id">0</property>
+                            <signal name="clicked" handler="on_pitch_reset"/>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                       </widget>
@@ -834,10 +877,10 @@
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="tooltip" translatable="yes">Tempo increment in BPM per bar</property>
-                                <property name="max_length">4</property>
+                                <property name="max_length">5</property>
                                 <property name="width_chars">4</property>
                                 <property name="xalign">1</property>
-                                <property name="adjustment">0.5 0 9.9900000000000002 0.01 1 0</property>
+                                <property name="adjustment">0.5 -9.9900000000000002 9.9900000000000002 0.01 0.10000000000000001 0</property>
                                 <property name="digits">2</property>
                                 <property name="snap_to_ticks">True</property>
                                 <property name="numeric">True</property>
