@@ -92,7 +92,7 @@ class PreferencesDialog:
                     klick.send('/config/set_sound', a, b)
                 else:
                     # set silent
-                    klick.send('/config/set_sound', -2)
+                    klick.send('/config/set_sound', -1)
 
     @gui_callback
     def on_sound_selection_changed(self, chooser):
@@ -102,7 +102,7 @@ class PreferencesDialog:
             klick.send('/config/set_sound', a, b)
         else:
             # set silent
-            klick.send('/config/set_sound', -2)
+            klick.send('/config/set_sound', -1)
 
     @gui_callback
     def on_pitch_changed(self, r):
@@ -216,7 +216,7 @@ class PreferencesDialog:
     @make_method('/config/sound_loading_failed', 's')
     @osc_callback
     def sound_loading_failed_cb(self, path, args):
-        klick.send('/config/set_sound', -2)
+        klick.send('/config/set_sound', -1)
         m = gtk.MessageDialog(widgets['dialog_preferences'], 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, "couldn't load file '%s'." % args[0])
         m.run()
         m.destroy()
