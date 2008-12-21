@@ -44,107 +44,16 @@ Options:
 class GTKlick:
     def __init__(self, args, share_dir):
         self.config = None
-
-        # parse command line arguments
-        port = None
-        return_port = None
-        connect = False
-        verbose = False
-        try:
-            r = getopt.getopt(args, 'o:q:r:Lh');
-            for opt, arg in r[0]:
-                if opt == '-o':
-                    port = arg
-                    connect = False
-                elif opt == '-q':
-                    port = arg
-                    connect = True
-                elif opt == '-r':
-                    return_port = arg
-                elif opt == '-L':
-                    verbose = True
-                elif opt == '-h':
-                    print help_string
-                    sys.exit(0)
-        except getopt.GetoptError, e:
-            sys.exit(e.msg)
+        self.parse_cmdline(args)
 
         gtk.gdk.threads_init()
 
         try:
-            self.wtree = gtk.glade.XML(os.path.join(share_dir, 'gtklick.glade'))
-            # explicitly call base class method, because get_name() is overridden in AboutDialog. stupid GTK...
-            widgets = dict([(gtk.Widget.get_name(w), w) for w in self.wtree.get_widget_prefix('')])
-
-            self.config = gtklick_config.GTKlickConfig()
-
-            # load config from file
-            self.config.read()
-
-            # start klick process
-            self.klick = klick_backend.KlickBackend('gtklick', port, return_port, connect, verbose)
-
-            # make "globals" known in other modules
-            for m in (main_window, profiles_pane, preferences_dialog):
-                m.wtree = self.wtree
-                m.widgets = widgets
-                m.klick = weakref.proxy(self.klick)
-                m.config = weakref.proxy(self.config)
-
-            # the actual windows are created by glade, this basically just connects GUI and OSC callbacks
-            self.win = main_window.MainWindow()
-            self.profiles = profiles_pane.ProfilesPane(self.win)
-            self.prefs = preferences_dialog.PreferencesDialog()
-
-            #self.klick.add_method(None, None, self.fallback)
-
-            if not connect:
-                # restore settings from config file.
-                # many settings are just sent to klick, and the OSC notifications will take care of the rest
-
-                # port connections
-                if len(self.config.prefs_connect_ports):
-                    ports = self.config.prefs_connect_ports.split('\0')
-                    for p in ports:
-                        self.prefs.model_ports.append([p])
-
-                if self.config.prefs_autoconnect:
-                    misc.do_quietly(lambda: widgets['radio_connect_auto'].set_active(True))
-                    self.klick.send('/config/autoconnect')
-                else:
-                    misc.do_quietly(lambda: widgets['radio_connect_manual'].set_active(True))
-                    self.klick.send('/config/connect', *ports)
-
-                # sound / volume
-                if self.config.prefs_sound >= 0:
-                    self.klick.send('/config/set_sound', self.config.prefs_sound)
-                else:
-                    self.klick.send('/config/set_sound', self.config.prefs_sound_accented, self.config.prefs_sound_normal)
-
-                self.klick.send('/config/set_sound_pitch',
-                    2 ** (self.config.prefs_pitch_accented / 12.0),
-                    2 ** (self.config.prefs_pitch_normal / 12.0)
-                )
-                self.klick.send('/config/set_volume', self.config.volume)
-
-                # metronome state
-                misc.do_quietly(lambda: (
-                    widgets['check_speedtrainer_enable'].set_active(self.config.speedtrainer),
-                    widgets['spin_tempo_increment'].set_value(self.config.tempo_increment),
-                    widgets['radio_meter_other'].set_active(self.config.denom != 0)
-                ))
-                widgets['spin_tempo_increment'].set_sensitive(self.config.speedtrainer)
-                widgets['spin_tempo_start'].set_sensitive(self.config.speedtrainer)
-
-                self.klick.send('/simple/set_tempo', self.config.tempo)
-                self.klick.send('/simple/set_tempo_increment', self.config.tempo_increment if self.config.speedtrainer else 0.0)
-                self.klick.send('/simple/set_tempo_start', self.config.tempo_start)
-                self.klick.send('/simple/set_meter', self.config.beats, self.config.denom if self.config.denom else 4)
-                self.klick.send('/simple/set_pattern', self.config.pattern)
+            self.setup(share_dir)
+            if not self.connect:
+                self.restore_config()
             else:
-                self.klick.send('/query')
-
-            widgets['window_main'].show()
+                self.query_config()
 
         except klick_backend.KlickBackendError, e:
             self.error_message(e.msg)
@@ -158,7 +67,109 @@ class GTKlick:
         if self.config:
             self.config.write()
 
+    def parse_cmdline(self, args):
+        # parse command line arguments
+        self.port = None
+        self.return_port = None
+        self.connect = False
+        self.verbose = False
+        try:
+            r = getopt.getopt(args, 'o:q:r:Lh');
+            for opt, arg in r[0]:
+                if opt == '-o':
+                    self.port = arg
+                    self.connect = False
+                elif opt == '-q':
+                    self.port = arg
+                    self.connect = True
+                elif opt == '-r':
+                    self.return_port = arg
+                elif opt == '-L':
+                    self.verbose = True
+                elif opt == '-h':
+                    print help_string
+                    sys.exit(0)
+        except getopt.GetoptError, e:
+            sys.exit(e.msg)
+
+    # create windows, config, and klick backend
+    def setup(self, share_dir):
+        self.wtree = gtk.glade.XML(os.path.join(share_dir, 'gtklick.glade'))
+        # explicitly call base class method, because get_name() is overridden in AboutDialog. stupid GTK...
+        self.widgets = dict([(gtk.Widget.get_name(w), w) for w in self.wtree.get_widget_prefix('')])
+
+        self.config = gtklick_config.GTKlickConfig()
+
+        # load config from file
+        self.config.read()
+
+        # start klick process
+        self.klick = klick_backend.KlickBackend('gtklick', self.port, self.return_port, self.connect, self.verbose)
+
+        # make "globals" known in other modules
+        for m in (main_window, profiles_pane, preferences_dialog):
+            m.wtree = self.wtree
+            m.widgets = self.widgets
+            m.klick = weakref.proxy(self.klick)
+            m.config = weakref.proxy(self.config)
+
+        # the actual windows are created by glade, this basically just connects GUI and OSC callbacks
+        self.win = main_window.MainWindow()
+        self.profiles = profiles_pane.ProfilesPane(self.win)
+        self.prefs = preferences_dialog.PreferencesDialog()
+
+        #self.klick.add_method(None, None, self.fallback)
+
+    # restore settings from config file.
+    # many settings are just sent to klick, and the OSC notifications will take care of the rest
+    def restore_config(self):
+        # port connections
+        if len(self.config.prefs_connect_ports):
+            ports = self.config.prefs_connect_ports.split('\0')
+            for p in ports:
+                self.prefs.model_ports.append([p])
+
+        if self.config.prefs_autoconnect:
+            misc.do_quietly(lambda: self.widgets['radio_connect_auto'].set_active(True))
+            self.klick.send('/config/autoconnect')
+        else:
+            misc.do_quietly(lambda: self.widgets['radio_connect_manual'].set_active(True))
+            self.klick.send('/config/connect', *ports)
+
+        # sound / volume
+        if self.config.prefs_sound >= 0:
+            self.klick.send('/config/set_sound', self.config.prefs_sound)
+        else:
+            self.klick.send('/config/set_sound', self.config.prefs_sound_accented, self.config.prefs_sound_normal)
+
+        self.klick.send('/config/set_sound_pitch',
+            2 ** (self.config.prefs_pitch_accented / 12.0),
+            2 ** (self.config.prefs_pitch_normal / 12.0)
+        )
+        self.klick.send('/config/set_volume', self.config.volume)
+
+        # metronome state
+        misc.do_quietly(lambda: (
+            self.widgets['check_speedtrainer_enable'].set_active(self.config.speedtrainer),
+            self.widgets['spin_tempo_increment'].set_value(self.config.tempo_increment),
+            self.widgets['radio_meter_other'].set_active(self.config.denom != 0)
+        ))
+        self.widgets['spin_tempo_increment'].set_sensitive(self.config.speedtrainer)
+        self.widgets['spin_tempo_start'].set_sensitive(self.config.speedtrainer)
+
+        self.klick.send('/simple/set_tempo', self.config.tempo)
+        self.klick.send('/simple/set_tempo_increment', self.config.tempo_increment if self.config.speedtrainer else 0.0)
+        self.klick.send('/simple/set_tempo_start', self.config.tempo_start)
+        self.klick.send('/simple/set_meter', self.config.beats, self.config.denom if self.config.denom else 4)
+        self.klick.send('/simple/set_pattern', self.config.pattern)
+
+    # get current settings from running klick instance
+    def query_config(self):
+        self.klick.send('/query')
+
+    # start the whole thing
     def run(self):
+        self.widgets['window_main'].show()
         gtk.main()
 
     def check_klick(self):
