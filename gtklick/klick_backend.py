@@ -34,7 +34,7 @@ class make_method(liblo.make_method):
 
 
 class KlickBackend(liblo.ServerThread):
-    def __init__(self, name, port, connect, verbose):
+    def __init__(self, name, port, return_port, connect, verbose):
         self.addr = None
         self.version = None
         self.ready = threading.Event()
@@ -42,7 +42,7 @@ class KlickBackend(liblo.ServerThread):
         self.check_version()
 
         # call base class c'tor and start OSC server
-        liblo.ServerThread.__init__(self)
+        liblo.ServerThread.__init__(self, return_port)
         self.start()
 
         if not connect:

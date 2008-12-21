@@ -37,6 +37,7 @@ help_string = """Usage:
 Options:
   -o port   OSC port to start klick with
   -q port   OSC port of running klick instance to connect to
+  -r port   OSC port to be used for gtklick
   -h        show this help"""
 
 
@@ -46,10 +47,11 @@ class GTKlick:
 
         # parse command line arguments
         port = None
+        return_port = None
         connect = False
         verbose = False
         try:
-            r = getopt.getopt(args, 'o:q:Lh');
+            r = getopt.getopt(args, 'o:q:r:Lh');
             for opt, arg in r[0]:
                 if opt == '-o':
                     port = arg
@@ -57,6 +59,8 @@ class GTKlick:
                 elif opt == '-q':
                     port = arg
                     connect = True
+                elif opt == '-r':
+                    return_port = arg
                 elif opt == '-L':
                     verbose = True
                 elif opt == '-h':
@@ -78,7 +82,7 @@ class GTKlick:
             self.config.read()
 
             # start klick process
-            self.klick = klick_backend.KlickBackend('gtklick', port, connect, verbose)
+            self.klick = klick_backend.KlickBackend('gtklick', port, return_port, connect, verbose)
 
             # make "globals" known in other modules
             for m in (main_window, profiles_pane, preferences_dialog):
