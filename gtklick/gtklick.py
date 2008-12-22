@@ -54,7 +54,6 @@ class GTKlick:
                 self.restore_config()
             else:
                 self.query_config()
-
         except klick_backend.KlickBackendError, e:
             self.error_message(e.msg)
             sys.exit(1)
@@ -67,8 +66,8 @@ class GTKlick:
         if self.config:
             self.config.write()
 
+    # parse command line arguments
     def parse_cmdline(self, args):
-        # parse command line arguments
         self.port = None
         self.return_port = None
         self.connect = False
@@ -172,6 +171,7 @@ class GTKlick:
         self.widgets['window_main'].show()
         gtk.main()
 
+    # check if klick is still running
     def check_klick(self):
         if not self.klick.check_process():
             self.error_message("klick seems to have been killed, can't continue without it")
