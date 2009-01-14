@@ -1,3 +1,11 @@
+2009-01-14: Version 0.5.0
+
+ * Added capability to load custom audio samples, and to change the sound's
+   pitch.
+ * Changed the speed trainer so that the regular tempo setting is now the
+   upper limit.
+ * klick 0.11.0 or later is now required.
+
 2008-12-03: Version 0.4.0
 
  * Allow manual selection of JACK ports to connect to.
