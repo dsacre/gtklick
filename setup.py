@@ -26,7 +26,7 @@ setup(
     author = 'Dominic Sacre',
     author_email = 'dominic.sacre@gmx.de',
     url = 'http://das.nasophon.de/gtklick/',
-    description = '',
+    description = 'a simple GTK metronome based on klick',
     license = 'GPL',
     scripts = ['bin/gtklick'],
     packages = ['gtklick'],

@@ -1,12 +1,12 @@
 gtklick - a simple GTK metronome based on klick
 
-Copyright (C) 2008  Dominic Sacré  <dominic.sacre@gmx.de>
+Copyright (C) 2008-2009  Dominic Sacré  <dominic.sacre@gmx.de>
 
 
 Requirements:
 =============
 
-* klick >= 0.9.0 [http://das.nasophon.de/klick/]
+* klick >= 0.11.0 [http://das.nasophon.de/klick/]
 * pyliblo >= 0.7.0 [http://das.nasophon.de/pyliblo/]
 * Python >= 2.5
 * PyGTK
