@@ -138,6 +138,11 @@ class MainWindow:
 
     def on_help_about(self, i):
         about = widgets['dialog_about']
+        try:
+            # d'oh!
+            about.set_program_name("gtklick")
+        except AttributeError:
+            pass
         about.run()
         about.hide()
 
