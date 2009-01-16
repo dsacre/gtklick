@@ -20,8 +20,12 @@ import gobject
 import getopt
 import sys
 import os.path
-
 import weakref
+
+import gettext
+import locale
+import __builtin__
+__builtin__._ = gettext.gettext
 
 import klick_backend
 import gtklick_config
@@ -31,18 +35,18 @@ import preferences_dialog
 import misc
 
 
-help_string = """Usage:
-  gtklick [ options ]
-
-Options:
-  -o port   OSC port to start klick with
-  -q port   OSC port of running klick instance to connect to
-  -r port   OSC port to be used for gtklick
-  -h        show this help"""
-
-
 class GTKlick:
-    def __init__(self, args, share_dir):
+    def __init__(self, args, share_dir, locale_dir):
+        try:
+            locale.setlocale(locale.LC_ALL, '')
+        except locale.Error:
+            # don't crash when run with unsupported locale
+            pass
+
+        for m in gettext, gtk.glade:
+            m.bindtextdomain('gtklick', locale_dir)
+            m.textdomain('gtklick')
+
         self.config = None
         self.parse_cmdline(args)
 
@@ -86,10 +90,20 @@ class GTKlick:
                 elif opt == '-L':
                     self.verbose = True
                 elif opt == '-h':
-                    print help_string
+                    self.print_help()
                     sys.exit(0)
         except getopt.GetoptError, e:
             sys.exit(e.msg)
+
+    def print_help(self):
+        print _("Usage:\n" \
+                "  gtklick [ options ]\n" \
+                "\n" \
+                "Options:\n" \
+                "  -o port   OSC port to start klick with\n" \
+                "  -q port   OSC port of running klick instance to connect to\n" \
+                "  -r port   OSC port to be used for gtklick\n" \
+                "  -h        show this help")
 
     # create windows, config, and klick backend
     def setup(self, share_dir):
@@ -176,7 +190,7 @@ class GTKlick:
     # check if klick is still running
     def check_klick(self):
         if not self.klick.check_process():
-            self.error_message("klick seems to have been killed, can't continue without it")
+            self.error_message(_("klick seems to have been killed, can't continue without it"))
             sys.exit(1)
         return True
 
@@ -185,11 +199,11 @@ class GTKlick:
 
     def error_message(self, msg):
         m = gtk.MessageDialog(self.wtree.get_widget('window_main'), 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, msg)
-        m.set_title("gtklick error")
+        m.set_title(_("gtklick error"))
         m.run()
         m.destroy()
 
 
 if __name__ == '__main__':
-    app = GTKlick(sys.argv[1:], 'share')
+    app = GTKlick(sys.argv[1:], 'share', 'build/locale')
     app.run()

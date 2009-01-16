@@ -17,6 +17,7 @@ import os.path
 
 bin_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
 share_dir = os.path.join(os.path.split(bin_dir)[0], 'share/gtklick')
+locale_dir = os.path.join(os.path.split(bin_dir)[0], 'share/locale')
 
-app = GTKlick(sys.argv[1:], share_dir)
+app = GTKlick(sys.argv[1:], share_dir, locale_dir)
 app.run()

@@ -55,16 +55,16 @@ class KlickBackend(liblo.ServerThread):
                     args += ['-L']
                 self.process = subprocess.Popen(args)
             except OSError, e:
-                raise KlickBackendError("failed to start klick: %s" % e.strerror)
+                raise KlickBackendError(_("failed to start klick: %s") % e.strerror)
             # wait for klick to send /klick/ready
             if not self.wait():
-                raise KlickBackendError("timeout while waiting for klick to start")
+                raise KlickBackendError(_("timeout while waiting for klick to start"))
         else:
             self.process = None
             # check if klick is running
             liblo.ServerThread.send(self, port, '/klick/check')
             if not self.wait():
-                raise KlickBackendError("can't connect to klick")
+                raise KlickBackendError(_("can't connect to klick"))
 
         # register as client
         self.send('/register_client')
@@ -82,12 +82,12 @@ class KlickBackend(liblo.ServerThread):
         try:
             output = subprocess.Popen([KLICK_PATH, '-V'], stdout=subprocess.PIPE).communicate()[0]
         except OSError, e:
-            raise KlickBackendError("failed to start klick: %s\nplease make sure klick is installed." % e.strerror)
+            raise KlickBackendError(_("failed to start klick: %s\nplease make sure klick is installed.") % e.strerror)
         try:
             version_string = output.split()[1]
             self.version = tuple(int(x) for x in version_string.split('.'))
             if self.version < MIN_KLICK_VERSION:
-                raise KlickBackendError("your version of klick is too old (%s).\nplease upgrade to klick %d.%d.%d or later." %
+                raise KlickBackendError(_("your version of klick is too old (%s).\nplease upgrade to klick %d.%d.%d or later.") %
                                         ((version_string,) + MIN_KLICK_VERSION))
         except ValueError:
             # let's hope for the best
