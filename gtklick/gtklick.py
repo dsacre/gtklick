@@ -127,6 +127,8 @@ class GTKlick:
             ports = self.config.prefs_connect_ports.split('\0')
             for p in ports:
                 self.prefs.model_ports.append([p])
+        else:
+            ports = []
 
         if self.config.prefs_autoconnect:
             misc.do_quietly(lambda: self.widgets['radio_connect_auto'].set_active(True))
