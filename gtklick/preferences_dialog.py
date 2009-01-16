@@ -15,6 +15,7 @@ import math
 
 from klick_backend import make_method
 from misc import gui_callback, osc_callback
+import misc
 
 
 class PreferencesDialog:
@@ -139,7 +140,7 @@ class PreferencesDialog:
         selection = self.treeview_ports.get_selection()
         i = selection.get_selected()[1]
         if i:
-            treeview_remove(self.model_ports, selection, i)
+            misc.treeview_remove(self.model_ports, selection, i)
         self.update_connect_ports()
 
     def on_connect_selection_changed(self, selection):
@@ -217,6 +218,6 @@ class PreferencesDialog:
     @osc_callback
     def sound_loading_failed_cb(self, path, args):
         klick.send('/config/set_sound', -1)
-        m = gtk.MessageDialog(widgets['dialog_preferences'], 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, "couldn't load file '%s'." % args[0])
+        m = gtk.MessageDialog(widgets['dialog_preferences'], 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, _("couldn't load file '%s'.") % args[0])
         m.run()
         m.destroy()
