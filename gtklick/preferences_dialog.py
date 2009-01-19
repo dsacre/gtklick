@@ -32,7 +32,6 @@ class PreferencesDialog:
 
             'on_pitch_accented_changed':    self.on_pitch_changed,
             'on_pitch_normal_changed':      self.on_pitch_changed,
-            'on_pitch_reset':               self.on_pitch_reset,
             'on_pitch_format_value':        self.on_pitch_format_value,
 
             'on_connect_auto_toggled':      (self.on_connect_toggled, True),
@@ -111,10 +110,6 @@ class PreferencesDialog:
             2 ** (widgets['scale_pitch_accented'].get_value() / 12),
             2 ** (widgets['scale_pitch_normal'].get_value() / 12)
         )
-
-    @gui_callback
-    def on_pitch_reset(self, r):
-        klick.send('/config/set_sound_pitch', 1.0, 1.0)
 
     def on_pitch_format_value(self, scale, value):
         return ('+%d' if value > 0.0 else '%d') % value
