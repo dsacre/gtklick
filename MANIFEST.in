@@ -5,3 +5,5 @@ include NEWS
 include bin/gtklick
 include gtklick/*.py
 recursive-include share *
+include po/gtklick.pot
+include po/*.po
