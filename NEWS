@@ -1,3 +1,10 @@
+2009-01-24: gtklick 0.6.0
+
+  * Fixed a bug that caused a crash at startup.
+  * Fixed a crash when removing JACK ports in the preferences dialog.
+  * Added support for gettext, and a german translation. Translations for
+    other languages are welcome.
+
 2009-01-14: gtklick 0.5.0
 
   * Added capability to load custom audio samples, and to change the sound's
