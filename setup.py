@@ -37,12 +37,8 @@ except OSError:
 
 mo_files = []
 
-class my_build(build):
+class build_with_i18n(build):
     def run(self):
-        self.compile_po_files()
-        build.run(self)
-
-    def compile_po_files(self):
         for po in glob.glob('po/*.po'):
             lang = os.path.basename(po)[:-3]
             mo_dir = os.path.join(self.build_base, 'locale', lang, 'LC_MESSAGES')
@@ -55,13 +51,14 @@ class my_build(build):
                 subprocess.Popen(['msgfmt', '-o', mo, po])
             lang_dir = os.path.join('share', 'locale', lang, 'LC_MESSAGES')
             mo_files.append((lang_dir, [mo]))
+        build.run(self)
 
-class my_install_data(install_data):
+class install_data_with_i18n(install_data):
     def run(self):
         self.data_files.extend(mo_files)
         install_data.run(self)
 
-class my_clean(clean):
+class clean_with_i18n(clean):
     def run(self):
         clean.run(self)
         locale_dir = os.path.join(self.build_base, 'locale')
@@ -84,13 +81,13 @@ setup(
     scripts = ['bin/gtklick'],
     packages = ['gtklick'],
     data_files = [
-        ('share/gtklick', ['share/gtklick.glade']),
+        ('share/gtklick', ['share/gtklick.glade', 'share/gtklick.png']),
         ('share/applications', ['share/gtklick.desktop']),
         ('share/pixmaps', ['share/gtklick.xpm', 'share/gtklick.png']),
     ],
     cmdclass = {
-        'build': my_build,
-        'install_data': my_install_data,
-        'clean': my_clean,
+        'build': build_with_i18n,
+        'install_data': install_data_with_i18n,
+        'clean': clean_with_i18n,
     }
 )

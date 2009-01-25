@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.1 on Mon Jan 19 05:33:48 2009 -->
+<!--Generated with glade3 3.4.1 on Sun Jan 25 06:38:19 2009 -->
 <glade-interface>
   <widget class="GtkAboutDialog" id="dialog_about">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -16,6 +16,7 @@
     <property name="version">0.6.0</property>
     <property name="copyright">Copyright © 2008-2009 Dominic Sacré &lt;dominic.sacre@gmx.de&gt;</property>
     <property name="website">http://das.nasophon.de/gtklick/</property>
+    <property name="logo">gtklick.png</property>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -507,6 +508,7 @@
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="title" translatable="yes">gtklick</property>
     <property name="resizable">False</property>
+    <property name="icon">gtklick.png</property>
     <signal name="delete_event" handler="on_window_main_delete_event"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
