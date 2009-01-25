@@ -86,6 +86,7 @@ setup(
     data_files = [
         ('share/gtklick', ['share/gtklick.glade']),
         ('share/applications', ['share/gtklick.desktop']),
+        ('share/pixmaps', ['share/gtklick.xpm', 'share/gtklick.png']),
     ],
     cmdclass = {
         'build': my_build,
