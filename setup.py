@@ -72,7 +72,7 @@ class clean_with_i18n(clean):
 
 setup(
     name = 'gtklick',
-    version = '0.6.0',
+    version = '0.6.1',
     author = 'Dominic Sacre',
     author_email = 'dominic.sacre@gmx.de',
     url = 'http://das.nasophon.de/gtklick/',

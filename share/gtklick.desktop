@@ -6,4 +6,4 @@ Exec=gtklick
 Icon=gtklick
 Type=Application
 Terminal=false
-Categories=Application;AudioVideo;Audio;Music;GTK;
+Categories=AudioVideo;Audio;Music;GTK;
