@@ -1,3 +1,9 @@
+2009-01-29: gtklick 0.6.1
+
+  * Changed keyboard shortcuts for tempo, volume and start/stop to work
+    without the Ctrl key.
+  * Added a menu icon.
+
 2009-01-24: gtklick 0.6.0
 
   * Fixed a bug that caused a crash at startup.
