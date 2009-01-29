@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-18 19:04+0100\n"
+"POT-Creation-Date: 2009-01-29 22:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -85,80 +85,80 @@ msgid "Create new profile (Ctrl+N)"
 msgstr ""
 
 #: share/gtklick.glade.h:18
-msgid ""
-"Ctrl+Space\t\tStart / stop\n"
-"\n"
-"Ctrl+→\t\t\tTempo + 1\n"
-"Ctrl+←\t\t\tTempo - 1\n"
-"Ctrl+↑\t\t\tTempo + 10\n"
-"Ctrl+↓\t\t\tTempo - 10\n"
-"Ctrl+PgUp  \t\tTempo × 2\n"
-"Ctrl+PgDn  \t\tTempo / 2\n"
-"\n"
-"Ctrl+Return\t\tTap tempo\n"
-"\n"
-"Ctrl++\t\t\tVolume up\n"
-"Ctrl+-\t\t\tVolume down"
-msgstr ""
-
-#: share/gtklick.glade.h:31
 msgid "Delete profile (Ctrl+D)"
 msgstr ""
 
-#: share/gtklick.glade.h:32
+#: share/gtklick.glade.h:19
 msgid "Ena_ble"
 msgstr ""
 
-#: share/gtklick.glade.h:33
+#: share/gtklick.glade.h:20
 msgid "Eve_n"
 msgstr ""
 
-#: share/gtklick.glade.h:34
+#: share/gtklick.glade.h:21
 msgid "Keyboard shortcuts"
 msgstr ""
 
-#: share/gtklick.glade.h:35
+#: share/gtklick.glade.h:22
 msgid "P_rofiles"
 msgstr ""
 
-#: share/gtklick.glade.h:36
+#: share/gtklick.glade.h:23
 msgid "Pitch of accented beats"
 msgstr ""
 
-#: share/gtklick.glade.h:37
+#: share/gtklick.glade.h:24
 msgid "Pitch of normal beats"
 msgstr ""
 
-#: share/gtklick.glade.h:38
+#: share/gtklick.glade.h:25
 msgid "Preferences"
 msgstr ""
 
-#: share/gtklick.glade.h:39
+#: share/gtklick.glade.h:26
 msgid "Remove selected connection"
 msgstr ""
 
-#: share/gtklick.glade.h:40
+#: share/gtklick.glade.h:27
 msgid "Rename profile (Ctrl+E)"
 msgstr ""
 
-#: share/gtklick.glade.h:41
+#: share/gtklick.glade.h:28
 msgid "Reset pattern"
 msgstr ""
 
-#: share/gtklick.glade.h:42
+#: share/gtklick.glade.h:29
 msgid "S_ine"
 msgstr ""
 
-#: share/gtklick.glade.h:43
+#: share/gtklick.glade.h:30
 msgid "Save profile (Ctrl+S)"
 msgstr ""
 
-#: share/gtklick.glade.h:44
+#: share/gtklick.glade.h:31
 msgid "Select audio file for accented beats"
 msgstr ""
 
-#: share/gtklick.glade.h:45
+#: share/gtklick.glade.h:32
 msgid "Select audio file for normal beats"
+msgstr ""
+
+#: share/gtklick.glade.h:33
+msgid ""
+"Space\t\tStart / stop\n"
+"\n"
+"→\t\t\tTempo + 1\n"
+"←\t\t\tTempo - 1\n"
+"↑\t\t\tTempo + 10\n"
+"↓\t\t\tTempo - 10\n"
+"PgUp  \t\tTempo × 2\n"
+"PgDn  \t\tTempo / 2\n"
+"\n"
+"Return\t\tTap tempo\n"
+"\n"
+"+/=   \t\tVolume up\n"
+"-\t\t\tVolume down"
 msgstr ""
 
 #: share/gtklick.glade.h:46

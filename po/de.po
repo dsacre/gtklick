@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-18 19:04+0100\n"
+"POT-Creation-Date: 2009-01-29 22:46+0100\n"
 "PO-Revision-Date: 2009-01-16 06:06+0100\n"
 "Last-Translator: Dominic Sacré <dominic.sacre@gmx.de>\n"
 "Language-Team: German\n"
@@ -85,94 +85,94 @@ msgid "Create new profile (Ctrl+N)"
 msgstr "Neues Profil erstellen (Strg+N)"
 
 #: share/gtklick.glade.h:18
-msgid ""
-"Ctrl+Space\t\tStart / stop\n"
-"\n"
-"Ctrl+→\t\t\tTempo + 1\n"
-"Ctrl+←\t\t\tTempo - 1\n"
-"Ctrl+↑\t\t\tTempo + 10\n"
-"Ctrl+↓\t\t\tTempo - 10\n"
-"Ctrl+PgUp  \t\tTempo × 2\n"
-"Ctrl+PgDn  \t\tTempo / 2\n"
-"\n"
-"Ctrl+Return\t\tTap tempo\n"
-"\n"
-"Ctrl++\t\t\tVolume up\n"
-"Ctrl+-\t\t\tVolume down"
-msgstr ""
-"Strg+Leertaste\tStart / stop\n"
-"\n"
-"Strg+→\t\t\tTempo + 1\n"
-"Strg+←\t\t\tTempo - 1\n"
-"Strg+↑\t\t\tTempo + 10\n"
-"Strg+↓\t\t\tTempo - 10\n"
-"Strg+Bild ↑\t\tTempo × 2\n"
-"Strg+Bild ↓\t\tTempo / 2\n"
-"\n"
-"Strg+Eingabe\t\tTempo klopfen\n"
-"\n"
-"Strg++\t\t\tLauter\n"
-"Strg+-\t\t\tLeiser"
-
-#: share/gtklick.glade.h:31
 msgid "Delete profile (Ctrl+D)"
 msgstr "Profil löschen (Strg+D)"
 
-#: share/gtklick.glade.h:32
+#: share/gtklick.glade.h:19
 msgid "Ena_ble"
 msgstr "Akti_v"
 
-#: share/gtklick.glade.h:33
+#: share/gtklick.glade.h:20
 msgid "Eve_n"
 msgstr "Glei_ch"
 
-#: share/gtklick.glade.h:34
+#: share/gtklick.glade.h:21
 msgid "Keyboard shortcuts"
 msgstr "Tastenkombinationen"
 
-#: share/gtklick.glade.h:35
+#: share/gtklick.glade.h:22
 msgid "P_rofiles"
 msgstr "P_rofile"
 
-#: share/gtklick.glade.h:36
+#: share/gtklick.glade.h:23
 msgid "Pitch of accented beats"
 msgstr "Tonhöhe von betonten Schlägen"
 
-#: share/gtklick.glade.h:37
+#: share/gtklick.glade.h:24
 msgid "Pitch of normal beats"
 msgstr "Tonhöhe von unbetonten Schlägen"
 
-#: share/gtklick.glade.h:38
+#: share/gtklick.glade.h:25
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: share/gtklick.glade.h:39
+#: share/gtklick.glade.h:26
 msgid "Remove selected connection"
 msgstr "Ausgewählte Verbindung entfernen"
 
-#: share/gtklick.glade.h:40
+#: share/gtklick.glade.h:27
 msgid "Rename profile (Ctrl+E)"
 msgstr "Profil umbenennen (Strg+E)"
 
-#: share/gtklick.glade.h:41
+#: share/gtklick.glade.h:28
 msgid "Reset pattern"
 msgstr "Muster zurücksetzen"
 
-#: share/gtklick.glade.h:42
+#: share/gtklick.glade.h:29
 msgid "S_ine"
 msgstr "_Sinus"
 
-#: share/gtklick.glade.h:43
+#: share/gtklick.glade.h:30
 msgid "Save profile (Ctrl+S)"
 msgstr "Profil speichern (Strg+S)"
 
-#: share/gtklick.glade.h:44
+#: share/gtklick.glade.h:31
 msgid "Select audio file for accented beats"
 msgstr "Audio-Datei für betonte Schläge auswählen"
 
-#: share/gtklick.glade.h:45
+#: share/gtklick.glade.h:32
 msgid "Select audio file for normal beats"
 msgstr "Audio-Datei für unbetonte Schläge auswählen"
+
+#: share/gtklick.glade.h:33
+msgid ""
+"Space\t\tStart / stop\n"
+"\n"
+"→\t\t\tTempo + 1\n"
+"←\t\t\tTempo - 1\n"
+"↑\t\t\tTempo + 10\n"
+"↓\t\t\tTempo - 10\n"
+"PgUp  \t\tTempo × 2\n"
+"PgDn  \t\tTempo / 2\n"
+"\n"
+"Return\t\tTap tempo\n"
+"\n"
+"+/=   \t\tVolume up\n"
+"-\t\t\tVolume down"
+msgstr ""
+"Leertaste\tStart / stop\n"
+"\n"
+"→\t\t\tTempo + 1\n"
+"←\t\t\tTempo - 1\n"
+"↑\t\t\tTempo + 10\n"
+"↓\t\t\tTempo - 10\n"
+"Bild ↑\t\tTempo × 2\n"
+"Bild ↓\t\tTempo / 2\n"
+"\n"
+"Eingabe\t\tTempo klopfen\n"
+"\n"
+"+\t\t\tLauter\n"
+"-\t\t\tLeiser"
 
 #: share/gtklick.glade.h:46
 msgid "Sta_rt:"

@@ -61,17 +61,8 @@ class MainWindow:
             'on_start_stop':                    self.on_start_stop,
             'on_volume_changed':                self.on_volume_changed,
             'on_window_main_delete_event':      self.on_delete_event,
+            'on_window_main_key_press_event':   self.on_key_press_event,
         })
-
-        accel = gtk.AccelGroup()
-
-        for k in (gtk.keysyms.Left, gtk.keysyms.Right, gtk.keysyms.Down, gtk.keysyms.Up, gtk.keysyms.Page_Down, gtk.keysyms.Page_Up):
-            accel.connect_group(k, gtk.gdk.CONTROL_MASK, 0, self.on_tempo_accel)
-
-        for k in (gtk.keysyms.plus, gtk.keysyms.equal, gtk.keysyms.KP_Add, gtk.keysyms.minus, gtk.keysyms.KP_Subtract):
-            accel.connect_group(k, gtk.gdk.CONTROL_MASK, 0, self.on_volume_accel)
-
-        widgets['window_main'].add_accel_group(accel)
 
         widgets['item_view_markings'].set_active(config.view_markings)
         widgets['item_view_meter'].set_active(config.view_meter)
@@ -265,28 +256,63 @@ class MainWindow:
         klick.send('/config/set_volume', r.get_value())
 
     @gui_callback
-    def on_tempo_accel(self, group, accel, key, mod):
-        tempo = int(widgets['spin_tempo'].get_value())
-        if   key == gtk.keysyms.Left:       tempo -= 1
-        elif key == gtk.keysyms.Right:      tempo += 1
-        elif key == gtk.keysyms.Down:       tempo -= 10
-        elif key == gtk.keysyms.Up:         tempo += 10
-        elif key == gtk.keysyms.Page_Down:  tempo /= 2
-        elif key == gtk.keysyms.Page_Up:    tempo *= 2
-        tempo = min(max(tempo, 1), 999)
-        klick.send('/simple/set_tempo', tempo)
-        return True
+    def on_key_press_event(self, widget, event):
+        key = event.keyval
+        focus = widgets['window_main'].get_focus()
 
-    @gui_callback
-    def on_volume_accel(self, group, accel, key, mod):
-        volume = widgets['scale_volume'].get_value()
-        if key in (gtk.keysyms.minus, gtk.keysyms.KP_Subtract):
-            volume -= 0.1
-        elif key in (gtk.keysyms.plus, gtk.keysyms.equal, gtk.keysyms.KP_Add):
-            volume += 0.1
-        volume = min(max(volume, 0.0), 1.0)
-        klick.send('/config/set_volume', volume)
-        return True
+        # make escape remove focus from spinbuttons
+        if event.keyval == gtk.keysyms.Escape and isinstance(focus, gtk.SpinButton):
+            widgets['window_main'].set_focus(None)
+            return True
+
+        # don't allow shortcuts in spinbuttons and entrys
+        if isinstance(focus, (gtk.SpinButton, gtk.Entry)):
+            return False
+
+        # use keys with ctrl modifier to get default GTK behaviour
+        if event.state & gtk.gdk.CONTROL_MASK and \
+            key in (gtk.keysyms.Left, gtk.keysyms.Right, gtk.keysyms.Down, gtk.keysyms.Up, gtk.keysyms.space, gtk.keysyms.Return):
+            event.state &= ~gtk.gdk.CONTROL_MASK
+            return False
+
+        # tempo shortcuts
+        if key in (gtk.keysyms.Left, gtk.keysyms.Right, gtk.keysyms.Down, gtk.keysyms.Up, gtk.keysyms.Page_Down, gtk.keysyms.Page_Up):
+            tempo = int(widgets['spin_tempo'].get_value())
+            if   key == gtk.keysyms.Left:       tempo -= 1
+            elif key == gtk.keysyms.Right:      tempo += 1
+            elif key == gtk.keysyms.Down:       tempo -= 10
+            elif key == gtk.keysyms.Up:         tempo += 10
+            elif key == gtk.keysyms.Page_Down:  tempo /= 2
+            elif key == gtk.keysyms.Page_Up:    tempo *= 2
+            tempo = min(max(tempo, 1), 999)
+            klick.send('/simple/set_tempo', tempo)
+            return True
+
+        # volume shortcuts
+        elif key in (gtk.keysyms.plus, gtk.keysyms.equal, gtk.keysyms.KP_Add, gtk.keysyms.minus, gtk.keysyms.KP_Subtract):
+            volume = widgets['scale_volume'].get_value()
+            if key in (gtk.keysyms.minus, gtk.keysyms.KP_Subtract):
+                volume -= 0.1
+            elif key in (gtk.keysyms.plus, gtk.keysyms.equal, gtk.keysyms.KP_Add):
+                volume += 0.1
+            volume = min(max(volume, 0.0), 1.0)
+            klick.send('/config/set_volume', volume)
+            return True
+
+        # start/stop
+        elif key == gtk.keysyms.space:
+            if widgets['align_stop'].get_property('visible'):
+                klick.send('/metro/stop')
+            else:
+                klick.send('/metro/start')
+            return True
+
+        # tap tempo
+        elif key == gtk.keysyms.Return:
+            klick.send('/simple/tap', ('d', time.time()))
+            return True
+
+        return False
 
 
     # OSC callbacks
