@@ -140,7 +140,6 @@ class MainWindow:
     @gui_callback
     def on_tempo_changed(self, r):
         klick.send('/simple/set_tempo', int(r.get_value()))
-        self.state_changed.queue()
 
     @gui_callback
     def on_tap_tempo(self, b):
@@ -170,17 +169,14 @@ class MainWindow:
             widgets['spin_tempo_increment'].select_region(0, 0)
             widgets['spin_tempo_start'].select_region(0, 0)
             klick.send('/simple/set_tempo_increment', 0.0)
-        self.state_changed.queue()
 
     @gui_callback
     def on_tempo_increment_changed(self, b):
         klick.send('/simple/set_tempo_increment', b.get_value())
-        self.state_changed.queue()
 
     @gui_callback
     def on_tempo_start_changed(self, b):
         klick.send('/simple/set_tempo_start', int(b.get_value()))
-        self.state_changed.queue()
 
     @gui_callback
     def on_meter_toggled(self, b, data):
@@ -189,12 +185,10 @@ class MainWindow:
                 self.set_meter(data[0], data[1])
             else:
                 self.set_meter(int(widgets['spin_meter_beats'].get_value()), int(widgets['spin_meter_denom'].get_value()))
-        self.state_changed.queue()
 
     @gui_callback
     def on_meter_beats_changed(self, b):
         self.set_meter(int(widgets['spin_meter_beats'].get_value()), int(widgets['spin_meter_denom'].get_value()))
-        self.state_changed.queue()
 
     @gui_callback
     def on_meter_denom_changed(self, b):
@@ -219,7 +213,6 @@ class MainWindow:
         config.denom = denom
 
         self.set_meter(int(widgets['spin_meter_beats'].get_value()), int(widgets['spin_meter_denom'].get_value()))
-        self.state_changed.queue()
 
     def set_meter(self, beats, denom):
         if len(self.pattern_buttons):
@@ -237,12 +230,10 @@ class MainWindow:
     @gui_callback
     def on_pattern_button_toggled(self, b):
         klick.send('/simple/set_pattern', self.get_pattern())
-        self.state_changed.queue()
 
     @gui_callback
     def on_pattern_reset(self, b):
         klick.send('/simple/set_pattern', '')
-        self.state_changed.queue()
 
     @gui_callback
     def on_start_stop(self, b):
@@ -320,22 +311,34 @@ class MainWindow:
     @make_method('/simple/tempo', 'f')
     @osc_callback
     def simple_tempo_cb(self, path, args):
-        widgets['scale_tempo'].set_value(int(args[0]))
-        widgets['spin_tempo'].set_value(int(args[0]))
-        config.tempo = args[0]
+        tempo = args[0]
+        changed = tempo != config.tempo
+        widgets['scale_tempo'].set_value(int(tempo))
+        widgets['spin_tempo'].set_value(int(tempo))
+        config.tempo = tempo
+        if changed:
+            self.state_changed.queue()
 
     @make_method('/simple/tempo_increment', 'f')
     @osc_callback
     def simple_tempo_increment_cb(self, path, args):
-        if args[0]:
-            widgets['spin_tempo_increment'].set_value(args[0])
-            config.tempo_increment = args[0]
+        tempo_increment = args[0]
+        changed = tempo_increment != config.tempo_increment
+        if tempo_increment:
+            widgets['spin_tempo_increment'].set_value(tempo_increment)
+            config.tempo_increment = tempo_increment
+        if changed:
+            self.state_changed.queue()
 
     @make_method('/simple/tempo_start', 'f')
     @osc_callback
     def simple_tempo_start_cb(self, path, args):
-        widgets['spin_tempo_start'].set_value(int(args[0]))
-        config.tempo_start = args[0]
+        tempo_start = args[0]
+        changed = tempo_start != config.tempo_start
+        widgets['spin_tempo_start'].set_value(int(tempo_start))
+        config.tempo_start = tempo_start
+        if changed:
+            self.state_changed.queue()
 
     @make_method('/simple/current_tempo', 'f')
     @osc_callback
@@ -349,6 +352,8 @@ class MainWindow:
     @osc_callback
     def simple_meter_cb(self, path, args):
         beats, denom = args
+        changed = beats != config.beats or denom != config.denom
+
         if beats in (0, 2, 3, 4) and denom == 4 and not widgets['radio_meter_other'].get_active():
             # standard meter
             widgets['hbox_meter_spins'].set_sensitive(False)
@@ -378,6 +383,8 @@ class MainWindow:
         widgets['label_frame_meter'].set_mnemonic_widget(w)
 
         self.readjust_pattern_table(beats)
+        if changed:
+            self.state_changed.queue()
 
     @make_method('/simple/pattern', 's')
     @osc_callback
@@ -386,9 +393,12 @@ class MainWindow:
         if len(pattern) != len(self.pattern_buttons) or not all(x in '.xX' for x in pattern):
             # invalid pattern, use default
             pattern = self.default_pattern(config.beats)
+        changed = pattern != config.pattern
         for p, b in itertools.izip(pattern, self.pattern_buttons):
             b.set_state('.xX'.index(p))
-        config.pattern = args[0]
+        config.pattern = pattern
+        if changed:
+            self.state_changed.queue()
 
     @make_method('/metro/active', 'i')
     @osc_callback
