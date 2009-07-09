@@ -1,3 +1,9 @@
+2009-07-09: gtklick 0.6.2
+
+  * Added russian translation, thanks to Damir Abdullin.
+  * Slightly changed the program icon to make it more visible on a dark
+    background.
+
 2009-01-29: gtklick 0.6.1
 
   * Changed keyboard shortcuts for tempo, volume and start/stop to work
