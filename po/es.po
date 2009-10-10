@@ -1,0 +1,337 @@
+# Spanish translations for gtklick package
+# Traducciones al español para el paquete gtklick.
+# Copyright (C) 2009 THE gtklick'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the gtklick package.
+# Pablo <pablo.fbus@gmail.com>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtklick 0.6.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-01-29 22:46+0100\n"
+"PO-Revision-Date: 2009-10-03 11:18+0100\n"
+"Last-Translator: Pablo Fernández <pablo.fbus@gmail.com>\n"
+"Language-Team: Spanish <es@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: share/gtklick.glade.h:1
+msgid "<b>Output</b>"
+msgstr "<b>Salida</b>"
+
+#: share/gtklick.glade.h:2
+msgid "<b>Profi_les</b>"
+msgstr "<b>Perfi_les</b>"
+
+#: share/gtklick.glade.h:3
+msgid "<b>Sound</b>"
+msgstr "<b>Sonido</b>"
+
+#: share/gtklick.glade.h:4
+msgid "<b>Spee_d trainer</b>"
+msgstr "<b>Práctica de velocida_d</b>"
+
+#: share/gtklick.glade.h:5
+msgid "<b>_Meter</b>"
+msgstr "<b>_Medida</b>"
+
+#: share/gtklick.glade.h:6
+msgid "<b>_Pattern</b>"
+msgstr "<b>_Patrón</b>"
+
+#: share/gtklick.glade.h:7
+msgid "<b>_Start</b>"
+msgstr "<b>Arrancar</b>"
+
+#: share/gtklick.glade.h:8
+msgid "<b>_Stop</b>"
+msgstr "<b>Parar</b>"
+
+#: share/gtklick.glade.h:9
+msgid "<b>_Tempo</b>"
+msgstr "<b>_Tempo</b>"
+
+#: share/gtklick.glade.h:10
+msgid "About gtklick"
+msgstr "Acerca de gtklick"
+
+#: share/gtklick.glade.h:11
+msgid "Acoustic _bell / click"
+msgstr "Cam_pana / click"
+
+#: share/gtklick.glade.h:12
+msgid "Add new JACK connection"
+msgstr "Añadir nueva conexión JACK"
+
+#: share/gtklick.glade.h:13
+msgid "Audio file for accented beats"
+msgstr "Archivo de audio para golpes acentuados"
+
+#: share/gtklick.glade.h:14
+msgid "Audio file for normal beats"
+msgstr "Archivo de audio para golpes normales"
+
+#: share/gtklick.glade.h:15
+msgid "C_onnect to these ports:"
+msgstr "Co_nectar a estos puertos:"
+
+#: share/gtklick.glade.h:16
+msgid "C_ustom:"
+msgstr "P_ersonalizado:"
+
+#: share/gtklick.glade.h:17
+msgid "Create new profile (Ctrl+N)"
+msgstr "Crear nuevo perfil (Ctrl+N)"
+
+#: share/gtklick.glade.h:18
+msgid "Delete profile (Ctrl+D)"
+msgstr "Eliminar perfil (Ctrl+D)"
+
+#: share/gtklick.glade.h:19
+msgid "Ena_ble"
+msgstr "Ha_bilitar"
+
+#: share/gtklick.glade.h:20
+msgid "Eve_n"
+msgstr "U_niforme"
+
+#: share/gtklick.glade.h:21
+msgid "Keyboard shortcuts"
+msgstr "Atajos de teclado"
+
+#: share/gtklick.glade.h:22
+msgid "P_rofiles"
+msgstr "Pe_rfiles"
+
+#: share/gtklick.glade.h:23
+msgid "Pitch of accented beats"
+msgstr "Tono de golpes acentuados"
+
+#: share/gtklick.glade.h:24
+msgid "Pitch of normal beats"
+msgstr "Tono de golpes normales"
+
+#: share/gtklick.glade.h:25
+msgid "Preferences"
+msgstr "Preferencias"
+
+#: share/gtklick.glade.h:26
+msgid "Remove selected connection"
+msgstr "Soltar conexión seleccionada"
+
+#: share/gtklick.glade.h:27
+msgid "Rename profile (Ctrl+E)"
+msgstr "Renombrar perfil (Ctrl+E)"
+
+#: share/gtklick.glade.h:28
+msgid "Reset pattern"
+msgstr "Restaurar patrón"
+
+#: share/gtklick.glade.h:29
+msgid "S_ine"
+msgstr "_Senoidal"
+
+#: share/gtklick.glade.h:30
+msgid "Save profile (Ctrl+S)"
+msgstr "Guardar perfil (Ctrl+S)"
+
+#: share/gtklick.glade.h:31
+msgid "Select audio file for accented beats"
+msgstr "Seleccionar archivo de audio para golpes acentuados"
+
+#: share/gtklick.glade.h:32
+msgid "Select audio file for normal beats"
+msgstr "Seleccionar archivo de audio para golpes normales"
+
+#: share/gtklick.glade.h:33
+msgid ""
+"Space\t\tStart / stop\n"
+"\n"
+"→\t\t\tTempo + 1\n"
+"←\t\t\tTempo - 1\n"
+"↑\t\t\tTempo + 10\n"
+"↓\t\t\tTempo - 10\n"
+"PgUp  \t\tTempo × 2\n"
+"PgDn  \t\tTempo / 2\n"
+"\n"
+"Return\t\tTap tempo\n"
+"\n"
+"+/=   \t\tVolume up\n"
+"-\t\t\tVolume down"
+msgstr ""
+"Espacio\t\tArrancar / Parar\n"
+"\n"
+"→\t\t\tTempo + 1\n"
+"←\t\t\tTempo - 1\n"
+"↑\t\t\tTempo + 10\n"
+"↓\t\t\tTempo - 10\n"
+"Re Pág  \t\tTempo × 2\n"
+"Av Pág  \t\tTempo / 2\n"
+"\n"
+"Enter\t\tPulsar tempo\n"
+"\n"
+"+/=   \t\tSubir volumen\n"
+"-\t\t\tBajar volumen"
+
+#: share/gtklick.glade.h:46
+msgid "Sta_rt:"
+msgstr "_Inicio"
+
+#: share/gtklick.glade.h:47
+msgid "Start tempo"
+msgstr "Tempo inicial"
+
+#: share/gtklick.glade.h:48
+msgid "T_ap"
+msgstr "P_ulsar"
+
+#: share/gtklick.glade.h:49
+msgid "Tempo _markings"
+msgstr "_Marcas de tempo"
+
+#: share/gtklick.glade.h:50
+msgid "Tempo increment in BPM per bar"
+msgstr "Incremento de tempo en BPM por compás"
+
+#: share/gtklick.glade.h:51
+msgid "Volume"
+msgstr "Volumen"
+
+#: share/gtklick.glade.h:52
+msgid "_2/4"
+msgstr "_2/4"
+
+#: share/gtklick.glade.h:53
+msgid "_3/4"
+msgstr "_3/4"
+
+#: share/gtklick.glade.h:54
+msgid "_4/4"
+msgstr "_4/4"
+
+#: share/gtklick.glade.h:55
+msgid "_Automatically connect to soundcard output"
+msgstr "C_onectar automáticamente a salida de tarjeta"
+
+#: share/gtklick.glade.h:56
+msgid "_Edit"
+msgstr "_Editar"
+
+#: share/gtklick.glade.h:57
+msgid "_File"
+msgstr "_Archivo"
+
+#: share/gtklick.glade.h:58
+msgid "_Help"
+msgstr "A_yuda"
+
+#: share/gtklick.glade.h:59
+msgid "_Increment:"
+msgstr "_Incremento:"
+
+#: share/gtklick.glade.h:60
+msgid "_Keyboard Shortcuts"
+msgstr "_Atajos de teclado"
+
+#: share/gtklick.glade.h:61
+msgid "_Meter"
+msgstr "_Medida"
+
+#: share/gtklick.glade.h:62
+msgid "_Noise"
+msgstr "_Ruido"
+
+#: share/gtklick.glade.h:63
+msgid "_Other:"
+msgstr "_Otra:"
+
+#: share/gtklick.glade.h:64
+msgid "_Pattern"
+msgstr "_Patrón"
+
+#: share/gtklick.glade.h:65
+msgid "_Pitch:"
+msgstr "_Tono:"
+
+#: share/gtklick.glade.h:66
+msgid "_Speed trainer"
+msgstr "Práctica de velocida_d"
+
+#: share/gtklick.glade.h:67
+msgid "_Square"
+msgstr "C_uadrada"
+
+#: share/gtklick.glade.h:68
+msgid "_View"
+msgstr "_Ver"
+
+#: share/gtklick.glade.h:69
+msgid "gtklick"
+msgstr "gtklick"
+
+#: gtklick/gtklick.py:99
+msgid ""
+"Usage:\n"
+"  gtklick [ options ]\n"
+"\n"
+"Options:\n"
+"  -o port   OSC port to start klick with\n"
+"  -q port   OSC port of running klick instance to connect to\n"
+"  -r port   OSC port to be used for gtklick\n"
+"  -h        show this help"
+msgstr ""
+"Uso:\n"
+"  gtklick [ opciones ]\n"
+"\n"
+"Opciones:\n"
+"  -o puerto   puerto OSC para iniciar klick\n"
+"  -q puerto   puerto OSC de instancia operativa de klick para conectar a\n"
+"  -r puerto   puerto OSC para ser usado por gtklick\n"
+"  -h          enseñar esta ayuda"
+
+#: gtklick/gtklick.py:193
+msgid "klick seems to have been killed, can't continue without it"
+msgstr "Parece que se ha matado klick. Imposible continuar sin él"
+
+#: gtklick/gtklick.py:202
+msgid "gtklick error"
+msgstr "Error gtklick"
+
+#: gtklick/klick_backend.py:58
+#, python-format
+msgid "failed to start klick: %s"
+msgstr "Falló iniciar klick: %s"
+
+#: gtklick/klick_backend.py:61
+msgid "timeout while waiting for klick to start"
+msgstr "esperando mientras se espera que se inicie klick"
+
+#: gtklick/klick_backend.py:67
+msgid "can't connect to klick"
+msgstr "no se puede conectar a klick"
+
+#: gtklick/klick_backend.py:85
+#, python-format
+msgid ""
+"failed to start klick: %s\n"
+"please make sure klick is installed."
+msgstr ""
+"Falló iniciar klick: %s\n"
+"Asegúrese de que klick está instalado."
+
+#: gtklick/klick_backend.py:90
+#, python-format
+msgid ""
+"your version of klick is too old (%s).\n"
+"please upgrade to klick %d.%d.%d or later."
+msgstr ""
+"Su versión de klick es demasiado antigua (%s).\n"
+"Por favor, actualícela a klick %d.%d.%d o posterior"
+
+#: gtklick/preferences_dialog.py:216
+#, python-format
+msgid "couldn't load file '%s'."
+msgstr "No se pudo cargar archivo '%s'."
+

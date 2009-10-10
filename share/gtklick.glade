@@ -1,20 +1,19 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.1 on Wed May 27 23:07:15 2009 -->
+<?xml version="1.0"?>
 <glade-interface>
+  <!-- interface-requires gtk+ 2.16 -->
+  <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkAboutDialog" id="dialog_about">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">About gtklick</property>
     <property name="resizable">False</property>
-    <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
+    <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="type_hint">dialog</property>
     <property name="transient_for">window_main</property>
     <property name="has_separator">False</property>
-    <property name="name">gtklick</property>
     <property name="version">0.6.2</property>
-    <property name="copyright">Copyright © 2008-2009 Dominic Sacré</property>
+    <property name="copyright">Copyright &#xA9; 2008-2009 Dominic Sacr&#xE9;</property>
     <property name="website">http://das.nasophon.de/gtklick/</property>
     <property name="license" translatable="yes">This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,9 +28,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</property>
-    <property name="authors">Dominic Sacré &lt;dominic.sacre@gmx.de&gt;</property>
+    <property name="authors">Dominic Sacr&#xE9; &lt;dominic.sacre@gmx.de&gt;</property>
     <property name="translator_credits" translatable="yes">Damir Abdullin &lt;damir@mimas.ru&gt; (ru)
-Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
+Pablo Fern&#xE1;ndez &lt;pablo.fbus@gmail.com&gt; (es)
+Dominic Sacr&#xE9; &lt;dominic.sacre@gmx.de&gt; (de)</property>
     <property name="logo">gtklick.png</property>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
@@ -45,11 +45,12 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
           <widget class="GtkHButtonBox" id="dialog-action_area1">
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <property name="layout_style">end</property>
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="pack_type">GTK_PACK_END</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </widget>
@@ -60,9 +61,9 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Preferences</property>
     <property name="resizable">False</property>
-    <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
+    <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
     <property name="transient_for">window_main</property>
@@ -96,25 +97,28 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <child>
                           <widget class="GtkRadioButton" id="radio_sound_square">
+                            <property name="label" translatable="yes">_Square</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label" translatable="yes">_Square</property>
                             <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_sound_square_toggled"/>
                           </widget>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
                         </child>
                         <child>
                           <widget class="GtkRadioButton" id="radio_sound_sine">
+                            <property name="label" translatable="yes">S_ine</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label" translatable="yes">S_ine</property>
                             <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">radio_sound_square</property>
@@ -126,12 +130,12 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                         </child>
                         <child>
                           <widget class="GtkRadioButton" id="radio_sound_noise">
+                            <property name="label" translatable="yes">_Noise</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label" translatable="yes">_Noise</property>
                             <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">radio_sound_square</property>
@@ -143,12 +147,12 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                         </child>
                         <child>
                           <widget class="GtkRadioButton" id="radio_sound_click">
+                            <property name="label" translatable="yes">Acoustic _bell / click</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label" translatable="yes">Acoustic _bell / click</property>
                             <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">radio_sound_square</property>
@@ -165,12 +169,12 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                             <property name="top_padding">2</property>
                             <child>
                               <widget class="GtkRadioButton" id="radio_sound_custom">
+                                <property name="label" translatable="yes">C_ustom:</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="label" translatable="yes">C_ustom:</property>
                                 <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">radio_sound_square</property>
@@ -203,6 +207,9 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                     <property name="width_chars">24</property>
                                     <signal name="selection_changed" handler="on_accented_selection_changed"/>
                                   </widget>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
                                 </child>
                                 <child>
                                   <widget class="GtkFileChooserButton" id="filechooser_normal">
@@ -227,6 +234,9 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                           </packing>
                         </child>
                       </widget>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
                       <widget class="GtkVSeparator" id="vseparator1">
@@ -254,6 +264,7 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -268,17 +279,18 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="tooltip" translatable="yes">Pitch of accented beats</property>
-                                <property name="update_policy">GTK_UPDATE_DELAYED</property>
+                                <property name="update_policy">delayed</property>
                                 <property name="adjustment">0 -12 12 1 1 0</property>
                                 <property name="inverted">True</property>
                                 <property name="digits">0</property>
-                                <property name="value_pos">GTK_POS_BOTTOM</property>
+                                <property name="value_pos">bottom</property>
                                 <signal name="value_changed" handler="on_pitch_accented_changed"/>
                                 <signal name="format_value" handler="on_pitch_format_value"/>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="padding">4</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
@@ -287,11 +299,11 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="tooltip" translatable="yes">Pitch of normal beats</property>
-                                <property name="update_policy">GTK_UPDATE_DELAYED</property>
+                                <property name="update_policy">delayed</property>
                                 <property name="adjustment">0 -12 12 1 1 0</property>
                                 <property name="inverted">True</property>
                                 <property name="digits">0</property>
-                                <property name="value_pos">GTK_POS_BOTTOM</property>
+                                <property name="value_pos">bottom</property>
                                 <signal name="value_changed" handler="on_pitch_normal_changed"/>
                                 <signal name="format_value" handler="on_pitch_format_value"/>
                               </widget>
@@ -352,25 +364,28 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                     <property name="spacing">2</property>
                     <child>
                       <widget class="GtkRadioButton" id="radio_connect_auto">
+                        <property name="label" translatable="yes">_Automatically connect to soundcard output</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="label" translatable="yes">_Automatically connect to soundcard output</property>
                         <property name="use_underline">True</property>
-                        <property name="response_id">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <signal name="toggled" handler="on_connect_auto_toggled"/>
                       </widget>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
                       <widget class="GtkRadioButton" id="radio_connect_manual">
+                        <property name="label" translatable="yes">C_onnect to these ports:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="label" translatable="yes">C_onnect to these ports:</property>
                         <property name="use_underline">True</property>
-                        <property name="response_id">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">radio_connect_auto</property>
@@ -395,9 +410,9 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                                <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                                <property name="shadow_type">GTK_SHADOW_IN</property>
+                                <property name="hscrollbar_policy">automatic</property>
+                                <property name="vscrollbar_policy">automatic</property>
+                                <property name="shadow_type">in</property>
                                 <child>
                                   <widget class="GtkTreeView" id="treeview_connect_ports">
                                     <property name="visible">True</property>
@@ -409,6 +424,9 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                   </widget>
                                 </child>
                               </widget>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                             <child>
                               <widget class="GtkVBox" id="vbox5">
@@ -422,7 +440,6 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                     <property name="receives_default">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="tooltip" translatable="yes">Add new JACK connection</property>
-                                    <property name="response_id">0</property>
                                     <signal name="clicked" handler="on_connect_add"/>
                                     <child>
                                       <widget class="GtkImage" id="image8">
@@ -435,6 +452,7 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -444,7 +462,6 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                     <property name="receives_default">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="tooltip" translatable="yes">Remove selected connection</property>
-                                    <property name="response_id">0</property>
                                     <signal name="clicked" handler="on_connect_remove"/>
                                     <child>
                                       <widget class="GtkImage" id="image9">
@@ -498,23 +515,28 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
           <widget class="GtkHButtonBox" id="dialog-action_area2">
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <property name="layout_style">end</property>
             <child>
               <widget class="GtkButton" id="btn_close">
+                <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label">gtk-close</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">0</property>
                 <signal name="clicked" handler="on_preferences_close"/>
               </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
             </child>
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="pack_type">GTK_PACK_END</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </widget>
@@ -547,9 +569,9 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
                       <widget class="GtkImageMenuItem" id="item_file_quit">
+                        <property name="label">gtk-quit</property>
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="label">gtk-quit</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="on_file_quit"/>
@@ -571,9 +593,9 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
                       <widget class="GtkImageMenuItem" id="item_edit_preferences">
+                        <property name="label">gtk-preferences</property>
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="label">gtk-preferences</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="on_edit_preferences"/>
@@ -615,7 +637,7 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                         <property name="label" translatable="yes">_Speed trainer</property>
                         <property name="use_underline">True</property>
                         <signal name="toggled" handler="on_view_speedtrainer_toggled"/>
-                        <accelerator key="F5" modifiers="" signal="activate"/>
+                        <accelerator key="F5" signal="activate"/>
                       </widget>
                     </child>
                     <child>
@@ -625,7 +647,7 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                         <property name="label" translatable="yes">_Meter</property>
                         <property name="use_underline">True</property>
                         <signal name="toggled" handler="on_view_meter_toggled"/>
-                        <accelerator key="F6" modifiers="" signal="activate"/>
+                        <accelerator key="F6" signal="activate"/>
                       </widget>
                     </child>
                     <child>
@@ -635,7 +657,7 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                         <property name="label" translatable="yes">_Pattern</property>
                         <property name="use_underline">True</property>
                         <signal name="toggled" handler="on_view_pattern_toggled"/>
-                        <accelerator key="F7" modifiers="" signal="activate"/>
+                        <accelerator key="F7" signal="activate"/>
                       </widget>
                     </child>
                     <child>
@@ -651,7 +673,7 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                         <property name="label" translatable="yes">P_rofiles</property>
                         <property name="use_underline">True</property>
                         <signal name="toggled" handler="on_view_profiles_toggled"/>
-                        <accelerator key="F8" modifiers="" signal="activate"/>
+                        <accelerator key="F8" signal="activate"/>
                       </widget>
                     </child>
                   </widget>
@@ -670,15 +692,15 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
                       <widget class="GtkImageMenuItem" id="item_help_shortcuts">
+                        <property name="label" translatable="yes">_Keyboard Shortcuts</property>
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="label" translatable="yes">_Keyboard Shortcuts</property>
                         <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
                         <signal name="activate" handler="on_help_shortcuts"/>
                         <child internal-child="image">
-                          <widget class="GtkImage" id="menu-item-image1">
+                          <widget class="GtkImage" id="image8">
                             <property name="visible">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="stock">gtk-dialog-info</property>
                           </widget>
                         </child>
@@ -686,9 +708,9 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="item_help_about">
+                        <property name="label">gtk-about</property>
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="label">gtk-about</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="on_help_about"/>
@@ -701,6 +723,7 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
           </widget>
           <packing>
             <property name="expand">False</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
@@ -743,6 +766,9 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                 <signal name="value_changed" handler="on_tempo_scale_changed"/>
                                 <signal name="format_value" handler="on_tempo_format_value"/>
                               </widget>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                             <child>
                               <widget class="GtkSpinButton" id="spin_tempo">
@@ -755,7 +781,7 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                 <property name="adjustment">120 1 999 1 10 0</property>
                                 <property name="snap_to_ticks">True</property>
                                 <property name="numeric">True</property>
-                                <property name="update_policy">GTK_UPDATE_IF_VALID</property>
+                                <property name="update_policy">if-valid</property>
                                 <signal name="value_changed" handler="on_tempo_spin_changed"/>
                               </widget>
                               <packing>
@@ -770,14 +796,13 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                 <property name="yscale">0</property>
                                 <child>
                                   <widget class="GtkButton" id="btn_tap_tempo">
+                                    <property name="label" translatable="yes">T_ap</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="can_default">True</property>
                                     <property name="receives_default">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="label" translatable="yes">T_ap</property>
                                     <property name="use_underline">True</property>
-                                    <property name="response_id">0</property>
                                     <signal name="clicked" handler="on_tap_tempo"/>
                                   </widget>
                                 </child>
@@ -807,6 +832,7 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -828,15 +854,18 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                             <property name="spacing">6</property>
                             <child>
                               <widget class="GtkCheckButton" id="check_speedtrainer_enable">
+                                <property name="label" translatable="yes">Ena_ble</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="label" translatable="yes">Ena_ble</property>
                                 <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="on_speedtrainer_enable_toggled"/>
                               </widget>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                             <child>
                               <widget class="GtkLabel" id="label11">
@@ -863,7 +892,7 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                 <property name="adjustment">120 1 999 1 10 0</property>
                                 <property name="snap_to_ticks">True</property>
                                 <property name="numeric">True</property>
-                                <property name="update_policy">GTK_UPDATE_IF_VALID</property>
+                                <property name="update_policy">if-valid</property>
                                 <signal name="value_changed" handler="on_tempo_start_changed"/>
                               </widget>
                               <packing>
@@ -897,7 +926,7 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                 <property name="digits">2</property>
                                 <property name="snap_to_ticks">True</property>
                                 <property name="numeric">True</property>
-                                <property name="update_policy">GTK_UPDATE_IF_VALID</property>
+                                <property name="update_policy">if-valid</property>
                                 <signal name="value_changed" handler="on_tempo_increment_changed"/>
                               </widget>
                               <packing>
@@ -950,12 +979,12 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                             <property name="homogeneous">True</property>
                             <child>
                               <widget class="GtkRadioButton" id="radio_meter_even">
+                                <property name="label" translatable="yes">Eve_n</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="label" translatable="yes">Eve_n</property>
                                 <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="on_meter_even_toggled"/>
@@ -963,12 +992,12 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                             </child>
                             <child>
                               <widget class="GtkRadioButton" id="radio_meter_24">
+                                <property name="label" translatable="yes">_2/4</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="label" translatable="yes">_2/4</property>
                                 <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">radio_meter_even</property>
@@ -981,12 +1010,12 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                             </child>
                             <child>
                               <widget class="GtkRadioButton" id="radio_meter_34">
+                                <property name="label" translatable="yes">_3/4</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="label" translatable="yes">_3/4</property>
                                 <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">radio_meter_even</property>
@@ -999,12 +1028,12 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                             </child>
                             <child>
                               <widget class="GtkRadioButton" id="radio_meter_44">
+                                <property name="label" translatable="yes">_4/4</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="label" translatable="yes">_4/4</property>
                                 <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">radio_meter_even</property>
@@ -1017,12 +1046,12 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                             </child>
                             <child>
                               <widget class="GtkRadioButton" id="radio_meter_other">
+                                <property name="label" translatable="yes">_Other:</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="label" translatable="yes">_Other:</property>
                                 <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">radio_meter_even</property>
@@ -1053,6 +1082,7 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -1136,13 +1166,14 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                               <widget class="GtkTable" id="table_pattern">
                                 <property name="visible">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="n_rows">1</property>
-                                <property name="n_columns">1</property>
                                 <property name="homogeneous">True</property>
                                 <child>
                                   <placeholder/>
                                 </child>
                               </widget>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                             <child>
                               <widget class="GtkButton" id="btn_reset_pattern">
@@ -1151,9 +1182,8 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                 <property name="receives_default">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="tooltip" translatable="yes">Reset pattern</property>
-                                <property name="relief">GTK_RELIEF_NONE</property>
+                                <property name="relief">none</property>
                                 <property name="focus_on_click">False</property>
-                                <property name="response_id">0</property>
                                 <signal name="clicked" handler="on_pattern_reset"/>
                                 <child>
                                   <widget class="GtkImage" id="image1">
@@ -1198,7 +1228,7 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                     <property name="left_padding">24</property>
                     <property name="right_padding">24</property>
                     <child>
-                      <widget class="GtkHBox" id="hbox1">
+                      <widget class="GtkHBox" id="hbox2">
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="spacing">48</property>
@@ -1211,10 +1241,9 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                             <property name="has_default">True</property>
                             <property name="receives_default">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="response_id">0</property>
                             <signal name="clicked" handler="on_start_stop"/>
                             <child>
-                              <widget class="GtkVBox" id="vbox4">
+                              <widget class="GtkVBox" id="vbox2">
                                 <property name="visible">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="border_width">1</property>
@@ -1224,7 +1253,7 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="xscale">0.11999999731779099</property>
                                     <child>
-                                      <widget class="GtkHBox" id="hbox2">
+                                      <widget class="GtkHBox" id="hbox5">
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <child>
@@ -1233,6 +1262,9 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="stock">gtk-media-play</property>
                                           </widget>
+                                          <packing>
+                                            <property name="position">0</property>
+                                          </packing>
                                         </child>
                                         <child>
                                           <widget class="GtkLabel" id="label5">
@@ -1249,13 +1281,16 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                       </widget>
                                     </child>
                                   </widget>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
                                 </child>
                                 <child>
                                   <widget class="GtkAlignment" id="align_stop">
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="xscale">0.11999999731779099</property>
                                     <child>
-                                      <widget class="GtkHBox" id="hbox5">
+                                      <widget class="GtkHBox" id="hbox6">
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <child>
@@ -1264,6 +1299,9 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="stock">gtk-media-stop</property>
                                           </widget>
+                                          <packing>
+                                            <property name="position">0</property>
+                                          </packing>
                                         </child>
                                         <child>
                                           <widget class="GtkLabel" id="label7">
@@ -1287,6 +1325,9 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                               </widget>
                             </child>
                           </widget>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
                         </child>
                         <child>
                           <widget class="GtkHScale" id="scale_volume">
@@ -1315,6 +1356,7 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
               </widget>
               <packing>
                 <property name="expand">False</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
@@ -1345,16 +1387,19 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                                <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                                <property name="shadow_type">GTK_SHADOW_IN</property>
+                                <property name="hscrollbar_policy">automatic</property>
+                                <property name="vscrollbar_policy">automatic</property>
+                                <property name="shadow_type">in</property>
                                 <child>
                                   <placeholder/>
                                 </child>
                               </widget>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox6">
+                              <widget class="GtkHBox" id="hbox7">
                                 <property name="visible">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="homogeneous">True</property>
@@ -1366,9 +1411,8 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="tooltip" translatable="yes">Create new profile (Ctrl+N)</property>
                                     <property name="focus_on_click">False</property>
-                                    <property name="response_id">0</property>
                                     <signal name="clicked" handler="on_profile_add"/>
-                                    <accelerator key="N" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
+                                    <accelerator key="N" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                                     <child>
                                       <widget class="GtkImage" id="image3">
                                         <property name="visible">True</property>
@@ -1377,6 +1421,9 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                       </widget>
                                     </child>
                                   </widget>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
                                 </child>
                                 <child>
                                   <widget class="GtkButton" id="btn_profile_remove">
@@ -1386,9 +1433,8 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="tooltip" translatable="yes">Delete profile (Ctrl+D)</property>
                                     <property name="focus_on_click">False</property>
-                                    <property name="response_id">0</property>
                                     <signal name="clicked" handler="on_profile_remove"/>
-                                    <accelerator key="D" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
+                                    <accelerator key="D" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                                     <child>
                                       <widget class="GtkImage" id="image5">
                                         <property name="visible">True</property>
@@ -1409,9 +1455,8 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="tooltip" translatable="yes">Save profile (Ctrl+S)</property>
                                     <property name="focus_on_click">False</property>
-                                    <property name="response_id">0</property>
                                     <signal name="clicked" handler="on_profile_save"/>
-                                    <accelerator key="S" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
+                                    <accelerator key="S" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                                     <child>
                                       <widget class="GtkImage" id="image6">
                                         <property name="visible">True</property>
@@ -1431,9 +1476,8 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                                     <property name="receives_default">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="tooltip" translatable="yes">Rename profile (Ctrl+E)</property>
-                                    <property name="response_id">0</property>
                                     <signal name="clicked" handler="on_profile_rename"/>
-                                    <accelerator key="E" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
+                                    <accelerator key="E" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                                     <child>
                                       <widget class="GtkImage" id="image7">
                                         <property name="visible">True</property>
@@ -1469,6 +1513,9 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
                       </packing>
                     </child>
                   </widget>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
               </widget>
               <packing>
@@ -1488,8 +1535,8 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Keyboard shortcuts</property>
-    <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="type_hint">dialog</property>
     <property name="transient_for">window_main</property>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox3">
@@ -1504,11 +1551,11 @@ Dominic Sacré &lt;dominic.sacre@gmx.de&gt; (de)</property>
             <property name="ypad">8</property>
             <property name="label" translatable="yes">Space		Start / stop
 
-→			Tempo + 1
-←			Tempo - 1
-↑			Tempo + 10
-↓			Tempo - 10
-PgUp  		Tempo × 2
+&#x2192;			Tempo + 1
+&#x2190;			Tempo - 1
+&#x2191;			Tempo + 10
+&#x2193;			Tempo - 10
+PgUp  		Tempo &#xD7; 2
 PgDn  		Tempo / 2
 
 Return		Tap tempo
@@ -1525,22 +1572,27 @@ Return		Tap tempo
           <widget class="GtkHButtonBox" id="dialog-action_area3">
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <property name="layout_style">end</property>
             <child>
               <widget class="GtkButton" id="button1">
+                <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label">gtk-close</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">0</property>
               </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
             </child>
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="pack_type">GTK_PACK_END</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </widget>
