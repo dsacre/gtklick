@@ -306,7 +306,7 @@ msgstr "Falló iniciar klick: %s"
 
 #: gtklick/klick_backend.py:61
 msgid "timeout while waiting for klick to start"
-msgstr " timeout esperando a que iniciara klick"
+msgstr "timeout esperando a que iniciara klick"
 
 #: gtklick/klick_backend.py:67
 msgid "can't connect to klick"
