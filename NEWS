@@ -1,3 +1,8 @@
+2010-02-14: gtklick 0.6.4
+
+  * Updated spanish translation.
+  * Removed unnecessary checks for runtime depencies from setup.py.
+
 2010-01-28: gtklick 0.6.3
 
   * Added spanish translation by Pablo Fernández.
