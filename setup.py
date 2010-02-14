@@ -17,19 +17,6 @@ if sys.hexversion < 0x02050000:
     sys.exit("sorry, python 2.5 or higher is required")
 
 try:
-    import pygtk
-    pygtk.require('2.0')
-    import gtk
-    import gtk.glade
-except:
-    sys.exit("sorry, can't find pygtk")
-
-try:
-    import liblo
-except:
-    sys.exit("sorry, can't find pyliblo")
-
-try:
     subprocess.Popen(['msgfmt'], stderr=subprocess.PIPE)
 except OSError:
     sys.exit("couldn't run msgfmt, please make sure gettext is installed")
