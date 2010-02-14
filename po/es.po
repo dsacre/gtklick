@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtklick 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-29 22:46+0100\n"
-"PO-Revision-Date: 2009-10-03 11:18+0100\n"
+"PO-Revision-Date: 2010-01-31 19:31+0100\n"
 "Last-Translator: Pablo Fernández <pablo.fbus@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -293,7 +293,7 @@ msgstr ""
 
 #: gtklick/gtklick.py:193
 msgid "klick seems to have been killed, can't continue without it"
-msgstr "Parece que se ha matado klick. Imposible continuar sin él"
+msgstr "Parece que klick ha petado. Imposible continuar sin él"
 
 #: gtklick/gtklick.py:202
 msgid "gtklick error"
@@ -306,7 +306,7 @@ msgstr "Falló iniciar klick: %s"
 
 #: gtklick/klick_backend.py:61
 msgid "timeout while waiting for klick to start"
-msgstr "esperando mientras se espera que se inicie klick"
+msgstr " timeout esperando a que iniciara klick"
 
 #: gtklick/klick_backend.py:67
 msgid "can't connect to klick"
