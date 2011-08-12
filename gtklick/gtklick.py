@@ -185,7 +185,9 @@ class GTKlick:
     # start the whole thing
     def run(self):
         self.widgets['window_main'].show()
+        gtk.gdk.threads_enter()
         gtk.main()
+        gtk.gdk.threads_leave()
 
     # check if klick is still running
     def check_klick(self):
