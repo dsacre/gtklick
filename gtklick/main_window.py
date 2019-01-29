@@ -147,13 +147,22 @@ class MainWindow:
 
     def on_tempo_format_value(self, scale, value):
         if value < 40:      return "Larghissimo"
-        elif value < 56:    return "Largo"
+        elif value < 46:    return "Grave"
+        elif value < 52:    return "Largo"
+        elif value < 56:    return "Lento"
+        elif value < 60:    return "Adagio"
         elif value < 66:    return "Larghetto"
-        elif value < 76:    return "Adagio"
-        elif value < 108:   return "Andante"
-        elif value < 120:   return "Moderato"
-        elif value < 168:   return "Allegro"
-        elif value < 200:   return "Presto"
+        elif value < 72:    return "Adagietto"
+        elif value < 80:    return "Andante"
+        elif value < 88:    return "Andantino"
+        elif value < 96:    return "Maestoso"
+        elif value < 108:   return "Moderato"
+        elif value < 120:   return "Allegretto"
+        elif value < 132:   return "Animato"
+        elif value < 144:   return "Allegro"
+        elif value < 160:   return "Assai"
+        elif value < 184:   return "Vivace"
+        elif value < 208:   return "Presto"
         else:               return "Prestissimo"
 
     @gui_callback
