@@ -91,7 +91,7 @@ class run_idle_once:
 
 class TristateCheckButton(Gtk.CheckButton):
     def __init__(self, label):
-        GObject.GObject.__init__(self, label)
+        Gtk.CheckButton.__init__(self, label)
         self.connect('button-release-event', self.on_button_released)
         self.connect('key-press-event', self.on_key_pressed)
 
