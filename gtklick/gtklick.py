@@ -119,7 +119,6 @@ class GTKlick:
         # make "globals" known in other modules
         for m in (main_window, profiles_pane, preferences_dialog):
             m.wtree = self.wtree
-            m.widgets = self.widgets
             m.klick = weakref.proxy(self.klick)
             m.config = weakref.proxy(self.config)
 
