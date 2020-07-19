@@ -26,7 +26,6 @@ class MainWindow:
         wtree.get_object('spin_meter_beats').set_value(4)
         wtree.get_object('spin_meter_denom').set_value(4)
 
-        #wtree.signal_autoconnect({
         wtree.connect_signals({
             # main menu
             'on_file_quit':                     self.on_file_quit,

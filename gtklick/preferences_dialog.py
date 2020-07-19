@@ -20,7 +20,6 @@ import misc
 
 class PreferencesDialog:
     def __init__(self):
-        #wtree.signal_autoconnect({
         wtree.connect_signals({
             'on_sound_square_toggled':      (self.on_sound_toggled, 0),
             'on_sound_sine_toggled':        (self.on_sound_toggled, 1),

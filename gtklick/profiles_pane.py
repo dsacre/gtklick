@@ -22,7 +22,7 @@ class ProfilesPane:
     def __init__(self, mainwin):
         self.mainwin = mainwin
 
-        wtree.signal_autoconnect({
+        wtree.connect_signals({
             'on_profile_add':       self.on_profile_add,
             'on_profile_remove':    self.on_profile_remove,
             'on_profile_save':      self.on_profile_save,
