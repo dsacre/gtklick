@@ -53,7 +53,8 @@ class ProfilesPane:
         self.treeview.connect('row-activated', self.on_row_activated)
         # create a weak reference to the callback function, to prevent cyclic references.
         # sometimes PyGTK astounds me...
-        self.renderer.connect('edited', misc.weakref_method(self.on_cell_edited))
+        #self.renderer.connect('edited', misc.weakref_method(self.on_cell_edited))
+        self.renderer.connect('edited', self.on_cell_edited)
 
         self.model.connect('row-changed', self.on_row_changed)
         self.model.connect('row-deleted', self.on_row_deleted)

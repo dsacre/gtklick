@@ -13,7 +13,7 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GLib
 from gi.repository import GObject
 
 import getopt
@@ -61,7 +61,7 @@ class GTKlick:
         # start timer to check if klick is still running
         if self.klick.process:
             #self.timer = GLib.timeout_add( GLib.PRIORITY_DEFAULT, 1000, misc.weakref_method(self.check_klick))
-            self.timer = GLib.timeout_add( GLib.PRIORITY_DEFAULT, 1000, self.check_klick)
+            self.timer = GLib.timeout_add( 1000, self.check_klick)
 
     def __del__(self):
         if self.config:
