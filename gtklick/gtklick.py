@@ -109,28 +109,8 @@ class GTKlick:
         self.wtree = Gtk.Builder().new_from_file(self.glade_file)
         self.wtree.set_translation_domain('gtklick')
 
-        spinner=Gtk.Widget(self.wtree.get_object('spin_meter_beats'))
-        print('spinner name', spinner.do_get_name())
-        spinner.set_value(4)
-        exit()
-        self.widgets=dict()
-        for w in self.wtree.get_objects():
-                if isinstance(w, Gtk.Widget):
-                    name = w.get_name()
-                    self.widgets.update([(name, w)])
-                    print("Added widget", name, "of type", type(w))
-                #else:
-                    #print("couldn't add object ", w)
-                    #print(w.list_properties())
-        
-        #self.widgets = dict([(Gtk.Widget.get_name(w), w) for w in self.wtree.get_objects()])
-        #print("Widgets: ")
-        #print(self.widgets)
-        #self.widgets = self.wtree.get_objects()
-
-        self.config = gtklick_config.GTKlickConfig()
-
         # load config from file
+        self.config = gtklick_config.GTKlickConfig()
         self.config.read()
 
         # start klick process
@@ -162,10 +142,10 @@ class GTKlick:
             ports = []
 
         if self.config.prefs_autoconnect:
-            misc.do_quietly(lambda: self.widgets['radio_connect_auto'].set_active(True))
+            misc.do_quietly(lambda: self.wtree.get_object('radio_connect_auto').set_active(True))
             self.klick.send('/config/autoconnect')
         else:
-            misc.do_quietly(lambda: self.widgets['radio_connect_manual'].set_active(True))
+            misc.do_quietly(lambda: self.wtree.get_object('radio_connect_manual').set_active(True))
             self.klick.send('/config/connect', *ports)
 
         # sound / volume
@@ -182,12 +162,12 @@ class GTKlick:
 
         # metronome state
         misc.do_quietly(lambda: (
-            self.widgets['check_speedtrainer_enable'].set_active(self.config.speedtrainer),
-            self.widgets['spin_tempo_increment'].set_value(self.config.tempo_increment),
-            self.widgets['radio_meter_other'].set_active(self.config.denom != 0)
+            self.wtree.get_object('check_speedtrainer_enable').set_active(self.config.speedtrainer),
+            self.wtree.get_object('spin_tempo_increment').set_value(self.config.tempo_increment),
+            self.wtree.get_object('radio_meter_other').set_active(self.config.denom != 0)
         ))
-        self.widgets['spin_tempo_increment'].set_sensitive(self.config.speedtrainer)
-        self.widgets['spin_tempo_start'].set_sensitive(self.config.speedtrainer)
+        self.wtree.get_object('spin_tempo_increment').set_sensitive(self.config.speedtrainer)
+        self.wtree.get_object('spin_tempo_start').set_sensitive(self.config.speedtrainer)
 
         self.klick.send('/simple/set_tempo', self.config.tempo)
         self.klick.send('/simple/set_tempo_increment', self.config.tempo_increment if self.config.speedtrainer else 0.0)
@@ -201,7 +181,7 @@ class GTKlick:
 
     # start the whole thing
     def run(self):
-        self.widgets['window_main'].show()
+        self.wtree.get_object('window_main').show()
         Gdk.threads_enter()
         Gtk.main()
         Gdk.threads_leave()

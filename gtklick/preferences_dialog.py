@@ -44,10 +44,10 @@ class PreferencesDialog:
             'on_preferences_close':         self.on_close,
         })
 
-        widgets['vbox_filechoosers'].set_sensitive(config.prefs_sound == -1)
+        wtree.get_object('vbox_filechoosers').set_sensitive(config.prefs_sound == -1)
 
         # build JACK connection treeview
-        self.treeview_ports = widgets['treeview_connect_ports']
+        self.treeview_ports = wtree.get_object('treeview_connect_ports')
         self.model_ports = Gtk.ListStore(str)
         self.treeview_ports.set_model(self.model_ports)
         self.model_avail = Gtk.ListStore(str)
@@ -65,7 +65,7 @@ class PreferencesDialog:
         renderer.connect('edited', self.on_connect_cell_edited)
         self.model_ports.connect('row-deleted', lambda w, p: self.update_connect_ports())
 
-        widgets['btn_connect_remove'].set_sensitive(False)
+        wtree.get_object('btn_connect_remove').set_sensitive(False)
         self.ports_avail = []
 
         klick.register_methods(self)
@@ -74,21 +74,21 @@ class PreferencesDialog:
     # GUI callbacks
 
     def on_delete_event(self, w, ev):
-        widgets['dialog_preferences'].hide()
+        wtree.get_object('dialog_preferences').hide()
         return 1
 
     def on_close(self, b):
-        widgets['dialog_preferences'].hide()
+        wtree.get_object('dialog_preferences').hide()
 
     @gui_callback
     def on_sound_toggled(self, b, data):
         if b.get_active():
-            widgets['vbox_filechoosers'].set_sensitive(data == -1)
+            wtree.get_object('vbox_filechoosers').set_sensitive(data == -1)
             if data >= 0:
                 klick.send('/config/set_sound', data)
             else:
-                a = widgets['filechooser_accented'].get_filename()
-                b = widgets['filechooser_normal'].get_filename()
+                a = wtree.get_object('filechooser_accented').get_filename()
+                b = wtree.get_object('filechooser_normal').get_filename()
                 if a and b:
                     klick.send('/config/set_sound', a, b)
                 else:
@@ -97,8 +97,8 @@ class PreferencesDialog:
 
     @gui_callback
     def on_sound_selection_changed(self, chooser):
-        a = widgets['filechooser_accented'].get_filename()
-        b = widgets['filechooser_normal'].get_filename()
+        a = wtree.get_object('filechooser_accented').get_filename()
+        b = wtree.get_object('filechooser_normal').get_filename()
         if a and b:
             klick.send('/config/set_sound', a, b)
         else:
@@ -108,8 +108,8 @@ class PreferencesDialog:
     @gui_callback
     def on_pitch_changed(self, r):
         klick.send('/config/set_sound_pitch',
-            2 ** (widgets['scale_pitch_accented'].get_value() / 12),
-            2 ** (widgets['scale_pitch_normal'].get_value() / 12)
+            2 ** (wtree.get_object('scale_pitch_accented').get_value() / 12),
+            2 ** (wtree.get_object('scale_pitch_normal').get_value() / 12)
         )
 
     def on_pitch_format_value(self, scale, value):
@@ -118,7 +118,7 @@ class PreferencesDialog:
     @gui_callback
     def on_connect_toggled(self, b, data):
         if b.get_active():
-            widgets['hbox_connect_manual'].set_sensitive(data == False)
+            wtree.get_object('hbox_connect_manual').set_sensitive(data == False)
             if data:
                 klick.send('/config/disconnect_all')
                 klick.send('/config/autoconnect')
@@ -141,7 +141,7 @@ class PreferencesDialog:
 
     def on_connect_selection_changed(self, selection):
         i = selection.get_selected()[1]
-        widgets['btn_connect_remove'].set_sensitive(bool(i))
+        wtree.get_object('btn_connect_remove').set_sensitive(bool(i))
 
     def on_connect_editing_started(self, cell, editable, path):
         klick.send('/config/get_available_ports')
@@ -174,18 +174,18 @@ class PreferencesDialog:
         sound = args[0]
         if sound < 0 or sound > 3: return
         w = ('radio_sound_square', 'radio_sound_sine', 'radio_sound_noise', 'radio_sound_click')[sound]
-        widgets[w].set_active(True)
+        wtree.get_object(w).set_active(True)
         config.prefs_sound = sound
 
     @make_method('/config/sound', 'ss')
     @osc_callback
     def sound_custom_cb(self, path, args):
-        widgets['radio_sound_custom'].set_active(True)
+        wtree.get_object('radio_sound_custom').set_active(True)
 
-        if args[0] != widgets['filechooser_accented'].get_filename():
-            widgets['filechooser_accented'].set_filename(args[0])
-        if args[1] != widgets['filechooser_normal'].get_filename():
-            widgets['filechooser_normal'].set_filename(args[1])
+        if args[0] != wtree.get_object('filechooser_accented').get_filename():
+            wtree.get_object('filechooser_accented').set_filename(args[0])
+        if args[1] != wtree.get_object('filechooser_normal').get_filename():
+            wtree.get_object('filechooser_normal').set_filename(args[1])
 
         config.prefs_sound = -1
         config.prefs_sound_accented = args[0]
@@ -196,8 +196,8 @@ class PreferencesDialog:
     def sound_pitch_cb(self, path, args):
         v = round(math.log(args[0], 2) * 12)
         w = round(math.log(args[1], 2) * 12)
-        widgets['scale_pitch_accented'].set_value(v)
-        widgets['scale_pitch_normal'].set_value(w)
+        wtree.get_object('scale_pitch_accented').set_value(v)
+        wtree.get_object('scale_pitch_normal').set_value(w)
         config.prefs_pitch_accented = v
         config.prefs_pitch_normal = w
 
@@ -214,6 +214,6 @@ class PreferencesDialog:
     @osc_callback
     def sound_loading_failed_cb(self, path, args):
         klick.send('/config/set_sound', -1)
-        m = Gtk.MessageDialog(widgets['dialog_preferences'], 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("couldn't load file '%s'.") % args[0])
+        m = Gtk.MessageDialog(wtree.get_object('dialog_preferences'), 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("couldn't load file '%s'.") % args[0])
         m.run()
         m.destroy()
