@@ -11,11 +11,10 @@
 # (at your option) any later version.
 
 
-import pygtk
-pygtk.require('2.0')
-import gtk
-import gtk.glade
-import gobject
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk, Gdk
+from gi.repository import GObject
 
 import getopt
 import sys
@@ -24,9 +23,10 @@ import weakref
 
 import gettext
 import locale
-import __builtin__
-__builtin__._ = gettext.gettext
+import builtins
+builtins._ = gettext.gettext
 
+#from . import klick_backend
 import klick_backend
 import gtklick_config
 import main_window
@@ -43,14 +43,10 @@ class GTKlick:
             # don't crash when run with unsupported locale
             pass
 
-        for m in gettext, gtk.glade:
-            m.bindtextdomain('gtklick', locale_dir)
-            m.textdomain('gtklick')
-
         self.config = None
         self.parse_cmdline(args)
 
-        gtk.gdk.threads_init()
+        Gdk.threads_init()
 
         try:
             self.setup(share_dir)
@@ -58,13 +54,14 @@ class GTKlick:
                 self.restore_config()
             else:
                 self.query_config()
-        except klick_backend.KlickBackendError, e:
+        except klick_backend.KlickBackendError as e:
             self.error_message(e.msg)
             sys.exit(1)
 
         # start timer to check if klick is still running
         if self.klick.process:
-            self.timer = gobject.timeout_add(1000, misc.weakref_method(self.check_klick))
+            #self.timer = GLib.timeout_add( GLib.PRIORITY_DEFAULT, 1000, misc.weakref_method(self.check_klick))
+            self.timer = GLib.timeout_add( GLib.PRIORITY_DEFAULT, 1000, self.check_klick)
 
     def __del__(self):
         if self.config:
@@ -92,24 +89,44 @@ class GTKlick:
                 elif opt == '-h':
                     self.print_help()
                     sys.exit(0)
-        except getopt.GetoptError, e:
+        except getopt.GetoptError as e:
             sys.exit(e.msg)
 
     def print_help(self):
-        print _("Usage:\n" \
+        print(_("Usage:\n" \
                 "  gtklick [ options ]\n" \
                 "\n" \
                 "Options:\n" \
                 "  -o port   OSC port to start klick with\n" \
                 "  -q port   OSC port of running klick instance to connect to\n" \
                 "  -r port   OSC port to be used for gtklick\n" \
-                "  -h        show this help")
+                "  -h        show this help"))
 
     # create windows, config, and klick backend
     def setup(self, share_dir):
-        self.wtree = gtk.glade.XML(os.path.join(share_dir, 'gtklick.glade'))
-        # explicitly call base class method, because get_name() is overridden in AboutDialog. stupid GTK...
-        self.widgets = dict([(gtk.Widget.get_name(w), w) for w in self.wtree.get_widget_prefix('')])
+        # Load the GLADE xml file and initialise the Gtk objects
+        self.glade_file = os.path.join(share_dir, 'gtklick.ui')
+        self.wtree = Gtk.Builder().new_from_file(self.glade_file)
+        self.wtree.set_translation_domain('gtklick')
+
+        spinner=Gtk.Widget(self.wtree.get_object('spin_meter_beats'))
+        print('spinner name', spinner.do_get_name())
+        spinner.set_value(4)
+        exit()
+        self.widgets=dict()
+        for w in self.wtree.get_objects():
+                if isinstance(w, Gtk.Widget):
+                    name = w.get_name()
+                    self.widgets.update([(name, w)])
+                    print("Added widget", name, "of type", type(w))
+                #else:
+                    #print("couldn't add object ", w)
+                    #print(w.list_properties())
+        
+        #self.widgets = dict([(Gtk.Widget.get_name(w), w) for w in self.wtree.get_objects()])
+        #print("Widgets: ")
+        #print(self.widgets)
+        #self.widgets = self.wtree.get_objects()
 
         self.config = gtklick_config.GTKlickConfig()
 
@@ -185,9 +202,9 @@ class GTKlick:
     # start the whole thing
     def run(self):
         self.widgets['window_main'].show()
-        gtk.gdk.threads_enter()
-        gtk.main()
-        gtk.gdk.threads_leave()
+        Gdk.threads_enter()
+        Gtk.main()
+        Gdk.threads_leave()
 
     # check if klick is still running
     def check_klick(self):
@@ -197,15 +214,15 @@ class GTKlick:
         return True
 
     def fallback(self, path, args, types, src):
-        print "message not handled:", path, args, src.get_url()
+        print("message not handled:", path, args, src.get_url())
 
     def error_message(self, msg):
-        m = gtk.MessageDialog(self.wtree.get_widget('window_main'), 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, msg)
+        m = Gtk.MessageDialog(self.wtree.get_object('window_main'), 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, msg)
         m.set_title(_("gtklick error"))
         m.run()
         m.destroy()
 
 
 if __name__ == '__main__':
-    app = GTKlick(sys.argv[1:], 'share', 'build/locale')
+    app = GTKlick(sys.argv[1:], '../share', 'build/locale')
     app.run()

@@ -9,7 +9,7 @@
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 
-import gtk
+from gi.repository import Gtk
 
 import math
 
@@ -20,7 +20,8 @@ import misc
 
 class PreferencesDialog:
     def __init__(self):
-        wtree.signal_autoconnect({
+        #wtree.signal_autoconnect({
+        wtree.connect_signals({
             'on_sound_square_toggled':      (self.on_sound_toggled, 0),
             'on_sound_sine_toggled':        (self.on_sound_toggled, 1),
             'on_sound_noise_toggled':       (self.on_sound_toggled, 2),
@@ -47,15 +48,15 @@ class PreferencesDialog:
 
         # build JACK connection treeview
         self.treeview_ports = widgets['treeview_connect_ports']
-        self.model_ports = gtk.ListStore(str)
+        self.model_ports = Gtk.ListStore(str)
         self.treeview_ports.set_model(self.model_ports)
-        self.model_avail = gtk.ListStore(str)
+        self.model_avail = Gtk.ListStore(str)
 
-        renderer = gtk.CellRendererCombo()
+        renderer = Gtk.CellRendererCombo()
         renderer.set_property('model', self.model_avail)
         renderer.set_property('text-column', 0)
         renderer.set_property('editable', True)
-        self.column = gtk.TreeViewColumn(None, renderer, text=0)
+        self.column = Gtk.TreeViewColumn(None, renderer, text=0)
         self.treeview_ports.append_column(self.column)
 
         self.treeview_ports.get_selection().connect('changed', self.on_connect_selection_changed)
@@ -213,6 +214,6 @@ class PreferencesDialog:
     @osc_callback
     def sound_loading_failed_cb(self, path, args):
         klick.send('/config/set_sound', -1)
-        m = gtk.MessageDialog(widgets['dialog_preferences'], 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, _("couldn't load file '%s'.") % args[0])
+        m = Gtk.MessageDialog(widgets['dialog_preferences'], 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, _("couldn't load file '%s'.") % args[0])
         m.run()
         m.destroy()

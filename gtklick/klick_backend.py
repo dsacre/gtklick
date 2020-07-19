@@ -21,7 +21,7 @@ MIN_KLICK_VERSION = (0,11,0)
 START_TIMEOUT = 10
 
 
-class KlickBackendError:
+class KlickBackendError(BaseException):
     def __init__(self, msg):
         self.msg = msg
     def __str__(self):
@@ -54,7 +54,7 @@ class KlickBackend(liblo.ServerThread):
                 if verbose:
                     args += ['-L']
                 self.process = subprocess.Popen(args)
-            except OSError, e:
+            except OSError as e:
                 raise KlickBackendError(_("failed to start klick: %s") % e.strerror)
             # wait for klick to send /klick/ready
             if not self.wait():
@@ -81,7 +81,7 @@ class KlickBackend(liblo.ServerThread):
     def check_version(self):
         try:
             output = subprocess.Popen([KLICK_PATH, '-V'], stdout=subprocess.PIPE).communicate()[0]
-        except OSError, e:
+        except OSError as e:
             raise KlickBackendError(_("failed to start klick: %s\nplease make sure klick is installed.") % e.strerror)
         try:
             version_string = output.split()[1]
@@ -89,9 +89,10 @@ class KlickBackend(liblo.ServerThread):
             if self.version < MIN_KLICK_VERSION:
                 raise KlickBackendError(_("your version of klick is too old (%s).\nplease upgrade to klick %d.%d.%d or later.") %
                                         ((version_string,) + MIN_KLICK_VERSION))
-        except ValueError:
+        #except ValueError:
+        except Exception:
             # let's hope for the best
-            print "couldn't parse klick version"
+            print("couldn't parse klick version")
 
     def get_version(self):
         return self.version

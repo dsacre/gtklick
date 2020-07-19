@@ -9,8 +9,8 @@
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 
 import cgi
 
@@ -30,7 +30,7 @@ class ProfilesPane:
         })
 
         # create treeview. doing this within glade somehow breaks dnd. weird...
-        self.treeview = gtk.TreeView()
+        self.treeview = Gtk.TreeView()
         self.treeview.set_headers_visible(False)
         self.treeview.set_enable_search(False)
         self.treeview.set_reorderable(True)
@@ -40,12 +40,12 @@ class ProfilesPane:
         self.treeview.show()
 
         # create model
-        self.model = gtk.ListStore(str, gtklick_config.Profile)
+        self.model = Gtk.ListStore(str, gtklick_config.Profile)
         self.treeview.set_model(self.model)
 
         # create renderer/column
-        self.renderer = gtk.CellRendererText()
-        self.column = gtk.TreeViewColumn(None, self.renderer, markup=0)
+        self.renderer = Gtk.CellRendererText()
+        self.column = Gtk.TreeViewColumn(None, self.renderer, markup=0)
         self.treeview.append_column(self.column)
 
         # connect signals
@@ -141,7 +141,7 @@ class ProfilesPane:
         # ignore state changes while activating the profile
         self.track_changes = False
         # sending and receiving all OSC messages takes, uhm... so we need to wait at least... oh well...
-        gobject.timeout_add(500, lambda: setattr(self, 'track_changes', True))
+        GObject.timeout_add(500, lambda: setattr(self, 'track_changes', True))
 
         klick.send('/simple/set_tempo', v.tempo)
         widgets['spin_tempo_increment'].set_value(v.tempo_increment)
