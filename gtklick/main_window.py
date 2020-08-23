@@ -26,42 +26,42 @@ class MainWindow:
         wtree.get_object('spin_meter_beats').set_value(4)
         wtree.get_object('spin_meter_denom').set_value(4)
 
-        wtree.connect_signals({
-            # main menu
-            'on_file_quit':                     self.on_file_quit,
-            'on_edit_preferences':              self.on_edit_preferences,
-            'on_view_markings_toggled':         self.on_view_markings_toggled,
-            'on_view_speedtrainer_toggled':     self.on_view_speedtrainer_toggled,
-            'on_view_meter_toggled':            self.on_view_meter_toggled,
-            'on_view_pattern_toggled':          self.on_view_pattern_toggled,
-            'on_view_profiles_toggled':         self.on_view_profiles_toggled,
-            'on_help_shortcuts':                self.on_help_shortcuts,
-            'on_help_about':                    self.on_help_about,
-            # tempo
-            'on_tempo_scale_changed':           self.on_tempo_changed,
-            'on_tempo_spin_changed':            self.on_tempo_changed,
-            'on_tap_tempo':                     self.on_tap_tempo,
-            'on_tempo_format_value':            self.on_tempo_format_value,
-            # speed trainer
-            'on_speedtrainer_enable_toggled':   self.on_speedtrainer_enable_toggled,
-            'on_tempo_increment_changed':       self.on_tempo_increment_changed,
-            'on_tempo_start_changed':           self.on_tempo_start_changed,
-            # meter
-            'on_meter_even_toggled':            (self.on_meter_toggled, (0, 4)),
-            'on_meter_24_toggled':              (self.on_meter_toggled, (2, 4)),
-            'on_meter_34_toggled':              (self.on_meter_toggled, (3, 4)),
-            'on_meter_44_toggled':              (self.on_meter_toggled, (4, 4)),
-            'on_meter_other_toggled':           (self.on_meter_toggled, None),
-            'on_meter_beats_changed':           self.on_meter_beats_changed,
-            'on_meter_denom_changed':           self.on_meter_denom_changed,
-            # pattern
-            'on_pattern_reset':                 self.on_pattern_reset,
-            # others
-            'on_start_stop':                    self.on_start_stop,
-            'on_volume_changed':                self.on_volume_changed,
-            'on_window_main_delete_event':      self.on_delete_event,
-            'on_window_main_key_press_event':   self.on_key_press_event,
-        })
+        # wtree.connect_signals({
+        #     # main menu
+        #     'on_file_quit':                     self.on_file_quit,
+        #     'on_edit_preferences':              self.on_edit_preferences,
+        #     'on_view_markings_toggled':         self.on_view_markings_toggled,
+        #     'on_view_speedtrainer_toggled':     self.on_view_speedtrainer_toggled,
+        #     'on_view_meter_toggled':            self.on_view_meter_toggled,
+        #     'on_view_pattern_toggled':          self.on_view_pattern_toggled,
+        #     'on_view_profiles_toggled':         self.on_view_profiles_toggled,
+        #     'on_help_shortcuts':                self.on_help_shortcuts,
+        #     'on_help_about':                    self.on_help_about,
+        #     # tempo
+        #     'on_tempo_scale_changed':           self.on_tempo_changed,
+        #     'on_tempo_spin_changed':            self.on_tempo_changed,
+        #     'on_tap_tempo':                     self.on_tap_tempo,
+        #     'on_tempo_format_value':            self.on_tempo_format_value,
+        #     # speed trainer
+        #     'on_speedtrainer_enable_toggled':   self.on_speedtrainer_enable_toggled,
+        #     'on_tempo_increment_changed':       self.on_tempo_increment_changed,
+        #     'on_tempo_start_changed':           self.on_tempo_start_changed,
+        #     # meter
+        #     'on_meter_even_toggled':            (self.on_meter_toggled, (0, 4)),
+        #     'on_meter_24_toggled':              (self.on_meter_toggled, (2, 4)),
+        #     'on_meter_34_toggled':              (self.on_meter_toggled, (3, 4)),
+        #     'on_meter_44_toggled':              (self.on_meter_toggled, (4, 4)),
+        #     'on_meter_other_toggled':           (self.on_meter_toggled, None),
+        #     'on_meter_beats_changed':           self.on_meter_beats_changed,
+        #     'on_meter_denom_changed':           self.on_meter_denom_changed,
+        #     # pattern
+        #     'on_pattern_reset':                 self.on_pattern_reset,
+        #     # others
+        #     'on_start_stop':                    self.on_start_stop,
+        #     'on_volume_changed':                self.on_volume_changed,
+        #     'on_window_main_delete_event':      self.on_delete_event,
+        #     'on_window_main_key_press_event':   self.on_key_press_event
+        # })
 
         wtree.get_object('item_view_markings').set_active(config.view_markings)
         wtree.get_object('item_view_meter').set_active(config.view_meter)

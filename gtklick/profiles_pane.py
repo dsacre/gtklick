@@ -22,12 +22,12 @@ class ProfilesPane:
     def __init__(self, mainwin):
         self.mainwin = mainwin
 
-        wtree.connect_signals({
-            'on_profile_add':       self.on_profile_add,
-            'on_profile_remove':    self.on_profile_remove,
-            'on_profile_save':      self.on_profile_save,
-            'on_profile_rename':    self.on_profile_rename,
-        })
+        # wtree.connect_signals({
+        #     'on_profile_add':       self.on_profile_add,
+        #     'on_profile_remove':    self.on_profile_remove,
+        #     'on_profile_save':      self.on_profile_save,
+        #     'on_profile_rename':    self.on_profile_rename,
+        # })
 
         # create treeview. doing this within glade somehow breaks dnd. weird...
         self.treeview = Gtk.TreeView()

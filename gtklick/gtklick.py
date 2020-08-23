@@ -123,9 +123,72 @@ class GTKlick:
             m.config = weakref.proxy(self.config)
 
         # the actual windows are created by glade, this basically just connects GUI and OSC callbacks
+        self.prefs = preferences_dialog.PreferencesDialog()
         self.win = main_window.MainWindow()
         self.profiles = profiles_pane.ProfilesPane(self.win)
-        self.prefs = preferences_dialog.PreferencesDialog()
+
+        self.wtree.connect_signals({
+            # main menu
+            'on_file_quit':                     self.win.on_file_quit,
+            'on_edit_preferences':              self.win.on_edit_preferences,
+            'on_view_markings_toggled':         self.win.on_view_markings_toggled,
+            'on_view_speedtrainer_toggled':     self.win.on_view_speedtrainer_toggled,
+            'on_view_meter_toggled':            self.win.on_view_meter_toggled,
+            'on_view_pattern_toggled':          self.win.on_view_pattern_toggled,
+            'on_view_profiles_toggled':         self.win.on_view_profiles_toggled,
+            'on_help_shortcuts':                self.win.on_help_shortcuts,
+            'on_help_about':                    self.win.on_help_about,
+            # tempo
+            'on_tempo_scale_changed':           self.win.on_tempo_changed,
+            'on_tempo_spin_changed':            self.win.on_tempo_changed,
+            'on_tap_tempo':                     self.win.on_tap_tempo,
+            'on_tempo_format_value':            self.win.on_tempo_format_value,
+            # speed trainer
+            'on_speedtrainer_enable_toggled':   self.win.on_speedtrainer_enable_toggled,
+            'on_tempo_increment_changed':       self.win.on_tempo_increment_changed,
+            'on_tempo_start_changed':           self.win.on_tempo_start_changed,
+            # meter
+            'on_meter_even_toggled':            (self.win.on_meter_toggled, (0, 4)),
+            'on_meter_24_toggled':              (self.win.on_meter_toggled, (2, 4)),
+            'on_meter_34_toggled':              (self.win.on_meter_toggled, (3, 4)),
+            'on_meter_44_toggled':              (self.win.on_meter_toggled, (4, 4)),
+            'on_meter_other_toggled':           (self.win.on_meter_toggled, None),
+            'on_meter_beats_changed':           self.win.on_meter_beats_changed,
+            'on_meter_denom_changed':           self.win.on_meter_denom_changed,
+            # pattern
+            'on_pattern_reset':                 self.win.on_pattern_reset,
+            # others
+            'on_start_stop':                    self.win.on_start_stop,
+            'on_volume_changed':                self.win.on_volume_changed,
+            'on_window_main_delete_event':      self.win.on_delete_event,
+            'on_window_main_key_press_event':   self.win.on_key_press_event,
+            # Preferences window
+            'on_sound_square_toggled':      (self.prefs.on_sound_toggled, 0),
+            'on_sound_sine_toggled':        (self.prefs.on_sound_toggled, 1),
+            'on_sound_noise_toggled':       (self.prefs.on_sound_toggled, 2),
+            'on_sound_click_toggled':       (self.prefs.on_sound_toggled, 3),
+            'on_sound_custom_toggled':      (self.prefs.on_sound_toggled, -1),
+
+            'on_accented_selection_changed':self.prefs.on_sound_selection_changed,
+            'on_normal_selection_changed':  self.prefs.on_sound_selection_changed,
+
+            'on_pitch_accented_changed':    self.prefs.on_pitch_changed,
+            'on_pitch_normal_changed':      self.prefs.on_pitch_changed,
+            'on_pitch_format_value':        self.prefs.on_pitch_format_value,
+
+            'on_connect_auto_toggled':      (self.prefs.on_connect_toggled, True),
+            'on_connect_manual_toggled':    (self.prefs.on_connect_toggled, False),
+            'on_connect_add':               self.prefs.on_connect_add,
+            'on_connect_remove':            self.prefs.on_connect_remove,
+
+            'on_preferences_delete_event':  self.prefs.on_delete_event,
+            'on_preferences_close':         self.prefs.on_close,
+            # Profiles dialog
+            'on_profile_add':       self.profiles.on_profile_add,
+            'on_profile_remove':    self.profiles.on_profile_remove,
+            'on_profile_save':      self.profiles.on_profile_save,
+            'on_profile_rename':    self.profiles.on_profile_rename
+        })
 
         #self.klick.add_method(None, None, self.fallback)
 

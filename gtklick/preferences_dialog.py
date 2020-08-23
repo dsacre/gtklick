@@ -20,28 +20,28 @@ import misc
 
 class PreferencesDialog:
     def __init__(self):
-        wtree.connect_signals({
-            'on_sound_square_toggled':      (self.on_sound_toggled, 0),
-            'on_sound_sine_toggled':        (self.on_sound_toggled, 1),
-            'on_sound_noise_toggled':       (self.on_sound_toggled, 2),
-            'on_sound_click_toggled':       (self.on_sound_toggled, 3),
-            'on_sound_custom_toggled':      (self.on_sound_toggled, -1),
+        # wtree.connect_signals({
+        #     'on_sound_square_toggled':      (self.on_sound_toggled, 0),
+        #     'on_sound_sine_toggled':        (self.on_sound_toggled, 1),
+        #     'on_sound_noise_toggled':       (self.on_sound_toggled, 2),
+        #     'on_sound_click_toggled':       (self.on_sound_toggled, 3),
+        #     'on_sound_custom_toggled':      (self.on_sound_toggled, -1),
 
-            'on_accented_selection_changed':self.on_sound_selection_changed,
-            'on_normal_selection_changed':  self.on_sound_selection_changed,
+        #     'on_accented_selection_changed':self.on_sound_selection_changed,
+        #     'on_normal_selection_changed':  self.on_sound_selection_changed,
 
-            'on_pitch_accented_changed':    self.on_pitch_changed,
-            'on_pitch_normal_changed':      self.on_pitch_changed,
-            'on_pitch_format_value':        self.on_pitch_format_value,
+        #     'on_pitch_accented_changed':    self.on_pitch_changed,
+        #     'on_pitch_normal_changed':      self.on_pitch_changed,
+        #     'on_pitch_format_value':        self.on_pitch_format_value,
 
-            'on_connect_auto_toggled':      (self.on_connect_toggled, True),
-            'on_connect_manual_toggled':    (self.on_connect_toggled, False),
-            'on_connect_add':               self.on_connect_add,
-            'on_connect_remove':            self.on_connect_remove,
+        #     'on_connect_auto_toggled':      (self.on_connect_toggled, True),
+        #     'on_connect_manual_toggled':    (self.on_connect_toggled, False),
+        #     'on_connect_add':               self.on_connect_add,
+        #     'on_connect_remove':            self.on_connect_remove,
 
-            'on_preferences_delete_event':  self.on_delete_event,
-            'on_preferences_close':         self.on_close,
-        })
+        #     'on_preferences_delete_event':  self.on_delete_event,
+        #     'on_preferences_close':         self.on_close
+        # })
 
         wtree.get_object('vbox_filechoosers').set_sensitive(config.prefs_sound == -1)
 
@@ -81,6 +81,7 @@ class PreferencesDialog:
 
     @gui_callback
     def on_sound_toggled(self, b, data):
+        print('on_sound_toggled')
         if b.get_active():
             wtree.get_object('vbox_filechoosers').set_sensitive(data == -1)
             if data >= 0:
