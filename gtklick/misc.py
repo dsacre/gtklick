@@ -9,12 +9,12 @@
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 
-import gtk
-import gtk.keysyms
-import gobject
+from gi.repository import Gtk, Gdk
+from gi.repository import GObject
 
 import inspect
-import weakref, new
+import weakref
+import types
 
 
 block = False
@@ -35,7 +35,7 @@ def osc_callback(f):
     def g(self, *args):
         global block
         try:
-            gtk.gdk.threads_enter()
+            Gdk.threads_enter()
             block = True
 
             #print args[0], args[1]
@@ -51,7 +51,7 @@ def osc_callback(f):
             return r
         finally:
             block = False
-            gtk.gdk.threads_leave()
+            Gdk.threads_leave()
     return g
 
 
@@ -67,10 +67,10 @@ def do_quietly(f):
 
 class weakref_method:
     def __init__(self, f):
-        self.inst = weakref.ref(f.im_self)
-        self.func = f.im_func
+        self.inst = weakref.ref(f.__self__)
+        self.func = f.__func__
     def __call__(self, *args, **kwargs):
-        f = new.instancemethod(self.func, self.inst(), self.inst().__class__)
+        f = types.instancemethod(self.func, self.inst(), self.inst().__class__)
         return f(*args, **kwargs)
 
 
@@ -82,16 +82,16 @@ class run_idle_once:
     def queue(self):
         if not self.pending:
             self.pending = True
-            gobject.idle_add(self.call_wrapper)
+            GObject.idle_add(self.call_wrapper)
     def call_wrapper(self):
         self.pending = False
         self.call()
         return False
 
 
-class TristateCheckButton(gtk.CheckButton):
+class TristateCheckButton(Gtk.CheckButton):
     def __init__(self, label):
-        gtk.CheckButton.__init__(self, label)
+        Gtk.CheckButton.__init__(self, label)
         self.connect('button-release-event', self.on_button_released)
         self.connect('key-press-event', self.on_key_pressed)
 
@@ -113,25 +113,25 @@ class TristateCheckButton(gtk.CheckButton):
 
     def on_button_released(self, b, ev):
         s = ev.get_state()
-        if s & gtk.gdk.CONTROL_MASK:
-            if s & gtk.gdk.BUTTON1_MASK:
+        if s & Gdk.ModifierType.CONTROL_MASK:
+            if s & Gdk.ModifierType.BUTTON1_MASK:
                 self.set_state(2)
-            elif s & gtk.gdk.BUTTON2_MASK:
+            elif s & Gdk.ModifierType.BUTTON2_MASK:
                 self.set_state(1)
-            elif s & gtk.gdk.BUTTON3_MASK:
+            elif s & Gdk.ModifierType.BUTTON3_MASK:
                 self.set_state(0)
         else:
-            if s & gtk.gdk.BUTTON1_MASK:
+            if s & Gdk.ModifierType.BUTTON1_MASK:
                 self.set_state((self.get_state() - 1) % 3)
-            elif s & gtk.gdk.BUTTON2_MASK:
+            elif s & Gdk.ModifierType.BUTTON2_MASK:
                 self.set_state(1 if self.get_state() == 2 else 2)
-            elif s & gtk.gdk.BUTTON3_MASK:
+            elif s & Gdk.ModifierType.BUTTON3_MASK:
                 self.set_state(1 if self.get_state() == 0 else 0)
         self.queue_draw()
         return True
 
     def on_key_pressed(self, b, ev):
-        if ev.keyval == gtk.keysyms.space:
+        if ev.keyval == Gdk.KEY_space:
             self.set_state((self.get_state() - 1) % 3)
             self.queue_draw()
             return True

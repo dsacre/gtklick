@@ -9,8 +9,8 @@
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 
 import cgi
 
@@ -22,30 +22,30 @@ class ProfilesPane:
     def __init__(self, mainwin):
         self.mainwin = mainwin
 
-        wtree.signal_autoconnect({
-            'on_profile_add':       self.on_profile_add,
-            'on_profile_remove':    self.on_profile_remove,
-            'on_profile_save':      self.on_profile_save,
-            'on_profile_rename':    self.on_profile_rename,
-        })
+        # wtree.connect_signals({
+        #     'on_profile_add':       self.on_profile_add,
+        #     'on_profile_remove':    self.on_profile_remove,
+        #     'on_profile_save':      self.on_profile_save,
+        #     'on_profile_rename':    self.on_profile_rename,
+        # })
 
         # create treeview. doing this within glade somehow breaks dnd. weird...
-        self.treeview = gtk.TreeView()
+        self.treeview = Gtk.TreeView()
         self.treeview.set_headers_visible(False)
         self.treeview.set_enable_search(False)
         self.treeview.set_reorderable(True)
 
-        widgets['scrolledwindow_profiles'].add(self.treeview)
-        widgets['label_frame_profiles'].set_mnemonic_widget(self.treeview)
+        wtree.get_object('scrolledwindow_profiles').add(self.treeview)
+        wtree.get_object('label_frame_profiles').set_mnemonic_widget(self.treeview)
         self.treeview.show()
 
         # create model
-        self.model = gtk.ListStore(str, gtklick_config.Profile)
+        self.model = Gtk.ListStore(str, gtklick_config.Profile)
         self.treeview.set_model(self.model)
 
         # create renderer/column
-        self.renderer = gtk.CellRendererText()
-        self.column = gtk.TreeViewColumn(None, self.renderer, markup=0)
+        self.renderer = Gtk.CellRendererText()
+        self.column = Gtk.TreeViewColumn(None, self.renderer, markup=0)
         self.treeview.append_column(self.column)
 
         # connect signals
@@ -53,7 +53,8 @@ class ProfilesPane:
         self.treeview.connect('row-activated', self.on_row_activated)
         # create a weak reference to the callback function, to prevent cyclic references.
         # sometimes PyGTK astounds me...
-        self.renderer.connect('edited', misc.weakref_method(self.on_cell_edited))
+        #self.renderer.connect('edited', misc.weakref_method(self.on_cell_edited))
+        self.renderer.connect('edited', self.on_cell_edited)
 
         self.model.connect('row-changed', self.on_row_changed)
         self.model.connect('row-deleted', self.on_row_deleted)
@@ -141,57 +142,57 @@ class ProfilesPane:
         # ignore state changes while activating the profile
         self.track_changes = False
         # sending and receiving all OSC messages takes, uhm... so we need to wait at least... oh well...
-        gobject.timeout_add(500, lambda: setattr(self, 'track_changes', True))
+        GObject.timeout_add(500, lambda: setattr(self, 'track_changes', True))
 
         klick.send('/simple/set_tempo', v.tempo)
-        widgets['spin_tempo_increment'].set_value(v.tempo_increment)
-        widgets['check_speedtrainer_enable'].set_active(v.speedtrainer)
+        wtree.get_object('spin_tempo_increment').set_value(v.tempo_increment)
+        wtree.get_object('check_speedtrainer_enable').set_active(v.speedtrainer)
         klick.send('/simple/set_tempo_increment', v.tempo_increment if v.speedtrainer else 0.0)
         klick.send('/simple/set_tempo_start', v.tempo_start)
 
         if v.denom:
-            misc.do_quietly(lambda: widgets['radio_meter_other'].set_active(True))
+            misc.do_quietly(lambda: wtree.get_object('radio_meter_other').set_active(True))
         else:
             # focus any radio button other than "other"
-            misc.do_quietly(lambda: widgets['radio_meter_44'].set_active(True))
+            misc.do_quietly(lambda: wtree.get_object('radio_meter_44').set_active(True))
         klick.send('/simple/set_meter', v.beats, v.denom if v.denom else 4)
 
         klick.send('/simple/set_pattern', v.pattern)
 
         # show all relevant frames
         if v.speedtrainer:
-            widgets['item_view_speedtrainer'].set_active(True)
+            wtree.get_object('item_view_speedtrainer').set_active(True)
         if (v.beats, v.denom) != (0, 4):
-            widgets['item_view_meter'].set_active(True)
+            wtree.get_object('item_view_meter').set_active(True)
         if v.pattern != '':
-            widgets['item_view_pattern'].set_active(True)
+            wtree.get_object('item_view_pattern').set_active(True)
 
     def current_profile(self, name):
         # create profile from the current state of the GUI
-        if widgets['radio_meter_other'].get_active():
-            beats = int(widgets['spin_meter_beats'].get_value())
-            denom = int(widgets['spin_meter_denom'].get_value())
+        if wtree.get_object('radio_meter_other').get_active():
+            beats = int(wtree.get_object('spin_meter_beats').get_value())
+            denom = int(wtree.get_object('spin_meter_denom').get_value())
         else:
-            beats = 0 if widgets['radio_meter_even'].get_active() else \
-                    2 if widgets['radio_meter_24'].get_active() else \
-                    3 if widgets['radio_meter_34'].get_active() else 4
+            beats = 0 if wtree.get_object('radio_meter_even').get_active() else \
+                    2 if wtree.get_object('radio_meter_24').get_active() else \
+                    3 if wtree.get_object('radio_meter_34').get_active() else 4
             denom = 0
 
         return gtklick_config.Profile(
             name,
-            int(widgets['spin_tempo'].get_value()),
-            widgets['check_speedtrainer_enable'].get_active(),
-            widgets['spin_tempo_increment'].get_value(),
-            int(widgets['spin_tempo_start'].get_value()),
+            int(wtree.get_object('spin_tempo').get_value()),
+            wtree.get_object('check_speedtrainer_enable').get_active(),
+            wtree.get_object('spin_tempo_increment').get_value(),
+            int(wtree.get_object('spin_tempo_start').get_value()),
             beats,
             denom,
             self.mainwin.get_pattern()
         )
 
     def enable_buttons(self, enable):
-        widgets['btn_profile_remove'].set_sensitive(enable)
-        widgets['btn_profile_save'].set_sensitive(enable)
-        widgets['btn_profile_rename'].set_sensitive(enable)
+        wtree.get_object('btn_profile_remove').set_sensitive(enable)
+        wtree.get_object('btn_profile_save').set_sensitive(enable)
+        wtree.get_object('btn_profile_rename').set_sensitive(enable)
 
     def idle_handler(self):
         # enable buttons only if a profile is selected

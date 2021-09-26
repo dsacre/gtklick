@@ -9,9 +9,9 @@
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 
-import ConfigParser
+import configparser
 import os.path
-import gobject
+from gi.repository import GObject
 import re
 import itertools
 
@@ -65,7 +65,7 @@ class GTKlickConfig(object):
     def __init__(self):
         self.cfgfile = os.path.expanduser('~/.gtklickrc')
 
-        self.parser = ConfigParser.SafeConfigParser()
+        self.parser = configparser.SafeConfigParser()
 
         self.parser.add_section('preferences')
         self.parser.add_section('view')
@@ -133,11 +133,11 @@ class GTKlickConfig(object):
 
     def set_profiles(self, profiles):
         # store all profiles in config parser
-        for n, p in itertools.izip(itertools.count(), profiles):
+        for n, p in zip(itertools.count(), profiles):
             s = 'profile_%d' % n
             try:
                 self.parser.add_section(s)
-            except ConfigParser.DuplicateSectionError:
+            except configparser.DuplicateSectionError:
                 pass
             self.parser.set(s, 'name', p.name)
             self.parser.set(s, 'tempo', str(p.tempo))
@@ -162,9 +162,9 @@ class GTKlickConfig(object):
             self.parser.remove_option(section, 'tempo_limit')
 
 
-class Profile(gobject.GObject):
+class Profile(GObject.GObject):
     def __init__(self, name, tempo, speedtrainer, tempo_increment, tempo_start, beats, denom, pattern):
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
         self.name = name
         self.tempo = tempo
         self.speedtrainer = speedtrainer

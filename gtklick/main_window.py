@@ -9,8 +9,7 @@
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 
-import gtk
-import gtk.keysyms
+from gi.repository import Gtk, Gdk
 
 import time
 import math
@@ -24,51 +23,51 @@ import misc
 class MainWindow:
     def __init__(self):
         # why doesn't glade do this?
-        widgets['spin_meter_beats'].set_value(4)
-        widgets['spin_meter_denom'].set_value(4)
+        wtree.get_object('spin_meter_beats').set_value(4)
+        wtree.get_object('spin_meter_denom').set_value(4)
 
-        wtree.signal_autoconnect({
-            # main menu
-            'on_file_quit':                     self.on_file_quit,
-            'on_edit_preferences':              self.on_edit_preferences,
-            'on_view_markings_toggled':         self.on_view_markings_toggled,
-            'on_view_speedtrainer_toggled':     self.on_view_speedtrainer_toggled,
-            'on_view_meter_toggled':            self.on_view_meter_toggled,
-            'on_view_pattern_toggled':          self.on_view_pattern_toggled,
-            'on_view_profiles_toggled':         self.on_view_profiles_toggled,
-            'on_help_shortcuts':                self.on_help_shortcuts,
-            'on_help_about':                    self.on_help_about,
-            # tempo
-            'on_tempo_scale_changed':           self.on_tempo_changed,
-            'on_tempo_spin_changed':            self.on_tempo_changed,
-            'on_tap_tempo':                     self.on_tap_tempo,
-            'on_tempo_format_value':            self.on_tempo_format_value,
-            # speed trainer
-            'on_speedtrainer_enable_toggled':   self.on_speedtrainer_enable_toggled,
-            'on_tempo_increment_changed':       self.on_tempo_increment_changed,
-            'on_tempo_start_changed':           self.on_tempo_start_changed,
-            # meter
-            'on_meter_even_toggled':            (self.on_meter_toggled, (0, 4)),
-            'on_meter_24_toggled':              (self.on_meter_toggled, (2, 4)),
-            'on_meter_34_toggled':              (self.on_meter_toggled, (3, 4)),
-            'on_meter_44_toggled':              (self.on_meter_toggled, (4, 4)),
-            'on_meter_other_toggled':           (self.on_meter_toggled, None),
-            'on_meter_beats_changed':           self.on_meter_beats_changed,
-            'on_meter_denom_changed':           self.on_meter_denom_changed,
-            # pattern
-            'on_pattern_reset':                 self.on_pattern_reset,
-            # others
-            'on_start_stop':                    self.on_start_stop,
-            'on_volume_changed':                self.on_volume_changed,
-            'on_window_main_delete_event':      self.on_delete_event,
-            'on_window_main_key_press_event':   self.on_key_press_event,
-        })
+        # wtree.connect_signals({
+        #     # main menu
+        #     'on_file_quit':                     self.on_file_quit,
+        #     'on_edit_preferences':              self.on_edit_preferences,
+        #     'on_view_markings_toggled':         self.on_view_markings_toggled,
+        #     'on_view_speedtrainer_toggled':     self.on_view_speedtrainer_toggled,
+        #     'on_view_meter_toggled':            self.on_view_meter_toggled,
+        #     'on_view_pattern_toggled':          self.on_view_pattern_toggled,
+        #     'on_view_profiles_toggled':         self.on_view_profiles_toggled,
+        #     'on_help_shortcuts':                self.on_help_shortcuts,
+        #     'on_help_about':                    self.on_help_about,
+        #     # tempo
+        #     'on_tempo_scale_changed':           self.on_tempo_changed,
+        #     'on_tempo_spin_changed':            self.on_tempo_changed,
+        #     'on_tap_tempo':                     self.on_tap_tempo,
+        #     'on_tempo_format_value':            self.on_tempo_format_value,
+        #     # speed trainer
+        #     'on_speedtrainer_enable_toggled':   self.on_speedtrainer_enable_toggled,
+        #     'on_tempo_increment_changed':       self.on_tempo_increment_changed,
+        #     'on_tempo_start_changed':           self.on_tempo_start_changed,
+        #     # meter
+        #     'on_meter_even_toggled':            (self.on_meter_toggled, (0, 4)),
+        #     'on_meter_24_toggled':              (self.on_meter_toggled, (2, 4)),
+        #     'on_meter_34_toggled':              (self.on_meter_toggled, (3, 4)),
+        #     'on_meter_44_toggled':              (self.on_meter_toggled, (4, 4)),
+        #     'on_meter_other_toggled':           (self.on_meter_toggled, None),
+        #     'on_meter_beats_changed':           self.on_meter_beats_changed,
+        #     'on_meter_denom_changed':           self.on_meter_denom_changed,
+        #     # pattern
+        #     'on_pattern_reset':                 self.on_pattern_reset,
+        #     # others
+        #     'on_start_stop':                    self.on_start_stop,
+        #     'on_volume_changed':                self.on_volume_changed,
+        #     'on_window_main_delete_event':      self.on_delete_event,
+        #     'on_window_main_key_press_event':   self.on_key_press_event
+        # })
 
-        widgets['item_view_markings'].set_active(config.view_markings)
-        widgets['item_view_meter'].set_active(config.view_meter)
-        widgets['item_view_speedtrainer'].set_active(config.view_speedtrainer)
-        widgets['item_view_pattern'].set_active(config.view_pattern)
-        widgets['item_view_profiles'].set_active(config.view_profiles)
+        wtree.get_object('item_view_markings').set_active(config.view_markings)
+        wtree.get_object('item_view_meter').set_active(config.view_meter)
+        wtree.get_object('item_view_speedtrainer').set_active(config.view_speedtrainer)
+        wtree.get_object('item_view_pattern').set_active(config.view_pattern)
+        wtree.get_object('item_view_profiles').set_active(config.view_profiles)
 
         self.pattern_buttons = []
         # create one button now to avoid window size changes later on
@@ -84,51 +83,51 @@ class MainWindow:
 
     def on_delete_event(self, w, ev):
         klick.quit()
-        gtk.main_quit()
+        Gtk.main_quit()
 
     def on_file_quit(self, i):
-        widgets['window_main'].destroy()
+        wtree.get_object('window_main').destroy()
         klick.quit()
-        gtk.main_quit()
+        Gtk.main_quit()
 
     def on_edit_preferences(self, i):
-        widgets['dialog_preferences'].show()
+        wtree.get_object('dialog_preferences').show()
 
     def on_view_markings_toggled(self, i):
-        widgets['scale_tempo'].set_draw_value(i.get_active())
+        wtree.get_object('scale_tempo').set_draw_value(i.get_active())
         config.view_markings = i.get_active()
 
     def on_view_speedtrainer_toggled(self, i):
         b = i.get_active()
-        widgets['frame_speedtrainer'].set_property('visible', b)
+        wtree.get_object('frame_speedtrainer').set_property('visible', b)
         config.view_speedtrainer = b
 
     def on_view_meter_toggled(self, i):
         b = i.get_active()
-        widgets['frame_meter'].set_property('visible', b)
+        wtree.get_object('frame_meter').set_property('visible', b)
         config.view_meter = b
         if not b:
             self.set_meter(0, 4)
 
     def on_view_pattern_toggled(self, i):
         b = i.get_active()
-        widgets['frame_pattern'].set_property('visible', b)
+        wtree.get_object('frame_pattern').set_property('visible', b)
         config.view_pattern = b
         if not b:
             klick.send('/simple/set_pattern', '')
 
     def on_view_profiles_toggled(self, i):
         b = i.get_active()
-        widgets['vbox_profiles'].set_property('visible', b)
+        wtree.get_object('vbox_profiles').set_property('visible', b)
         config.view_profiles = b
 
     def on_help_shortcuts(self, i):
-        shortcuts = widgets['dialog_shortcuts']
+        shortcuts = wtree.get_object('dialog_shortcuts')
         shortcuts.run()
         shortcuts.hide()
 
     def on_help_about(self, i):
-        about = widgets['dialog_about']
+        about = wtree.get_object('dialog_about')
         try:
             # d'oh!
             about.set_program_name("gtklick")
@@ -159,15 +158,15 @@ class MainWindow:
     @gui_callback
     def on_speedtrainer_enable_toggled(self, b):
         a = b.get_active()
-        widgets['spin_tempo_increment'].set_sensitive(a)
-        widgets['spin_tempo_start'].set_sensitive(a)
+        wtree.get_object('spin_tempo_increment').set_sensitive(a)
+        wtree.get_object('spin_tempo_start').set_sensitive(a)
         config.speedtrainer = a
         if a:
-            klick.send('/simple/set_tempo_increment', widgets['spin_tempo_increment'].get_value())
-            klick.send('/simple/set_tempo_start', int(widgets['spin_tempo_start'].get_value()))
+            klick.send('/simple/set_tempo_increment', wtree.get_object('spin_tempo_increment').get_value())
+            klick.send('/simple/set_tempo_start', int(wtree.get_object('spin_tempo_start').get_value()))
         else:
-            widgets['spin_tempo_increment'].select_region(0, 0)
-            widgets['spin_tempo_start'].select_region(0, 0)
+            wtree.get_object('spin_tempo_increment').select_region(0, 0)
+            wtree.get_object('spin_tempo_start').select_region(0, 0)
             klick.send('/simple/set_tempo_increment', 0.0)
 
     @gui_callback
@@ -184,11 +183,11 @@ class MainWindow:
             if data != None:
                 self.set_meter(data[0], data[1])
             else:
-                self.set_meter(int(widgets['spin_meter_beats'].get_value()), int(widgets['spin_meter_denom'].get_value()))
+                self.set_meter(int(wtree.get_object('spin_meter_beats').get_value()), int(wtree.get_object('spin_meter_denom').get_value()))
 
     @gui_callback
     def on_meter_beats_changed(self, b):
-        self.set_meter(int(widgets['spin_meter_beats'].get_value()), int(widgets['spin_meter_denom'].get_value()))
+        self.set_meter(int(wtree.get_object('spin_meter_beats').get_value()), int(wtree.get_object('spin_meter_denom').get_value()))
 
     @gui_callback
     def on_meter_denom_changed(self, b):
@@ -212,7 +211,7 @@ class MainWindow:
         b.set_value(denom)
         config.denom = denom
 
-        self.set_meter(int(widgets['spin_meter_beats'].get_value()), int(widgets['spin_meter_denom'].get_value()))
+        self.set_meter(int(wtree.get_object('spin_meter_beats').get_value()), int(wtree.get_object('spin_meter_denom').get_value()))
 
     def set_meter(self, beats, denom):
         if len(self.pattern_buttons):
@@ -237,7 +236,7 @@ class MainWindow:
 
     @gui_callback
     def on_start_stop(self, b):
-        if widgets['align_stop'].get_property('visible'):
+        if wtree.get_object('align_stop').get_property('visible'):
             klick.send('/metro/stop')
         else:
             klick.send('/metro/start')
@@ -249,57 +248,60 @@ class MainWindow:
     @gui_callback
     def on_key_press_event(self, widget, event):
         key = event.keyval
-        focus = widgets['window_main'].get_focus()
+        focus = wtree.get_object('window_main').get_focus()
 
         # make escape remove focus from spinbuttons
-        if event.keyval == gtk.keysyms.Escape and isinstance(focus, gtk.SpinButton):
-            widgets['window_main'].set_focus(None)
+        if event.keyval == Gdk.KEY_Escape and isinstance(focus, Gtk.SpinButton):
+            wtree.get_object('window_main').set_focus(None)
             return True
 
         # don't allow shortcuts in spinbuttons and entrys
-        if isinstance(focus, (gtk.SpinButton, gtk.Entry)):
+        if isinstance(focus, (Gtk.SpinButton, Gtk.Entry)):
             return False
 
         # use keys with ctrl modifier to get default GTK behaviour
-        if event.state & gtk.gdk.CONTROL_MASK and \
-            key in (gtk.keysyms.Left, gtk.keysyms.Right, gtk.keysyms.Down, gtk.keysyms.Up, gtk.keysyms.space, gtk.keysyms.Return):
-            event.state &= ~gtk.gdk.CONTROL_MASK
+        if event.get_state() & Gdk.ModifierType.CONTROL_MASK and \
+            key in (Gdk.KEY_Left, Gdk.KEY_Right, Gdk.KEY_Down, Gdk.KEY_Up, Gdk.KEY_space, Gdk.KEY_Return):
+            #event.get_state() &= ~Gdk.ModifierType.CONTROL_MASK
+            thisState = event.state 
+            thisState &= ~gtk.gdk.CONTROL_MASK
+            event.state = thisState
             return False
 
         # tempo shortcuts
-        if key in (gtk.keysyms.Left, gtk.keysyms.Right, gtk.keysyms.Down, gtk.keysyms.Up, gtk.keysyms.Page_Down, gtk.keysyms.Page_Up):
-            tempo = int(widgets['spin_tempo'].get_value())
-            if   key == gtk.keysyms.Left:       tempo -= 1
-            elif key == gtk.keysyms.Right:      tempo += 1
-            elif key == gtk.keysyms.Down:       tempo -= 10
-            elif key == gtk.keysyms.Up:         tempo += 10
-            elif key == gtk.keysyms.Page_Down:  tempo /= 2
-            elif key == gtk.keysyms.Page_Up:    tempo *= 2
+        if key in (Gdk.KEY_Left, Gdk.KEY_Right, Gdk.KEY_Down, Gdk.KEY_Up, Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
+            tempo = int(wtree.get_object('spin_tempo').get_value())
+            if   key == Gdk.KEY_Left:       tempo -= 1
+            elif key == Gdk.KEY_Right:      tempo += 1
+            elif key == Gdk.KEY_Down:       tempo -= 10
+            elif key == Gdk.KEY_Up:         tempo += 10
+            elif key == Gdk.KEY_Page_Down:  tempo /= 2
+            elif key == Gdk.KEY_Page_Up:    tempo *= 2
             tempo = min(max(tempo, 1), 999)
             klick.send('/simple/set_tempo', tempo)
             return True
 
         # volume shortcuts
-        elif key in (gtk.keysyms.plus, gtk.keysyms.equal, gtk.keysyms.KP_Add, gtk.keysyms.minus, gtk.keysyms.KP_Subtract):
-            volume = widgets['scale_volume'].get_value()
-            if key in (gtk.keysyms.minus, gtk.keysyms.KP_Subtract):
+        elif key in (Gdk.KEY_plus, Gdk.KEY_equal, Gdk.KEY_KP_Add, Gdk.KEY_minus, Gdk.KEY_KP_Subtract):
+            volume = wtree.get_object('scale_volume').get_value()
+            if key in (Gdk.KEY_minus, Gdk.KEY_KP_Subtract):
                 volume -= 0.1
-            elif key in (gtk.keysyms.plus, gtk.keysyms.equal, gtk.keysyms.KP_Add):
+            elif key in (Gdk.KEY_plus, Gdk.KEY_equal, Gdk.KEY_KP_Add):
                 volume += 0.1
             volume = min(max(volume, 0.0), 1.0)
             klick.send('/config/set_volume', volume)
             return True
 
         # start/stop
-        elif key == gtk.keysyms.space:
-            if widgets['align_stop'].get_property('visible'):
+        elif key == Gdk.KEY_space:
+            if wtree.get_object('align_stop').get_property('visible'):
                 klick.send('/metro/stop')
             else:
                 klick.send('/metro/start')
             return True
 
         # tap tempo
-        elif key == gtk.keysyms.Return:
+        elif key == Gdk.KEY_Return:
             klick.send('/simple/tap', ('d', time.time()))
             return True
 
@@ -313,8 +315,8 @@ class MainWindow:
     def simple_tempo_cb(self, path, args):
         tempo = args[0]
         changed = tempo != config.tempo
-        widgets['scale_tempo'].set_value(int(tempo))
-        widgets['spin_tempo'].set_value(int(tempo))
+        wtree.get_object('scale_tempo').set_value(int(tempo))
+        wtree.get_object('spin_tempo').set_value(int(tempo))
         config.tempo = tempo
         if changed:
             self.state_changed.queue()
@@ -325,7 +327,7 @@ class MainWindow:
         tempo_increment = args[0]
         changed = tempo_increment != config.tempo_increment
         if tempo_increment:
-            widgets['spin_tempo_increment'].set_value(tempo_increment)
+            wtree.get_object('spin_tempo_increment').set_value(tempo_increment)
             config.tempo_increment = tempo_increment
         if changed:
             self.state_changed.queue()
@@ -335,7 +337,7 @@ class MainWindow:
     def simple_tempo_start_cb(self, path, args):
         tempo_start = args[0]
         changed = tempo_start != config.tempo_start
-        widgets['spin_tempo_start'].set_value(int(tempo_start))
+        wtree.get_object('spin_tempo_start').set_value(int(tempo_start))
         config.tempo_start = tempo_start
         if changed:
             self.state_changed.queue()
@@ -344,9 +346,9 @@ class MainWindow:
     @osc_callback
     def simple_current_tempo_cb(self, path, args):
         if args[0]:
-            widgets['window_main'].set_title("gtklick - " + str(int(args[0])))
+            wtree.get_object('window_main').set_title("gtklick - " + str(int(args[0])))
         else:
-            widgets['window_main'].set_title("gtklick")
+            wtree.get_object('window_main').set_title("gtklick")
 
     @make_method('/simple/meter', 'ii')
     @osc_callback
@@ -354,33 +356,33 @@ class MainWindow:
         beats, denom = args
         changed = beats != config.beats or denom != config.denom
 
-        if beats in (0, 2, 3, 4) and denom == 4 and not widgets['radio_meter_other'].get_active():
+        if beats in (0, 2, 3, 4) and denom == 4 and not wtree.get_object('radio_meter_other').get_active():
             # standard meter
-            widgets['hbox_meter_spins'].set_sensitive(False)
-            widgets['spin_meter_beats'].select_region(0, 0)
-            widgets['spin_meter_denom'].select_region(0, 0)
+            wtree.get_object('hbox_meter_spins').set_sensitive(False)
+            wtree.get_object('spin_meter_beats').select_region(0, 0)
+            wtree.get_object('spin_meter_denom').select_region(0, 0)
             if beats == 0:
-                widgets['radio_meter_even'].set_active(True)
+                wtree.get_object('radio_meter_even').set_active(True)
             elif beats == 2:
-                widgets['radio_meter_24'].set_active(True)
+                wtree.get_object('radio_meter_24').set_active(True)
             elif beats == 3:
-                widgets['radio_meter_34'].set_active(True)
+                wtree.get_object('radio_meter_34').set_active(True)
             elif beats == 4:
-                widgets['radio_meter_44'].set_active(True)
+                wtree.get_object('radio_meter_44').set_active(True)
             config.beats = beats
             config.denom = 0
         else:
             # custom meter
-            widgets['radio_meter_other'].set_active(True)
-            widgets['hbox_meter_spins'].set_sensitive(True)
-            widgets['spin_meter_beats'].set_value(beats)
-            widgets['spin_meter_denom'].set_value(denom)
+            wtree.get_object('radio_meter_other').set_active(True)
+            wtree.get_object('hbox_meter_spins').set_sensitive(True)
+            wtree.get_object('spin_meter_beats').set_value(beats)
+            wtree.get_object('spin_meter_denom').set_value(denom)
             config.beats = beats
             config.denom = denom
 
         # set active radio button as mnemonic widget
-        w = [x for x in widgets['radio_meter_other'].get_group() if x.get_active()][0]
-        widgets['label_frame_meter'].set_mnemonic_widget(w)
+        w = [x for x in wtree.get_object('radio_meter_other').get_group() if x.get_active()][0]
+        wtree.get_object('label_frame_meter').set_mnemonic_widget(w)
 
         self.readjust_pattern_table(beats)
         if changed:
@@ -394,7 +396,7 @@ class MainWindow:
             # invalid pattern, use default
             pattern = self.default_pattern(config.beats)
         changed = pattern != config.pattern
-        for p, b in itertools.izip(pattern, self.pattern_buttons):
+        for p, b in zip(pattern, self.pattern_buttons):
             b.set_state('.xX'.index(p))
         config.pattern = pattern
         if changed:
@@ -404,22 +406,22 @@ class MainWindow:
     @osc_callback
     def simple_active_cb(self, path, args):
         if args[0]:
-            widgets['align_start'].hide()
-            widgets['align_stop'].show()
+            wtree.get_object('align_start').hide()
+            wtree.get_object('align_stop').show()
         else:
-            widgets['align_stop'].hide()
-            widgets['align_start'].show()
+            wtree.get_object('align_stop').hide()
+            wtree.get_object('align_start').show()
 
     @make_method('/config/volume', 'f')
     @osc_callback
     def config_volume_cb(self, path, args):
-        widgets['scale_volume'].set_value(args[0])
+        wtree.get_object('scale_volume').set_value(args[0])
         config.volume = args[0]
 
 
     def readjust_pattern_table(self, beats):
         n = max(1, beats)
-        table = widgets['table_pattern']
+        table = wtree.get_object('table_pattern')
 
         if n < len(self.pattern_buttons):
             # reduce table size
@@ -439,7 +441,7 @@ class MainWindow:
                 table.attach(b, col, col + 1, row, row + 1)
                 self.pattern_buttons.append(b)
                 if x == 0:
-                    widgets['label_frame_pattern'].set_mnemonic_widget(b)
+                    wtree.get_object('label_frame_pattern').set_mnemonic_widget(b)
                 b.show()
 
     def get_pattern(self, beats=None):
